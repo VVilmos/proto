@@ -55,13 +55,12 @@ public abstract class Node extends Element implements ISteppable{
      */
     public boolean AddPipe(PipeEnd pe)  {
         Skeleton.Start(this, "AddPipe(" + Skeleton.GetObjectName(pe) + ")");
-        if (pipeEnds.length <= 8) { //😎
-            int i = 0;
-            while (pipeEnds[i] != null) {i++;}
+        int i = 0;
+        while (i < 8 && pipeEnds[i] != null) {i++;}
+
+        if(i < 8) {
             pipeEnds[i] = pe;
-
             pe.ConnectNode(this);
-
             Skeleton.End();
             Skeleton.PrintReturn("true");
             return true;
@@ -80,7 +79,7 @@ public abstract class Node extends Element implements ISteppable{
     public void RemovePipe(PipeEnd pe) {
         Skeleton.Start(this, "RemovePipe(" + Skeleton.GetObjectName(pe) + ")");
         int i = 0;
-        while (pipeEnds[i] != pe){i++;}
+        while (!pipeEnds[i].equals(pe)){i++;}
         pipeEnds[i].DisconnectFromNode();
         pipeEnds[i] = null;
         Skeleton.End();
@@ -96,6 +95,4 @@ public abstract class Node extends Element implements ISteppable{
         Skeleton.PrintReturn("pipeEnds");
         return pipeEnds;
     }
-
-
 }
