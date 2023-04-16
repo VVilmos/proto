@@ -32,6 +32,7 @@ public class Cistern extends Node {
     public PipeEnd MakePipe() {
         Skeleton.Start(this, "MakePipe()");
 
+
         Skeleton.CtorStart("Pipe(" + Skeleton.GetObjectName(this) + ") newpip");
         Pipe newpip = new Pipe(this);  //ezt nem kene hozzaadni a hashMap-hez?
         Skeleton.End();
@@ -53,7 +54,7 @@ public class Cistern extends Node {
         Pump newPump = new Pump();
         Skeleton.End();
         Skeleton.End();
-        Skeleton.PrintReturn("newPump");
+        Skeleton.PrintReturn("newPumphvhhv");
         return newPump;
     }
 }

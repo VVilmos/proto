@@ -16,6 +16,8 @@ public class Pipe extends Element{
 
     public Pipe(Node node) {            //itt ki kéne találni, hogyan logoljuk a konstruktort / egyáltalán kell-e
         count++;
+
+
        // Skeleton.CtorStart("PipeEnd(" + Skeleton.GetObjectName(this) + ") end" + count + "1");
         Skeleton.CtorStart("PipeEnd(newpip) end" + count + "1");
         PipeEnd end1 = new PipeEnd(this);
