@@ -41,41 +41,31 @@ public class Pipe extends Element{
         count++;
 
         // Skeleton.CtorStart("PipeEnd(" + Skeleton.GetObjectName(this) + ") end" + count + "1");
-        Skeleton.CtorStart("PipeEnd(newpip) end" + count + "1");
         PipeEnd end1 = new PipeEnd(this);
-        Skeleton.End();
 
-        Skeleton.AddObject(end1, "end" + count + "1");
         node.AddPipe(end1);
 
-        Skeleton.CtorStart("PipeEnd(newpip) end" + count + "2");
         PipeEnd end2 = new PipeEnd(this);
-        Skeleton.AddObject(end2, "end" + count + "2");
         ends.add(end1);
         ends.add(end2);
-        Skeleton.End();
     }
 
     /**
      * Kilyukasztja a csövet.
      */
     public void Leak() {
-        Skeleton.Start(this, "Leak()");
         isBroken = true;
         if (hasWater) {
             Game.getSaboteurPool().AddWater();
             hasWater =false;
         }
-        Skeleton.End();
     }
 
     /**
      * Megfoltozza a csövet.
      */
     public void Patch() {
-        Skeleton.Start(this, "Patch()");
         isBroken = false;
-        Skeleton.End();
     }
 
     /**
@@ -83,10 +73,7 @@ public class Pipe extends Element{
      * @return sikeres-e a fogadás.
      */
     public boolean AcceptWater() {
-        Skeleton.Start(this, "AcceptWater()");
         if(hasWater) {
-            Skeleton.End();
-            Skeleton.PrintReturn("false");
             return false;
         }
         hasWater = true;
@@ -94,8 +81,6 @@ public class Pipe extends Element{
             Game.getSaboteurPool().AddWater();
             hasWater = false;
         }
-        Skeleton.End();
-        Skeleton.PrintReturn("true");
         return true;
     }
 
@@ -106,17 +91,14 @@ public class Pipe extends Element{
      */
     @Override
     public boolean AcceptPlayer(Player p) {
-        Skeleton.Start(this, "AcceptPlayer(" + Skeleton.GetObjectName(p) + ")");
-        
+
         if (players.size() > 0) {
-            Skeleton.End();
-            Skeleton.PrintReturn("false");
+
             return false;
         }
         players.add(p);
 
-        Skeleton.End();
-        Skeleton.PrintReturn("true");
+
         return true;
     }
 
@@ -125,15 +107,12 @@ public class Pipe extends Element{
      * @return sikerült-e a művelet.
      */
     public boolean RemoveWater() {
-        Skeleton.Start(this, "RemoveWater()");
         if (hasWater) {
             hasWater = false;
-            Skeleton.End();
-            Skeleton.PrintReturn("true");
+
             return true;
         }
-        Skeleton.End();
-        Skeleton.PrintReturn("false");
+
         return false;
     }
 
@@ -142,15 +121,11 @@ public class Pipe extends Element{
      * @return a művelet által létrehozott új cső.
      */
     public Pipe Cut() {
-        Skeleton.Start(this, "Cut()");
         Node node = ends.get(1).GetAttachedNode();
         node.RemovePipe(ends.get(1));
 
-        Skeleton.CtorStart("Pipe(" + Skeleton.GetObjectName(node) + ") newpip");
         Pipe newpip = new Pipe(node);
-        Skeleton.End();
-        Skeleton.End();
-        Skeleton.PrintReturn("newpip");
+
         return newpip;
     }
 
@@ -159,9 +134,7 @@ public class Pipe extends Element{
      * @return a csővégek.
      */
     public List<PipeEnd> GetEnds() {
-        Skeleton.Start(this, "GetEnds()");
-        Skeleton.End();
-        Skeleton.PrintReturn("ends");
+
         return ends;
     }
 
@@ -170,14 +143,12 @@ public class Pipe extends Element{
      * @return a szomszédok.
      */
     public List<Element> GetNeighbours() {
-        Skeleton.Start(this, "GetNeighbours()");
         List<Element> neighbours = new ArrayList<>();
         for (PipeEnd e : ends) {
             neighbours.add(e.GetAttachedNode());
         }
 
-        Skeleton.End();
-        Skeleton.PrintReturn("neighbours");
+
         return neighbours;
     }
 }

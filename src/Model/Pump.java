@@ -43,7 +43,6 @@ public class Pump extends Node{
      */
     @Override
     public void Step() {
-        Skeleton.Start(this, "Step()");
         if (tankFull && pipeEnds[outPipe] != null) {
             boolean accepted = pipeEnds[outPipe].AcceptWater();
             if (accepted) tankFull = false;
@@ -52,7 +51,6 @@ public class Pump extends Node{
             boolean arrived = pipeEnds[inPipe].RemoveWater();
             if (arrived) tankFull = true;
         }
-        Skeleton.End();
     }
 
     /**
@@ -61,38 +59,30 @@ public class Pump extends Node{
      * @param to annak a bekötött csőnek a vége, amibe vizet kívánunk mozgatni
      */
     public void Switch(PipeEnd from, PipeEnd to) {
-        Skeleton.Start(this, "Switch(" + Skeleton.GetObjectName(from) + "," + Skeleton.GetObjectName(to) + ")");
         for (int i = 0; i < pipeEnds.length; i++) {
             if (pipeEnds[i] != null && pipeEnds[i] == from) inPipe = i;
             if (pipeEnds[i] != null && pipeEnds[i] == to) outPipe = i;
         }
-        Skeleton.End();
     }
 
     /**
      * A pumpa meghibásodása
      */
     public void BreakPump() {
-        Skeleton.Start(this, "BreakPump()");
         isBroken = true;
-        Skeleton.End();
     }
 
     /**
      * A pumpa megszerelése
      */
     public void Repair() {
-        Skeleton.Start(this, "Repair()");
         isBroken = false;
-        Skeleton.End();
     }
 
     /**
      * A pumpa átmeneti tárolójának feltöltése
      */
     public void FillWaterTank() {
-        Skeleton.Start(this, "FillWaterTank()");
         tankFull = true;
-        Skeleton.End();
     }
 }

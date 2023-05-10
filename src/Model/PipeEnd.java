@@ -29,10 +29,7 @@ public class PipeEnd {
      * @return Visszatéríti a csövet, aminek ez a csővég a vége.
      */
     public Pipe GetOwnPipe() {
-        Skeleton.Start(this, "GetOwnPipe()");
 
-        Skeleton.End();
-        Skeleton.PrintReturn(Skeleton.GetObjectName(this.pipe));
         return pipe;
     }
 
@@ -41,14 +38,10 @@ public class PipeEnd {
      * @return Igazzal tér vissza, ha a cső ({@link Pipe}) képes vizet befogadni.
      */
     public boolean AcceptWater() {
-        Skeleton.Start(this, "AcceptWater()");
         boolean accepted = pipe.AcceptWater();
-        Skeleton.End();
         if(accepted){
-            Skeleton.PrintReturn("true");
         }
         else{
-            Skeleton.PrintReturn("false");
         }
         return accepted;
     }
@@ -58,11 +51,7 @@ public class PipeEnd {
      * @return Igazzal tér vissza, ha a csőből ({@link Pipe}) lehet vizet kiszívni.
      */
     public boolean RemoveWater() {
-        Skeleton.Start(this, "RemoveWater()");
         boolean accepted = pipe.RemoveWater();
-        Skeleton.End();
-        if (accepted) Skeleton.PrintReturn("true");
-        else Skeleton.PrintReturn("false");
         return accepted;
     }
 
@@ -71,8 +60,7 @@ public class PipeEnd {
      * @param node A {@link Node}, amire a csővéget felcsatlakoztatjuk.
      */
     public void ConnectNode(Node node) {
-        Skeleton.Start(this, "ConnectNode(" + Skeleton.GetObjectName(node) + ")");
-        Skeleton.End();
+
         this.node = node;
     }
 
@@ -80,10 +68,8 @@ public class PipeEnd {
      * Lecsatlakoztatja a csővéget a felkapcsolt {@link Node}-ról.
      */
     public void DisconnectFromNode(){  //pontadas?
-        Skeleton.Start(this, "DisconnectFromNode()");
         boolean isFull = pipe.RemoveWater();
         if (isFull) Game.getSaboteurPool().AddWater();
-        Skeleton.End();
     }
 
     /**
@@ -91,9 +77,7 @@ public class PipeEnd {
      * @return Visszatéríti a csővéghez kapcsolódó {@link Node}-ot.
      */
     public Node GetAttachedNode(){
-        Skeleton.Start(this, "GetAttachedNode()");
-        Skeleton.End();
-        Skeleton.PrintReturn(Skeleton.GetObjectName(this.node));
+
         return this.node;
     }
 }

@@ -35,7 +35,6 @@ public abstract class Player {
      * @param to az az Element, amire átmozgatja a Player-t
      */
     public void Move(Element to){
-        Skeleton.Start(this, "Move(" + Skeleton.GetObjectName(to) + ")");
         if(on == null){
             to.AcceptPlayer(this);
             on = to;
@@ -57,7 +56,6 @@ public abstract class Player {
                 on = to;
             }
         }
-        Skeleton.End();
     }
 
     /**
@@ -66,10 +64,8 @@ public abstract class Player {
      * @param to az a csővég, amelyikbe továbbítja a vizet a pumpa
      */
     public void SwitchPump(PipeEnd from, PipeEnd to){
-        Skeleton.Start(this, "SwitchPump(" + Skeleton.GetObjectName(from)
-                + "," + Skeleton.GetObjectName(to) + ")");
+
         on.Switch(from, to);
-        Skeleton.End();
     }
 
     /**
@@ -78,7 +74,6 @@ public abstract class Player {
      * törli a csövet a kezéből.
      */
     public void ConnectPipe() {
-        Skeleton.Start(this, "ConnectPipe()");
         boolean accepted;
         if(holdingPipeEnd != null){
             accepted = on.AddPipe(holdingPipeEnd);
@@ -86,7 +81,6 @@ public abstract class Player {
                 holdingPipeEnd = null;
             }
         }
-        Skeleton.End();
     }
 
     /**
@@ -96,11 +90,9 @@ public abstract class Player {
      * @param p a lecsatlakoztatni kívánt PipeEnd
      */
     public void DisconnectPipe(PipeEnd p){
-        Skeleton.Start(this, "DisconnectPipe()");
         if(holdingPipeEnd == null){
             on.RemovePipe(p);
             holdingPipeEnd = p;
-            Skeleton.End();
         }
 
     }
@@ -110,8 +102,6 @@ public abstract class Player {
      * @param pE a beállítandó PipeEnd
      */
     public void SetHoldingPipeEnd(PipeEnd pE){
-        Skeleton.Start(this, "SetHoldingPipeEnd(" + Skeleton.GetObjectName(pE) + ")");
         this.holdingPipeEnd = pE;
-        Skeleton.End();
     }
 }

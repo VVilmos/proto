@@ -11,10 +11,8 @@ public class Source extends Node{
      */
     @Override
     public void Step() {
-        Skeleton.Start(this, "Step()");
         for (PipeEnd pe : pipeEnds)  {
             if(pe != null) pe.AcceptWater();
         }
-        Skeleton.End();
     }
 }
