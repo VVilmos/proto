@@ -14,8 +14,6 @@ public class Pool {
      * Ez a metódus vizet ad hozzá a Pool-hoz. Ezáltal a Pool által tárolt víz mennyisége nő.
      */
     public void AddWater(){
-        Skeleton.Start(this, "AddWater()");
         amount++;
-        Skeleton.End();
     }
 }

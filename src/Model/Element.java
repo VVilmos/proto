@@ -28,9 +28,8 @@ public abstract class Element {
      * @param p az eltávolítandó játékos
      */
     public void RemovePlayer(Player p) {
-        Skeleton.Start(this, "RemovePlayer(" + Skeleton.GetObjectName(p) + ")");
+
         players.remove(p);
-        Skeleton.End();
     }
 
     /**

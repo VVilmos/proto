@@ -11,8 +11,6 @@ public class Cistern extends Node {
      * Konstruktor
      */
     public Cistern() {
-        Skeleton.CtorStart("Cistern()");
-        Skeleton.End();
     }
 
     /**
@@ -22,14 +20,12 @@ public class Cistern extends Node {
      */
     @Override
     public void Step() {
-        Skeleton.Start(this, "Step()");
         for (PipeEnd pe : pipeEnds)  {
             if (pe != null) {
                 boolean hadWater =  pe.RemoveWater();
                 if (hadWater) Game.getMechanicPool().AddWater();
             }
         }
-        Skeleton.End();
     }
 
     /**
@@ -38,17 +34,15 @@ public class Cistern extends Node {
      * @return az új cső szabad vége
      */
     public PipeEnd MakePipe() {
-        Skeleton.Start(this, "MakePipe()");
 
 
-        Skeleton.CtorStart("Pipe(" + Skeleton.GetObjectName(this) + ") newpip");
+
+
         Pipe newpip = new Pipe(this);
-        Skeleton.End();
-        Skeleton.AddObject(newpip, "newpip");
+
         List<PipeEnd> ends = newpip.GetEnds();
 
-        Skeleton.End();
-        Skeleton.PrintReturn(Skeleton.GetObjectName(ends.get(1)));
+
         return ends.get(1);
     }
 
@@ -57,15 +51,8 @@ public class Cistern extends Node {
      * @return az új pumpa
      */
     public Pump MakePump() {
-        Skeleton.Start(this, "MakePump()");
 
-        Skeleton.CtorStart("Pump() newPump");
         Pump newPump = new Pump();
-        Skeleton.AddObject(newPump, "newPump");
-        Skeleton.End();
-
-        Skeleton.End();
-        Skeleton.PrintReturn("newPumphvhhv");
         return newPump;
     }
 }

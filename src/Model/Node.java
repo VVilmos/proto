@@ -21,11 +21,9 @@ public abstract class Node extends Element implements ISteppable{
      */
     @Override
     public boolean AcceptPlayer(Player p) {
-        Skeleton.Start(this, "AcceptPlayer(" + Skeleton.GetObjectName(p) + ")");
         players.add(p);
 
-        Skeleton.End();
-        Skeleton.PrintReturn("true");
+
         return true;
     }
 
@@ -36,15 +34,13 @@ public abstract class Node extends Element implements ISteppable{
     public abstract void Step();
 
     public List<Element> GetNeighbours() {
-        Skeleton.Start(this, "GetNeighbours()");
         List<Element> neighbours = new ArrayList<>();
         for (int i = 0; i < pipeEnds.length; i++){
             if (pipeEnds[i] != null) {
                 neighbours.add(pipeEnds[i].GetOwnPipe());
             }
         }
-        Skeleton.End();
-        Skeleton.PrintReturn("neighbours");
+
         return neighbours;
     }
 
@@ -54,20 +50,17 @@ public abstract class Node extends Element implements ISteppable{
      * @return a felcsatlakoztatás sikeressége
      */
     public boolean AddPipe(PipeEnd pe)  {
-        Skeleton.Start(this, "AddPipe(" + Skeleton.GetObjectName(pe) + ")");
         int i = 0;
         while (i < 8 && pipeEnds[i] != null) {i++;}
 
         if(i < 8) {
             pipeEnds[i] = pe;
             pe.ConnectNode(this);
-            Skeleton.End();
-            Skeleton.PrintReturn("true");
+
             return true;
         }
         else {
-            Skeleton.End();
-            Skeleton.PrintReturn("false");
+
             return false;
         }
     }
@@ -77,11 +70,11 @@ public abstract class Node extends Element implements ISteppable{
      * @param pe az eltávolítani kívánt cső bekötött vége
      */
     public void RemovePipe(PipeEnd pe) {
-        Skeleton.Start(this, "RemovePipe(" + Skeleton.GetObjectName(pe) + ")");
+
         int i = 0;
         while (i < 8 && (pipeEnds[i] == null || pipeEnds[i] != pe)){i++;}
         if(pipeEnds[i] != null) pipeEnds[i].DisconnectFromNode();
-        Skeleton.End();
+
     }
 
     /**
@@ -89,9 +82,7 @@ public abstract class Node extends Element implements ISteppable{
      * @return a bekötött csővégek listája
      */
     public PipeEnd[] GetPipeEnds() {
-        Skeleton.Start(this, "GetPipeEnds()");
-        Skeleton.End();
-        Skeleton.PrintReturn("pipeEnds");
+
         return pipeEnds;
     }
 }
