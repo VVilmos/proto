@@ -29,35 +29,32 @@ public class Mechanic extends Player{
     }
 
     /**
-     * Lerak egy pumpát a csőre, amin áll.
+     * Lerak egy pumpát.
      */
     public void PlacePump() {
-
         if(holdingPumps.size() == 0) {
             return;
         }
-
         Pipe newPipe = on.Cut();
-
-
-        List<PipeEnd> ends = on.GetEnds();
-        ends.get(1).ConnectNode(holdingPumps.get(0));
-
-        newPipe.GetEnds().get(1).ConnectNode(holdingPumps.get(0));
-
-        Move(holdingPumps.get(0));
-        holdingPumps.remove(0);
-
+        if(newPipe != null) {
+            List<PipeEnd> ends = on.GetEnds();
+            ends.get(1).ConnectNode(holdingPumps.get(0)); //AddPipe hívja ConnectNode-ot, ez így működni fog?
+            newPipe.GetEnds().get(1).ConnectNode(holdingPumps.get(0));
+            Move(holdingPumps.get(0));
+            holdingPumps.remove(0);
+        }
     }
 
     /**
      * Felvesz egy új pumpát.
      * Megkéri a Ciszternát, hogy gyártson le neki egy új pumpát,
-     * majd hozzáaadja azt a holdingPumps-hoz.
+     * majd hozzáaadja azt a holdingPumps-hoz, ha nem null.
      */
     public void PickupPump() {
         Pump p = on.MakePump();
-        holdingPumps.add(p);
+        if(p != null) {
+            holdingPumps.add(p);
+        }
     }
 
     /**
@@ -69,7 +66,9 @@ public class Mechanic extends Player{
     public void PickupPipe() {
         if(holdingPipeEnd == null){
             PipeEnd p = on.MakePipe();
-            holdingPipeEnd = p;
+            if(p != null){
+                holdingPipeEnd = p;
+            }
         }
     }
 
@@ -77,7 +76,28 @@ public class Mechanic extends Player{
      * Megfoltozza a csövet, amin a Mechanic áll.
      */
     public void RepairPipe() {
-
         on.Patch();
     }
+
+    /**
+     * A játékosnál levő pumpákhoz adja a paraméterben megadott pumpát.
+     * @param p a hozzáadandó pumpa
+     */
+    public void HoldPump(Pump p){
+        holdingPumps.add(p);
+    }
+
+    public void GetState(){
+        super.GetState();
+        if(holdingPumps.size() == 0){
+            System.out.println("holdingPumps: null");
+        }
+        else{
+            System.out.println("holdingPumps: ");
+            for(int i = 0; i < holdingPumps.size(); i++){
+                System.out.println("    " + holdingPumps.get(i)); //a neve kellene
+            }
+        }
+    }
+
 }
