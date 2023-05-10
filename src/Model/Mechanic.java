@@ -25,49 +25,36 @@ public class Mechanic extends Player{
      * Megjavítja a pumpát, amin a szerelő áll.
      */
     public void RepairPump() {
-        Skeleton.Start(this, "RepairPump()");
         on.Repair();
-        Skeleton.End();
     }
 
     /**
-     * Lerak egy pumpát a csőre, amin áll.
+     * Lerak egy pumpát.
      */
     public void PlacePump() {
-        Skeleton.Start(this, "PlacePump()");
         if(holdingPumps.size() == 0) {
-            Skeleton.End();
             return;
         }
-
         Pipe newPipe = on.Cut();
-        Skeleton.LogOff();
-        Skeleton.AddObject(newPipe, "newPipe");
-        Skeleton.AddObject(newPipe.GetEnds().get(0), "newEnd1");
-        Skeleton.AddObject(newPipe.GetEnds().get(1), "newEnd2");
-        Skeleton.LogOn();
-
-        List<PipeEnd> ends = on.GetEnds();
-        ends.get(1).ConnectNode(holdingPumps.get(0));
-
-        newPipe.GetEnds().get(1).ConnectNode(holdingPumps.get(0));
-
-        Move(holdingPumps.get(0));
-        holdingPumps.remove(0);
-
-        Skeleton.End();
+        if(newPipe != null) {
+            List<PipeEnd> ends = on.GetEnds();
+            ends.get(1).ConnectNode(holdingPumps.get(0)); //AddPipe hívja ConnectNode-ot, ez így működni fog?
+            newPipe.GetEnds().get(1).ConnectNode(holdingPumps.get(0));
+            Move(holdingPumps.get(0));
+            holdingPumps.remove(0);
+        }
     }
 
     /**
      * Felvesz egy új pumpát.
      * Megkéri a Ciszternát, hogy gyártson le neki egy új pumpát,
-     * majd hozzáaadja azt a holdingPumps-hoz.
+     * majd hozzáaadja azt a holdingPumps-hoz, ha nem null.
      */
     public void PickupPump() {
-        Skeleton.Start(this, "PickUpPump()");
         Pump p = on.MakePump();
-        holdingPumps.add(p);
-        Skeleton.End();
+        if(p != null) {
+            holdingPumps.add(p);
+        }
     }
 
     /**
@@ -77,20 +64,40 @@ public class Mechanic extends Player{
      * A cső másik vége a Ciszternához van bekötve.
      */
     public void PickupPipe() {
-        Skeleton.Start(this, "PickUpPipe()");
         if(holdingPipeEnd == null){
             PipeEnd p = on.MakePipe();
-            holdingPipeEnd = p;
+            if(p != null){
+                holdingPipeEnd = p;
+            }
         }
-        Skeleton.End();
     }
 
     /**
      * Megfoltozza a csövet, amin a Mechanic áll.
      */
     public void RepairPipe() {
-        Skeleton.Start(this, "RepairPipe()");
         on.Patch();
-        Skeleton.End();
     }
+
+    /**
+     * A játékosnál levő pumpákhoz adja a paraméterben megadott pumpát.
+     * @param p a hozzáadandó pumpa
+     */
+    public void HoldPump(Pump p){
+        holdingPumps.add(p);
+    }
+
+    public void GetState(){
+        super.GetState();
+        if(holdingPumps.size() == 0){
+            System.out.println("holdingPumps: null");
+        }
+        else{
+            System.out.println("holdingPumps: ");
+            for(int i = 0; i < holdingPumps.size(); i++){
+                System.out.println("    " + holdingPumps.get(i)); //a neve kellene
+            }
+        }
+    }
+
 }
