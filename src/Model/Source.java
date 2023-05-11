@@ -11,8 +11,10 @@ public class Source extends Node{
      */
     @Override
     public void Step() {
-        for (PipeEnd pe : pipeEnds)  {
-            if(pe != null) pe.AcceptWater();
+        synchronized(this){
+            for(PipeEnd pe : pipeEnds) {
+                if(pe != null) pe.AcceptWater();
+            }
         }
     }
 }
