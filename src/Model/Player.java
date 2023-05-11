@@ -97,7 +97,6 @@ public abstract class Player {
         if(holdingPipeEnd == null){
             on.RemovePipe(p);
             holdingPipeEnd = p;
-            Skeleton.End();
         }
     }
 
