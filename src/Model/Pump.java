@@ -10,7 +10,7 @@ public class Pump extends Node{
      * Kétféle állapot lehetséges: meghibásodott vagy nem
      * Meghibásodott pumpa nem tud már vizet szívni, csak az átmeneti tárolójában lévő vizet kiengedni
      */
-    private boolean isBroken = false;
+    private boolean isBroken;
 
     /**
      * Annak a bekötött csőnek a vége, amiből minden ütembe a pumpa vizet próbál szívni
@@ -31,9 +31,13 @@ public class Pump extends Node{
 
     /**
      * Az osztály paraméter nélküli konstruktora
+     * Alapértelmezetten egy üres tárolójú, de működőképes pumpa jön létre, melynek inPipe/outPipe mezői inicializálatlanok
      */
     public Pump() {
-
+        inPipe = -1;
+        outPipe = -1;
+        tankFull = false;
+        isBroken = false;
     }
 
     /**
@@ -42,7 +46,7 @@ public class Pump extends Node{
      * Elvárt működése függ a működési állapotától és az átmeneti tároló állapotától
      */
     @Override
-    public void Step() {
+    synchronized public void Step() {
         if (tankFull && pipeEnds[outPipe] != null) {
             boolean accepted = pipeEnds[outPipe].AcceptWater();
             if (accepted) tankFull = false;

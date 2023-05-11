@@ -19,7 +19,7 @@ public class Cistern extends Node {
      * Ha kap vizet az egyik csőből, akkor megnöveli a játékban játszó szerelők csapatának összesen szerzett vízmennyiségét
      */
     @Override
-    public void Step() {
+    synchronized public void Step() {
         for (PipeEnd pe : pipeEnds)  {
             if (pe != null) {
                 boolean hadWater =  pe.RemoveWater();
