@@ -40,7 +40,7 @@ public class PipeEnd {
      *
      * @return Igazzal tér vissza, ha a cső ({@link Pipe}) képes vizet befogadni.
      */
-    public boolean AcceptWater() {
+    public synchronized boolean AcceptWater() {
         boolean accepted = pipe.AcceptWater();
         return accepted;
     }
@@ -50,7 +50,7 @@ public class PipeEnd {
      *
      * @return Igazzal tér vissza, ha a csőből ({@link Pipe}) lehet vizet kiszívni.
      */
-    public boolean RemoveWater() {
+    public synchronized boolean RemoveWater() {
         boolean accepted = pipe.RemoveWater();
         return accepted;
     }
@@ -67,7 +67,7 @@ public class PipeEnd {
     /**
      * Lecsatlakoztatja a csővéget a felkapcsolt {@link Node}-ról.
      */
-    public void DisconnectFromNode() {  //pontadas?
+    public synchronized void DisconnectFromNode() {  //pontadas?
         boolean isFull = pipe.RemoveWater();
         if (isFull) Game.getSaboteurPool().AddWater();
         node = null;
