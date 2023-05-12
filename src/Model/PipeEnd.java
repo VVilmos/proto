@@ -82,11 +82,5 @@ public class PipeEnd {
         return this.node;
     }
 
-    /**
-     * Kiírja a csővég belső állapotát
-     */
-    public void GetState(){
-        System.out.println("pipe:" /* a cső neve*/);
-        System.out.println("node: " /* a node neve*/);
-    }
+
 }
