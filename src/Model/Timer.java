@@ -21,7 +21,7 @@ public class Timer extends Thread {
     /**
      * A léptethető elemeket ({@link ISteppable}) tartalmazó lista.
      */
-    private ArrayList<ISteppable> iStebbaples;
+    private ArrayList<ISteppable> iSteppables;
     /**
      * Az osztály singleton példánya
      */
@@ -32,7 +32,7 @@ public class Timer extends Thread {
      * A konstruktor privát, hogy csak az osztály saját maga tudja meghívni, mivel singleton.
      */
     private Timer() {
-        iStebbaples = new ArrayList<ISteppable>();
+        iSteppables = new ArrayList<ISteppable>();
     }
 
     /**
@@ -53,7 +53,7 @@ public class Timer extends Thread {
      * @param iSteppable Léptethető objektum.
      */
     public synchronized void addISteppable(ISteppable iSteppable) {
-        iStebbaples.add(iSteppable);
+        iSteppables.add(iSteppable);
     }
 
     /**
@@ -62,21 +62,21 @@ public class Timer extends Thread {
      * @param iSteppable Léptethető objektum.
      */
     public synchronized void removeISteppable(ISteppable iSteppable) {
-        iStebbaples.remove(iSteppable);
+        iSteppables.remove(iSteppable);
     }
 
     /**
      * Kiüríti a léptethető elemek listáját
      */
     public synchronized void clear() {
-        iStebbaples.clear();
+        iSteppables.clear();
     }
 
     /**
      * Lépteti az eltárolt elemeket úgy, hogy mindegyiknek meghívja a step metódusát.
      */
     public synchronized void tick() {
-        for (ISteppable steppable : iStebbaples) {
+        for (ISteppable steppable : iSteppables) {
             steppable.Step();
         }
     }
