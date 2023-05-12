@@ -11,9 +11,9 @@ import java.util.ArrayList;
  */
 public class Timer extends Thread {
     /**
-     * Az időzítő leállításjelzője. Ha igazra állítódik, a szál elkezd várakozni.
+     * Az időzítő szünetelésjelzője. Ha igazra állítódik, a szál elkezd várakozni.
      */
-    private boolean stopSignal = false;
+    private boolean pauseSignal = false;
     /**
      * Az időzítő periódusa
      */
@@ -100,7 +100,7 @@ public class Timer extends Thread {
             try {
                 tick();
                 sleep(interval);
-                if (stopSignal) {
+                if (pauseSignal) {
                     wait();
                 }
             } catch (InterruptedException e) {
@@ -113,7 +113,7 @@ public class Timer extends Thread {
      * Az órajelet leállító függvény. Meghívása esetén leáll a szálfüggvény és következésképpen a periodikus működés.
      */
     public void pause() {
-        stopSignal = true;
+        pauseSignal = true;
     }
 
     /**
@@ -121,9 +121,9 @@ public class Timer extends Thread {
      */
     @Override
     public synchronized void start() {
-        if (stopSignal) {
+        if (pauseSignal) {
             notify();
-            stopSignal = false;
+            pauseSignal = false;
         } else
             super.start();
     }
