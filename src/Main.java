@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import Model.Timer;
 
 public class Main {
 
@@ -20,5 +21,6 @@ public class Main {
 
         }
         scanner.close();
+
     }
 }
