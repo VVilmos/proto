@@ -100,16 +100,15 @@ public class Timer extends Thread {
      */
     @Override
     public synchronized void run() {
-        while (!stopSignal) {
-            try {
+        try {
+            while (!stopSignal) {
                 tick();
                 sleep(interval);
                 if (pauseSignal) {
                     wait();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -136,7 +135,11 @@ public class Timer extends Thread {
      * Leállítja az időzítőt végérvényesen. \n
      * Az alkalmazás bezárásakor kell meghívni
      */
-    public void terminate(){
+    public void terminate() {
         stopSignal = true;
+        if (pauseSignal) {
+            pauseSignal = false;
+            interrupt();
+        }
     }
 }
