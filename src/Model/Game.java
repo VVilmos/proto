@@ -853,7 +853,7 @@ public class Game {
 
         PipeEnd empty = null;
         for (PipeEnd e : pip.GetEnds())
-            if (e.GetAttachedNode() == null)
+            if (e.GetAttachedNode() == null && empty == null)
                 empty = e;
 
         if (empty != null)
