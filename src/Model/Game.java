@@ -34,7 +34,7 @@ public class Game {
     /**
      * A játék determinisztikusságát határozza meg.
      */
-    private static boolean determinism = false;
+    private static boolean determinism = true;
 
     /**
      * A játék időzítője.
@@ -592,7 +592,8 @@ public class Game {
                     System.out.print("ConnectedPipes: ");
                     PipeEnd[] ends = pu.GetPipeEnds();
                     for (PipeEnd pe : ends) {
-                        System.out.print(objectnames.get(pe.GetOwnPipe()));
+                        if(pe != null)
+                            System.out.print(objectnames.get(pe.GetOwnPipe()));
                     }
 
                     System.out.println();
