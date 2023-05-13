@@ -428,6 +428,7 @@ public class Game {
                 }
                 System.out.println("");
             }
+            System.out.println();
         } else if (saboteurs.containsKey(objectname)) {
             Saboteur s = saboteurs.get(objectname);
             Element on = s.GetLocation();
