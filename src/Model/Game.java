@@ -473,7 +473,6 @@ public class Game {
                 if (pip.GetProtectedness()) System.out.println("true");
                 else System.out.println("false");
 
-                System.out.println();
 
             } else {
                 if (args.contains("o")) {
@@ -657,6 +656,7 @@ public class Game {
             }
 
             System.out.println();
+            System.out.println();
 
         } else if (sources.containsKey(objectname)) {
             Source source = sources.get(objectname);
@@ -679,6 +679,8 @@ public class Game {
             }
 
             System.out.println();
+            System.out.println();
+
         } else {
             System.out.println(unknownObjMsg);
         }
