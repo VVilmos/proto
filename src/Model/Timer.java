@@ -15,6 +15,10 @@ public class Timer extends Thread {
      */
     private boolean pauseSignal = false;
     /**
+     * Az időzítő leállításjelzője. Ha igazra állítódik, a szálfüggvény véget ér.
+     */
+    private boolean stopSignal = false;
+    /**
      * Az időzítő periódusa
      */
     private static int interval;
@@ -96,7 +100,7 @@ public class Timer extends Thread {
      */
     @Override
     public synchronized void run() {
-        while (true) {
+        while (!stopSignal) {
             try {
                 tick();
                 sleep(interval);
@@ -126,5 +130,13 @@ public class Timer extends Thread {
             pauseSignal = false;
         } else
             super.start();
+    }
+
+    /**
+     * Leállítja az időzítőt végérvényesen. \n
+     * Az alkalmazás bezárásakor kell meghívni
+     */
+    public synchronized void terminate(){
+        stopSignal = true;
     }
 }

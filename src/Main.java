@@ -184,9 +184,8 @@ public class Main {
                 break;
             }
         }
-
-
         scanner.close();
+        Timer.getInstance().terminate();
 
     }
 }
