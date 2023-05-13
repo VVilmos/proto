@@ -67,14 +67,18 @@ public class Pump extends Node implements Serializable {
      */
     @Override
     public synchronized void RemovePipe(PipeEnd pe) {
-        PipeEnd out = pipeEnds[outPipe];
-        if (out == pe)
-            outPipe = -1;
+       if (outPipe != -1) {
+           PipeEnd out = pipeEnds[outPipe];
+           if (out == pe)
+               outPipe = -1;
+       }
 
-        PipeEnd in = pipeEnds[inPipe];
-        if (in == pe)
-            inPipe = -1;
-        super.RemovePipe(pe);
+        if (inPipe != -1) {
+            PipeEnd in = pipeEnds[inPipe];
+            if (in == pe)
+                inPipe = -1;
+            super.RemovePipe(pe);
+        }
     }
 
     /**
