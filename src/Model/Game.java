@@ -762,6 +762,7 @@ public class Game {
             return;
         }
 
+
         Element element = player.GetLocation();
         Pipe inPipe = pipes.get(input);
         Pipe outPipe = pipes.get(output);
@@ -773,19 +774,17 @@ public class Game {
         PipeEnd inputPipeEnd = null;
         PipeEnd outputPipeEnd = null;
 
-        for (PipeEnd pe : pipeEnds)
-            if (pe.GetOwnPipe() == inPipe)
-                inputPipeEnd = pe;
-
-        for (PipeEnd pe : pipeEnds)
-            if (pe.GetOwnPipe() == outPipe)
-                outputPipeEnd = pe;
-
-        if (inputPipeEnd == null || outputPipeEnd == null) {
-            System.out.println("Unable to switch the pump! One of the pipes specified is not connected to the pump.");
-            return;
+        if(input != "null") {
+            for (PipeEnd pe : pipeEnds)
+                if (pe.GetOwnPipe() == inPipe)
+                    inputPipeEnd = pe;
         }
 
+        if(output != "null") {
+            for (PipeEnd pe : pipeEnds)
+                if (pe.GetOwnPipe() == outPipe)
+                    outputPipeEnd = pe;
+        }
         element.Switch(inputPipeEnd, outputPipeEnd);
     }
 
