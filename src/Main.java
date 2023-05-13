@@ -1,6 +1,7 @@
 import Model.Game;
 
 import java.util.Scanner;
+
 import Model.Timer;
 
 public class Main {
@@ -20,25 +21,29 @@ public class Main {
             if (command[0].equals("state")) {
                 if (command.length == 2) {
                     game.State(command[1], "");
-                }
-                else if (command.length == 3) {
+                } else if (command.length == 3) {
                     game.State(command[1], command[2]);
-                }
-                else System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
-            }
-            else if (command[0].equals("//")) {
+                } else
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+            } else if (command[0].equals("//")) {
                 //nothing
-            }
-            else if (command[0].equals("leak")) {
-                if (command.length != 2) System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+            } else if (command[0].equals("leak")) {
+                if (command.length != 2)
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
                 else {
                     game.Leak(command[1]);
                 }
-            }
-            else if (command[0].equals("disconnectpipe")) {
-                if (command.length != 3) System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+            } else if (command[0].equals("disconnectpipe")) {
+                if (command.length != 3)
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
                 else {
                     game.DisconnectPipe(command[1], command[2]);
+                }
+            } else if (command[0].equals("move")) {
+                if (command.length != 3)
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                else {
+                    game.Move(command[1], command[2]);
                 }
             }
 

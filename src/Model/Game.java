@@ -14,7 +14,7 @@ public class Game {
     private HashMap<String, Source> sources = new HashMap<>();
     private HashMap<String, Mechanic> mechanics = new HashMap<>();
     private HashMap<String, Saboteur> saboteurs = new HashMap<>();
-   private HashMap<Object, String> objectnames = new HashMap<>();
+    private HashMap<Object, String> objectnames = new HashMap<>();
 
     /**
      * A játék determinisztikusságát határozza meg.
@@ -26,7 +26,7 @@ public class Game {
      */
     private Timer timer;
 
-    public HashMap<String, Pipe> getPipes(){
+    public HashMap<String, Pipe> getPipes() {
         return pipes;
     }
 
@@ -40,13 +40,24 @@ public class Game {
     protected static Pool mechanicPool = new Pool();
 
     /**
+     * A Game osztály konstruktora. Inicializálja a Timer singleton osztályt.
+     */
+    public Game() {
+        timer = Timer.getInstance();
+    }
+
+    /**
      * Getter, mely visszaadja a szabotőrök "vízgyűjtőjét"
+     *
      * @return referencia a szabotőrök vízgyüjtőjére
      */
-    public static Pool getSaboteurPool() { return saboteurPool; }
+    public static Pool getSaboteurPool() {
+        return saboteurPool;
+    }
 
     /**
      * Getter, mely visszaadja a szerelők "vízgyűjtőjét"
+     *
      * @return referencia a szerelők vízgyüjtőjére
      */
     public static Pool getMechanicPool() {
@@ -56,65 +67,61 @@ public class Game {
     //ide jöhetnek a parancsok
     //Paraméterként adott objektum nem létezik: "Unknown object! Note that all referred objects are to be added to the running model."
 
-    public void Add(String type, String name){
-        if(Objects.equals(type, "Pipe")){
+    public void Add(String type, String name) {
+        if (Objects.equals(type, "Pipe")) {
             Pipe p = new Pipe(null);
             pipes.put(name, p);
         }
-        if(Objects.equals(type, "Pump")){
+        if (Objects.equals(type, "Pump")) {
             Pump p = new Pump();
             pumps.put(name, p);
         }
-        if(Objects.equals(type, "Cistern")){
+        if (Objects.equals(type, "Cistern")) {
             Cistern c = new Cistern();
             cisterns.put(name, c);
         }
-        if(Objects.equals(type, "Source")){
+        if (Objects.equals(type, "Source")) {
             Source s = new Source();
             sources.put(name, s);
         }
-        if(Objects.equals(type, "Mechanic")){
+        if (Objects.equals(type, "Mechanic")) {
             Mechanic m = new Mechanic();
             mechanics.put(name, m);
         }
-        if(Objects.equals(type, "Saboteur")){
+        if (Objects.equals(type, "Saboteur")) {
             Saboteur s = new Saboteur();
             saboteurs.put(name, s);
         }
     }
 
-    public void Drain(String name){
-        if(pipes.containsKey(name)){
+    public void Drain(String name) {
+        if (pipes.containsKey(name)) {
             pipes.get(name).RemoveWater();
-        }
-        else if(pumps.containsKey(name)){
+        } else if (pumps.containsKey(name)) {
             pumps.get(name).EmptyWaterTank();
         }
     }
 
-    public void HoldPipe(String pipename, String mechanicname){
-        if(pipes.containsKey(pipename) && mechanics.containsKey(mechanicname)){
+    public void HoldPipe(String pipename, String mechanicname) {
+        if (pipes.containsKey(pipename) && mechanics.containsKey(mechanicname)) {
             mechanics.get(mechanicname).HoldPipe(pipes.get(pipename));
         }
     }
 
-    public void HoldPump(String pumpname, String mechanicname){
-        if(pumps.containsKey(pumpname) && mechanics.containsKey(mechanicname)){
+    public void HoldPump(String pumpname, String mechanicname) {
+        if (pumps.containsKey(pumpname) && mechanics.containsKey(mechanicname)) {
             mechanics.get(mechanicname).HoldPump(pumps.get(pumpname));
         }
     }
 
-    public void Step(String name){
-        if(pipes.containsKey(name)){
+    public void Step(String name) {
+        if (pipes.containsKey(name)) {
             pipes.get(name).Step();
-        }
-        else if(pumps.containsKey(name)){
+        } else if (pumps.containsKey(name)) {
             pumps.get(name).Step();
-        }
-        else if(cisterns.containsKey(name)){
+        } else if (cisterns.containsKey(name)) {
             cisterns.get(name).Step();
-        }
-        else if(sources.containsKey(name)){
+        } else if (sources.containsKey(name)) {
             sources.get(name).Step();
         }
     }
@@ -123,8 +130,9 @@ public class Game {
      * Egy cső lecsatlakoztatását végzi egy karakteren keresztül.
      * Ha a paraméterként megadott karakter vagy cső nem létezik, hibát jelez.
      * Ha a megadott csövet a karakter nem tudja lecsatlakoztatni, akkor a modell nem változik, de nem jelez hibát.
+     *
      * @param playername a szerelő vagy szabotőr objektum neve, akivel le akarjuk csatlakoztatni a csövet
-     * @param pipename a lecsatlakoztatni kívánt cső objektum neve
+     * @param pipename   a lecsatlakoztatni kívánt cső objektum neve
      */
     public void DisconnectPipe(String playername, String pipename) {
         if (mechanics.containsKey(playername) && pipes.containsKey(pipename)) {
@@ -133,15 +141,13 @@ public class Game {
             var pipeEnds = pip.GetEnds();
             m.DisconnectPipe(pipeEnds.get(0));      //ha nem az on felőli vége, akkor nem csinál semmit
             m.DisconnectPipe(pipeEnds.get(1));
-        }
-        else if (saboteurs.containsKey(playername) && pipes.containsKey(pipename)) {
+        } else if (saboteurs.containsKey(playername) && pipes.containsKey(pipename)) {
             Saboteur s = saboteurs.get(playername);
             Pipe pip = pipes.get(pipename);
             var pipeEnds = pip.GetEnds();
             s.DisconnectPipe(pipeEnds.get(0));      //ha nem az on felőli vége, akkor nem csinál semmit
             s.DisconnectPipe(pipeEnds.get(1));
-        }
-        else {
+        } else {
             System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
         }
 
@@ -149,14 +155,14 @@ public class Game {
 
     /**
      * A paramáterként kapott csőnévnek megfelelő cső objektumot kilyukasztja. Ha a keresett cső nem létezik, hibát jelez.
+     *
      * @param pipename a kilyukasztandó cső neve
      */
     public void Leak(String pipename) {
         if (pipes.containsKey(pipename)) {
             Pipe p = pipes.get(pipename);
             p.Leak();
-        }
-        else {
+        } else {
             System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
         }
 
@@ -165,10 +171,11 @@ public class Game {
     /**
      * Állapotlekérdező parancs, amely kiírja a paraméterként megadott névez tartozó objektum állapotát a modellben.
      * Ha a keresett névhez nem tartozik objektum, a függvény hibát jelez.
-     * @param objectname    a lekérdezendő modellbeli objektum. Lehet: pumpa, cső, ciszterna, forrás, szerelő, szabotőr
-     * @param args  a lekérdezendő tulajdonságok betűnként kódólva (csak a pumpa és cső lekérdezésénél vesszük figyelembe)
+     *
+     * @param objectname a lekérdezendő modellbeli objektum. Lehet: pumpa, cső, ciszterna, forrás, szerelő, szabotőr
+     * @param args       a lekérdezendő tulajdonságok betűnként kódólva (csak a pumpa és cső lekérdezésénél vesszük figyelembe)
      */
-    public void State (String objectname, String args) {
+    public void State(String objectname, String args) {
         if (mechanics.containsKey(objectname)) {
             Mechanic m = mechanics.get(objectname);
             Element on = m.GetLocation();                                               //nem létező függvény!!!
@@ -186,8 +193,7 @@ public class Game {
             //ha van a kezében cső
             Pipe holdpipe = m.holdingPipeEnd.GetOwnPipe();                               //elérhetem a holdingPipeEndet?????
             System.out.println(objectnames.get(holdpipe));
-        }
-        else if (saboteurs.containsKey(objectname)) {
+        } else if (saboteurs.containsKey(objectname)) {
             Saboteur s = saboteurs.get(objectname);
             Element on = s.GetLocation();                                               //nem létező függvény!!!
 
@@ -203,8 +209,7 @@ public class Game {
             //ha van a kezében cső
             Pipe holdpipe = s.holdingPipeEnd.GetOwnPipe();                               //elérhetem a holdingPipeEndet?????
             System.out.println(objectnames.get(holdpipe));
-        }
-        else if (pipes.containsKey(objectname)) {
+        } else if (pipes.containsKey(objectname)) {
             Pipe pip = pipes.get(objectname);
             if (args.equals("")) {
 
@@ -280,8 +285,7 @@ public class Game {
 
             }
             System.out.println();
-        }
-        else if (pumps.containsKey(objectname)) {
+        } else if (pumps.containsKey(objectname)) {
             Pump pu = pumps.get(objectname);
             if (args.equals("")) {
 
@@ -289,14 +293,14 @@ public class Game {
                 var list = pu.GetPlayers();
                 System.out.print("Player: ");
                 for (Player p : list) {
-                    System.out.print(objectnames.get(p) +" ");
+                    System.out.print(objectnames.get(p) + " ");
                 }
                 System.out.println();
 
                 //csatlakoztatott csövek
                 System.out.print("ConnectedPipes: ");
                 var neighbours = pu.GetNeighbours();,
-                for (Element neighbour: neighbours) {
+                for (Element neighbour : neighbours) {
                     System.out.print(objectnames.get(neighbour));
                 }
                 System.out.println();
@@ -338,14 +342,13 @@ public class Game {
                 if (pu.GetTankLevel()) System.out.println("true");
                 else System.out.println("false");
 
-            }
-            else {
+            } else {
                 if (args.contains("o")) {
 
                     var list = pu.GetPlayers();
                     System.out.print("Player: ");
                     for (Player p : list) {
-                       System.out.print(objectnames.get(p)+ " ");
+                        System.out.print(objectnames.get(p) + " ");
                     }
                     System.out.println();
                 }
@@ -353,7 +356,7 @@ public class Game {
 
                     System.out.print("ConnectedPipes: ");
                     PipeEnd[] ends = pu.GetPipeEnds();
-                    for (PipeEnd pe: ends) {
+                    for (PipeEnd pe : ends) {
                         System.out.print(objectnames.get(pe.GetOwnPipe()));
                     }
 
@@ -401,52 +404,78 @@ public class Game {
             }
             System.out.println();
 
-        }
-        else if (cisterns.containsKey(objectname)) {
+        } else if (cisterns.containsKey(objectname)) {
             Cistern cis = cisterns.get(objectname);
 
             //helybéli karakterek
             var list = cis.GetPlayers();
             System.out.print("Player: ");
             for (Player p : list) {
-                System.out.print(objectnames.get(p)+ " ");
+                System.out.print(objectnames.get(p) + " ");
             }
             System.out.println();
 
             //csatlkaztatott csövek
             System.out.print("ConnectedPipes: ");
             PipeEnd[] ends = cis.GetPipeEnds();
-            for (PipeEnd pe: ends) {
+            for (PipeEnd pe : ends) {
                 System.out.print(objectnames.get(pe.GetOwnPipe()));
             }
 
             System.out.println();
 
-        }
-        else if (sources.containsKey(objectname)) {
+        } else if (sources.containsKey(objectname)) {
             Source source = sources.get(objectname);
 
             //helybéli karakterek
             var list = source.GetPlayers();
             System.out.print("Player: ");
             for (Player p : list) {
-                System.out.print(objectnames.get(p)+ " ");
+                System.out.print(objectnames.get(p) + " ");
             }
             System.out.println();
 
             //csatlkaztatott csövek
             System.out.print("ConnectedPipes: ");
             PipeEnd[] ends = source.GetPipeEnds();
-            for (PipeEnd pe: ends) {
+            for (PipeEnd pe : ends) {
                 System.out.print(objectnames.get(pe.GetOwnPipe()));
             }
 
             System.out.println();
-        }
-        else {
+        } else {
             System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
         }
 
+    }
+
+    /**
+     * Játékost elmozgató parancs. Kikeresi a hashmap-ekből a megfelelő elemet, valamint a megfelelő játékost, ezután a játékost lépteti a megadott elemre.
+     *
+     * @param playerName  A játékos neve, akit léptetünk.
+     * @param elementName Az elem neve, ahova a játékos lép.
+     */
+    public void Move(String playerName, String elementName) {
+        Player player;
+        player = mechanics.get(playerName);
+        if (player == null)
+            player = saboteurs.get(playerName);
+
+        if (player == null)  //hibakezelés?
+            return;
+
+        Element element;
+        element = pipes.get(elementName);
+        if (element == null)
+            element = sources.get(elementName);
+        if (element == null)
+            element = cisterns.get(elementName);
+        if (element == null)
+            element = pumps.get(elementName);
+        if (element == null) //hibakezelés?
+            return;
+
+        player.Move(element);
     }
 
 }
