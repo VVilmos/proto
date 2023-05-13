@@ -104,6 +104,33 @@ public class Main {
                 else {
                     game.HoldPump(command[1], command[2]);
                 }
+            } else if(command[0].equals("connect")) {
+                if(command.length == 3)
+                    game.Connect(command[1], command[2]);
+                else if(command.length == 4)
+                    game.Connect(command[1], command[2], command[3]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if(command[0].equals("sticky")) {
+                if(command.length == 2)
+                    game.Sticky(command[1]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if(command[0].equals("connectpipe")) {
+                if(command.length == 2)
+                    game.ConnectPipe(command[1]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if(command[0].equals("leakpipe")) {
+                if(command.length == 2)
+                    game.LeakPipe(command[1]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if(command[0].equals("switch")) {
+                if(command.length == 4)
+                    game.Switch(command[1], command[2], command[3]);
+                else
+                    System.out.println(argErrorMsg);
             }
 
         }
