@@ -187,7 +187,7 @@ public class Main {
                     System.out.println(argErrorMsg);
             } else if (command[0].equals("exit")) {
                 break;
-            } else {
+            } else if(!command[0].startsWith("//") && command[0].length() != 0){
                 System.out.println("Unknown command!!!");
             }
         }
