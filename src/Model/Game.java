@@ -63,6 +63,7 @@ public class Game {
      * A Game osztály konstruktora. Inicializálja a Timer singleton osztályt.
      */
     public Game() {
+        Timer.setInterval(500);
         timer = Timer.getInstance();
     }
 
