@@ -136,7 +136,7 @@ public abstract class Player {
      * @param p a megadott cső, amit a Player megfog
      */
     public void HoldPipe(Pipe p) {
-        holdingPipeEnd = p.GetEnds().get(1);
+        holdingPipeEnd = p.GetEnds().get(0);
     }
 
     /**
