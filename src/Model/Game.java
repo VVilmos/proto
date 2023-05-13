@@ -448,12 +448,14 @@ public class Game {
             //ha nincs a kezében semmi
             if (s.GetHoldingPipeEnd() == null) {
                 System.out.println("null");
+                System.out.println();
                 return;
             }
 
             //ha van a kezében cső
             Pipe holdpipe = s.GetHoldingPipeEnd().GetOwnPipe();
             System.out.println(objectnames.get(holdpipe));
+            System.out.println();
         } else if (pipes.containsKey(objectname)) {
             Pipe pip = pipes.get(objectname);
             if (args.equals("")) {
