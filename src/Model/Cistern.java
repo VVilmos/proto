@@ -21,9 +21,9 @@ public class Cistern extends Node implements Serializable {
      */
     @Override
     synchronized public void Step() {
-        for (PipeEnd pe : pipeEnds)  {
+        for (PipeEnd pe : pipeEnds) {
             if (pe != null) {
-                boolean hadWater =  pe.RemoveWater();
+                boolean hadWater = pe.RemoveWater();
                 if (hadWater) Game.getMechanicPool().AddWater();
             }
         }
@@ -32,6 +32,7 @@ public class Cistern extends Node implements Serializable {
     /**
      * A ciszterna egy új csövet juttat a rajta álló szerelőnek
      * Az új cső egyik végét automatikusan magához csatlakoztatja a ciszterna, így egy szerelő csak egy szabad véggel rendelkező csövet tud felvenni
+     *
      * @return az új cső szabad vége
      */
     public PipeEnd MakePipe() {
@@ -42,6 +43,7 @@ public class Cistern extends Node implements Serializable {
 
     /**
      * A ciszterna egy új pumpát juttat a rajta álló szerelőnek
+     *
      * @return az új pumpa
      */
     synchronized public Pump MakePump() {

@@ -8,7 +8,7 @@ import java.util.List;
  * Felelőssége: Képes megjavítani az elromlott pumpákat és a lyukas csöveket,
  * új csövet / pumpákat magához venni és letenni.
  */
-public class Mechanic extends Player{
+public class Mechanic extends Player {
     /**
      * A szerelőnél levő pumpákat tárolja el.
      */
@@ -17,7 +17,7 @@ public class Mechanic extends Player{
     /**
      * A Mechanic paraméter nélküli konstruktora.
      */
-    public Mechanic(){
+    public Mechanic() {
         super();
     }
 
@@ -32,11 +32,11 @@ public class Mechanic extends Player{
      * Lerak egy pumpát.
      */
     public void PlacePump() {
-        if(holdingPumps.size() == 0) {
+        if (holdingPumps.size() == 0) {
             return;
         }
         Pipe newPipe = on.Cut();
-        if(newPipe != null) {
+        if (newPipe != null) {
             List<PipeEnd> ends = on.GetEnds();
             holdingPumps.get(0).AddPipe(ends.get(1));
             holdingPumps.get(0).AddPipe(newPipe.GetEnds().get(1));
@@ -52,7 +52,7 @@ public class Mechanic extends Player{
      */
     public void PickupPump() {
         Pump p = on.MakePump();
-        if(p != null) {
+        if (p != null) {
             holdingPumps.add(p);
         }
     }
@@ -64,9 +64,9 @@ public class Mechanic extends Player{
      * A cső másik vége a Ciszternához van bekötve.
      */
     public void PickupPipe() {
-        if(holdingPipeEnd == null){
+        if (holdingPipeEnd == null) {
             PipeEnd p = on.MakePipe();
-            if(p != null){
+            if (p != null) {
                 holdingPipeEnd = p;
             }
         }
@@ -81,17 +81,19 @@ public class Mechanic extends Player{
 
     /**
      * A játékosnál levő pumpákhoz adja a paraméterben megadott pumpát.
+     *
      * @param p a hozzáadandó pumpa
      */
-    public void HoldPump(Pump p){
+    public void HoldPump(Pump p) {
         holdingPumps.add(p);
     }
 
     /**
      * Visszaadja a játékosnál levő pumpákat.
+     *
      * @return a játékosnál levő pumpák
      */
-    public List<Pump> GetHoldingPumps(){
+    public List<Pump> GetHoldingPumps() {
         return holdingPumps;
     }
 }

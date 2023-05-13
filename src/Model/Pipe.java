@@ -46,6 +46,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Konstruktor
+     *
      * @param node a node, amihez kezdetben kapcsolva van.
      */
     public Pipe(Node node) {
@@ -77,9 +78,9 @@ public class Pipe extends Element implements ISteppable, Serializable {
      * Kilyukasztja a csövet.
      */
     synchronized public void Leak() {
-        if(protectedFor == 0) {
+        if (protectedFor == 0) {
             isBroken = true;
-            if(hasWater) {
+            if (hasWater) {
                 saboteurPool.AddWater();
                 hasWater = false;
             }
@@ -90,7 +91,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
      * Megfoltozza a csövet.
      */
     synchronized public void Patch() {
-        if(isBroken) {
+        if (isBroken) {
             isBroken = false;
             protectedFor = Game.generateRandomProtectedTime();
         }
@@ -98,14 +99,15 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Elfogad vizet valakitől.
+     *
      * @return sikeres-e a fogadás.
      */
     synchronized public boolean AcceptWater() {
-        if(hasWater) {
+        if (hasWater) {
             return false;
         }
         hasWater = true;
-        if(isBroken){
+        if (isBroken) {
             saboteurPool.AddWater();
             hasWater = false;
         }
@@ -114,12 +116,13 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Ráléptet egy játékost a csőre.
+     *
      * @param p a játékos.
      * @return sikerült-e a művelet.
      */
     @Override
     synchronized public boolean AcceptPlayer(Player p) {
-        if(players.size() == 0) {
+        if (players.size() == 0) {
             if (slipperyFor != 0) {
                 players.add(p);
                 Node nextNode = ends.get(Game.generateRandomBetween(0, ends.size() - 1)).GetAttachedNode();
@@ -139,6 +142,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Kiszedi a vizet a csőből, ha van benne.
+     *
      * @return sikerült-e a művelet.
      */
     synchronized public boolean RemoveWater() {
@@ -151,10 +155,11 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Kettévágja a csövet.
+     *
      * @return a művelet által létrehozott új cső.
      */
     synchronized public Pipe Cut() {
-        if(ends.size() == 2) {
+        if (ends.size() == 2) {
             Node node = ends.get(1).GetAttachedNode();
             node.RemovePipe(ends.get(1));
 
@@ -166,6 +171,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekéri a cső végeit.
+     *
      * @return a csővégek.
      */
     synchronized public List<PipeEnd> GetEnds() {
@@ -175,6 +181,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekéri a cső szomszédos elemeit.
+     *
      * @return a szomszédok.
      */
     synchronized public List<Element> GetNeighbours() {
@@ -192,11 +199,11 @@ public class Pipe extends Element implements ISteppable, Serializable {
      */
     @Override
     synchronized public void Step() {
-        if(slipperyFor != 0)
+        if (slipperyFor != 0)
             slipperyFor--;
-        if(stickyFor != 0)
+        if (stickyFor != 0)
             stickyFor--;
-        if(protectedFor != 0)
+        if (protectedFor != 0)
             protectedFor--;
     }
 
@@ -204,7 +211,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
      * Ragadóssá teszi a csövet.
      */
     synchronized public void MakeSticky() {
-        if(stickyFor == 0)
+        if (stickyFor == 0)
             stickyFor = Game.generateRandomStickyTime();
     }
 
@@ -218,6 +225,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekérdezi, hogy törött-e a cső.
+     *
      * @return
      */
     synchronized public boolean GetBrokennes() {
@@ -226,6 +234,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekérdezi, hogy van-e víz a csőben.
+     *
      * @return
      */
     synchronized public boolean GetWaterLevel() {
@@ -234,6 +243,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekérdezi, hogy ragadós-e a cső.
+     *
      * @return
      */
     synchronized public boolean GetStickyness() {
@@ -242,6 +252,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekérdezi, hogy csúszós-e a cső.
+     *
      * @return
      */
     synchronized public boolean GetSlipperyness() {
@@ -250,6 +261,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
 
     /**
      * Lekérdezi, hogy védett-e a cső (azaz nem lehet kilyukasztani)
+     *
      * @return
      */
     synchronized public boolean GetProtectedness() {

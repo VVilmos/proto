@@ -1,7 +1,6 @@
 package Model;
 
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,8 @@ public abstract class Player {
     /**
      * A Player paraméter nélküli konstruktora.
      */
-    public Player(){    }
+    public Player() {
+    }
 
     /**
      * Átmozgatja a Player-t egy másik, szomszédos Element-re, amennyiben sikerül, eltárolja az új helyzetének.
@@ -37,26 +37,26 @@ public abstract class Player {
      * Egyéb esetben, ha nincs odaragadva a csőhöz, lekérdezi a szomszédokat, és ellenőrzi, hogy a megadott Element szomszédos-e azzal az
      * Element-tel, amin áll. Ha ez teljesül, akkor rálépteti a PLayer-t, és ha ez a művelet sikeres volt, akkor
      * eltávolítja az on Elementről a PLayer-t és beállítja az új helyzetét.
+     *
      * @param to az az Element, amire átmozgatja a Player-t
      */
-    public void Move(Element to){
-        if(on == null){
+    public void Move(Element to) {
+        if (on == null) {
             to.AcceptPlayer(this);
             on = to;
-        }
-        else if(!isStuck){
-            List<Element> neighbours =  on.GetNeighbours();
+        } else if (!isStuck) {
+            List<Element> neighbours = on.GetNeighbours();
             boolean adjacent = false;
-            for(int i = 0; i < neighbours.size(); i++){
-                if(to.equals(neighbours.get(i))){
+            for (int i = 0; i < neighbours.size(); i++) {
+                if (to.equals(neighbours.get(i))) {
                     adjacent = true;
                 }
             }
-            if(!adjacent){
+            if (!adjacent) {
                 return;
             }
             boolean accepted = to.AcceptPlayer(this);
-            if(accepted){
+            if (accepted) {
                 on.RemovePlayer(this);
                 on = to;
             }
@@ -65,10 +65,11 @@ public abstract class Player {
 
     /**
      * Átállítja annak a pumpának a bemeneti és kimeneti csövét, amin a karakter áll.
+     *
      * @param from az a csővég, amiből kapja a vizet a pumpa
-     * @param to az a csővég, amelyikbe továbbítja a vizet a pumpa
+     * @param to   az a csővég, amelyikbe továbbítja a vizet a pumpa
      */
-    public void SwitchPump(PipeEnd from, PipeEnd to){
+    public void SwitchPump(PipeEnd from, PipeEnd to) {
         on.Switch(from, to);
     }
 
@@ -79,9 +80,9 @@ public abstract class Player {
      */
     public void ConnectPipe() {
         boolean accepted;
-        if(holdingPipeEnd != null){
+        if (holdingPipeEnd != null) {
             accepted = on.AddPipe(holdingPipeEnd);
-            if(accepted){
+            if (accepted) {
                 holdingPipeEnd = null;
             }
         }
@@ -91,10 +92,11 @@ public abstract class Player {
      * Lecsatlakoztatja a megadott paraméterű csővéget arról az Elementről, amin áll, és hozzáadja
      * a holdingPipeEnd-hez. Amenniyben a Player-nek már van a kezében egy csővég, akkor nem tud más
      * csövet lecsatlakoztatni.
+     *
      * @param p a lecsatlakoztatni kívánt PipeEnd
      */
-    public void DisconnectPipe(PipeEnd p){
-        if(holdingPipeEnd == null && on.GetEnds().contains(p)){
+    public void DisconnectPipe(PipeEnd p) {
+        if (holdingPipeEnd == null && on.GetEnds().contains(p)) {
             on.RemovePipe(p);
             holdingPipeEnd = p;
         }
@@ -103,14 +105,14 @@ public abstract class Player {
     /**
      * Kilyukasztja a csövet, amin éppen áll.
      */
-    public void BreakPipe(){
+    public void BreakPipe() {
         on.Leak();
     }
 
     /**
      * Ragadóssá teszi a csövet, amin a játékos áll.
      */
-    public void MakeStickyPipe(){
+    public void MakeStickyPipe() {
         on.MakeSticky();
     }
 
@@ -124,46 +126,50 @@ public abstract class Player {
     /**
      * A Player-t elválasztja a csőtől.
      */
-    public void Release(){
+    public void Release() {
         isStuck = false;
     }
 
     /**
      * A megadott cső végét a Player kezébe adja.
+     *
      * @param p a megadott cső, amit a Player megfog
      */
-    public void HoldPipe(Pipe p){
+    public void HoldPipe(Pipe p) {
         holdingPipeEnd = p.GetEnds().get(1);
     }
 
     /**
      * A Player-t a megadott Element-re csúsztatja.
+     *
      * @param e a megadott Element, amire a Player csúszik
      */
-    public void SlippedTo(Element e){
+    public void SlippedTo(Element e) {
         on = e;
     }
 
     /**
      * Beállítja a paraméterben megadott csővéget a HoldingPipeEnd-nek.
+     *
      * @param pE a beállítandó PipeEnd
      */
-    public void SetHoldingPipeEnd(PipeEnd pE){
+    public void SetHoldingPipeEnd(PipeEnd pE) {
         this.holdingPipeEnd = pE;
     }
 
     /**
      * Visszaadja azt az Elementet, amin a Player éppen áll.
      */
-    public Element GetLocation(){
+    public Element GetLocation() {
         return on;
     }
 
     /**
      * Visszaadja azt a csővéget, amit a Player a kezében tart.
+     *
      * @return a holdingPipeEnd attribútum
      */
-    public PipeEnd GetHoldingPipeEnd(){
+    public PipeEnd GetHoldingPipeEnd() {
         return holdingPipeEnd;
     }
 }

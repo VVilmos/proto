@@ -61,8 +61,9 @@ public class Pump extends Node implements Serializable {
 
     /**
      * A pumpán a víz áramlásának/mozgatásának átirányítása
+     *
      * @param from annak a bekötött csőnek a vége, amiből vizet kívánunk mozgatni
-     * @param to annak a bekötött csőnek a vége, amibe vizet kívánunk mozgatni
+     * @param to   annak a bekötött csőnek a vége, amibe vizet kívánunk mozgatni
      */
     synchronized public void Switch(PipeEnd from, PipeEnd to) {
         for (int i = 0; i < pipeEnds.length; i++) {
@@ -74,7 +75,7 @@ public class Pump extends Node implements Serializable {
     /**
      * A pumpa meghibásodása
      */
-   synchronized public void BreakPump() {
+    synchronized public void BreakPump() {
         isBroken = true;
     }
 
@@ -101,6 +102,7 @@ public class Pump extends Node implements Serializable {
 
     /**
      * Getter a pump aktuális bemeneti csövére
+     *
      * @return a pumpa bemeneti csövének sorszáma a csatlakoztatott csövek közül
      */
     synchronized public int GetInPipeNumber() {
@@ -109,6 +111,7 @@ public class Pump extends Node implements Serializable {
 
     /**
      * Getter a pump aktuális kimeneti csövére
+     *
      * @return a pumpa kimeneti csövének sorszáma a csatlakoztatott csövek közül
      */
     synchronized public int GetOutPipeNumber() {
@@ -117,6 +120,7 @@ public class Pump extends Node implements Serializable {
 
     /**
      * Getter a pumpa működési állapotára
+     *
      * @return a pumpa törött-e
      */
     synchronized public boolean GetBrokenness() {
@@ -125,6 +129,7 @@ public class Pump extends Node implements Serializable {
 
     /**
      * Getter a pumpa átmeneti tárolójának vízszintjére
+     *
      * @return az átmeneti tároló teli van-e
      */
     synchronized public boolean GetTankLevel() {

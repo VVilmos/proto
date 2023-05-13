@@ -13,8 +13,8 @@ public class Source extends Node implements Serializable {
      */
     @Override
     public synchronized void Step() {
-        for(PipeEnd pe : pipeEnds) {
-            if(pe != null) pe.AcceptWater();
+        for (PipeEnd pe : pipeEnds) {
+            if (pe != null) pe.AcceptWater();
         }
     }
 }
