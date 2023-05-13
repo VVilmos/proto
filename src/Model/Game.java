@@ -408,12 +408,22 @@ public class Game {
             //ha nincs a kezében semmi
             if (m.holdingPipeEnd == null) {
                 System.out.println("null");
-                return;
+            }
+            else{ //ha van a kezében cső
+                Pipe holdpipe = m.GetHoldingPipeEnd().GetOwnPipe();
+                System.out.println(objectnames.get(holdpipe));
             }
 
-            //ha van a kezében cső
-            Pipe holdpipe = m.GetHoldingPipeEnd().GetOwnPipe();
-            System.out.println(objectnames.get(holdpipe));
+            System.out.print("holdingPumps: ");
+            if(m.GetHoldingPumps().size() == 0){
+                System.out.println("");
+            }
+            else{
+                for(Pump p : m.GetHoldingPumps()){
+                    System.out.print(objectnames.get(p) + " ");
+                }
+                System.out.println("");
+            }
         } else if (saboteurs.containsKey(objectname)) {
             Saboteur s = saboteurs.get(objectname);
             Element on = s.GetLocation();
