@@ -86,4 +86,12 @@ public class Mechanic extends Player{
     public void HoldPump(Pump p){
         holdingPumps.add(p);
     }
+
+    /**
+     * Visszaadja a játékosnál levő pumpákat.
+     * @return a játékosnál levő pumpák
+     */
+    public List<Pump> GetHoldinPumps(){
+        return holdingPumps;
+    }
 }
