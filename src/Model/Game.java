@@ -959,13 +959,13 @@ public class Game {
         }
 
         PipeEnd fromEnd = null;
-        for (PipeEnd e : pump.GetEnds())
-            if (e.GetOwnPipe() == from)
+        for (PipeEnd e : from.GetEnds())
+            if (e.GetAttachedNode() == pump)
                 fromEnd = e;
 
         PipeEnd toEnd = null;
-        for (PipeEnd e : pump.GetEnds())
-            if (e.GetOwnPipe() == to)
+        for (PipeEnd e : to.GetEnds())
+            if (e.GetAttachedNode() == pump)
                 toEnd = e;
 
         if (fromEnd != null && toEnd != null)
