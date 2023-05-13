@@ -145,7 +145,9 @@ public abstract class Player {
      * @param e a megadott Element, amire a Player csúszik
      */
     public void SlippedTo(Element e) {
+        on.RemovePlayer(this);
         on = e;
+        on.AcceptPlayer(this);
     }
 
     /**

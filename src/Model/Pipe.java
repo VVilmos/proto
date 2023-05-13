@@ -131,7 +131,8 @@ public class Pipe extends Element implements ISteppable, Serializable {
                 assert fromId >= 0;
                 players.add(p);
                 Node nextNode = ends.get(Game.generateNextStep(fromId)).GetAttachedNode();
-                p.Move(nextNode);
+                p.SlippedTo(nextNode);
+                players.remove(p);
                 return false;
             }
             if (stickyFor != 0) {
