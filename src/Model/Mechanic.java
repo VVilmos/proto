@@ -86,18 +86,4 @@ public class Mechanic extends Player{
     public void HoldPump(Pump p){
         holdingPumps.add(p);
     }
-
-    public void GetState(){
-        super.GetState();
-        if(holdingPumps.size() == 0){
-            System.out.println("holdingPumps: null");
-        }
-        else{
-            System.out.println("holdingPumps: ");
-            for(int i = 0; i < holdingPumps.size(); i++){
-                System.out.println("    " + holdingPumps.get(i)); //a neve kellene
-            }
-        }
-    }
-
 }

@@ -14,7 +14,10 @@ public class Game {
     private HashMap<String, Source> sources = new HashMap<>();
     private HashMap<String, Mechanic> mechanics = new HashMap<>();
     private HashMap<String, Saboteur> saboteurs = new HashMap<>();
-   private HashMap<Object, String> objectnames = new HashMap<>();
+    /**
+     * A játékban lévő objektumok nevei.
+     */
+    private HashMap<Object, String> objectnames = new HashMap<>();
 
     /**
      * A játék determinisztikusságát határozza meg.
@@ -26,16 +29,20 @@ public class Game {
      */
     private Timer timer;
 
+    /**
+     * Visszaadja a játékban levő csöveket.
+     * @return a csövek
+     */
     public HashMap<String, Pipe> getPipes(){
         return pipes;
     }
 
     /**
-     * A szabotőrök csapata által megszerzett víz "gyüjtőhelye"
+     * A szabotőrök csapata által megszerzett víz "gyűjtőhelye"
      */
     protected static Pool saboteurPool = new Pool(); //protected??
     /**
-     * A szerelők csapata által megszerzett víz "gyüjtőhelye"
+     * A szerelők csapata által megszerzett víz "gyűjtőhelye"
      */
     protected static Pool mechanicPool = new Pool();
 
@@ -56,33 +63,48 @@ public class Game {
     //ide jöhetnek a parancsok
     //Paraméterként adott objektum nem létezik: "Unknown object! Note that all referred objects are to be added to the running model."
 
+    /**
+     * Hozzáad egy új objektumot a játékhoz.
+     * @param type a hozzáadni kívánt objektum típusa
+     * @param name a hozzáadni kívánt objektum neve
+     */
     public void Add(String type, String name){
         if(Objects.equals(type, "Pipe")){
             Pipe p = new Pipe(null);
             pipes.put(name, p);
+            objectnames.put(p, name);
         }
         if(Objects.equals(type, "Pump")){
             Pump p = new Pump();
             pumps.put(name, p);
+            objectnames.put(p, name);
         }
         if(Objects.equals(type, "Cistern")){
             Cistern c = new Cistern();
             cisterns.put(name, c);
+            objectnames.put(c, name);
         }
         if(Objects.equals(type, "Source")){
             Source s = new Source();
             sources.put(name, s);
+            objectnames.put(s, name);
         }
         if(Objects.equals(type, "Mechanic")){
             Mechanic m = new Mechanic();
             mechanics.put(name, m);
+            objectnames.put(m, name);
         }
         if(Objects.equals(type, "Saboteur")){
             Saboteur s = new Saboteur();
             saboteurs.put(name, s);
+            objectnames.put(s, name);
         }
     }
 
+    /**
+     * Kiüríti az add paranccsal létrehozott csöveknek és pumpáknak a víztartályát, amennyiben azok tartalmaznak vizet.
+     * @param name a cső vagy pumpa neve
+     */
     public void Drain(String name){
         if(pipes.containsKey(name)){
             pipes.get(name).RemoveWater();
@@ -90,20 +112,43 @@ public class Game {
         else if(pumps.containsKey(name)){
             pumps.get(name).EmptyWaterTank();
         }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        }
     }
 
+    /**
+     * A megadott nevű szerelő kezébe adja annak a már létrehozott csőnek a végét, aminek a nevét megadjuk paraméterként.
+     * @param pipename a cső neve
+     * @param mechanicname a szerelő neve
+     */
     public void HoldPipe(String pipename, String mechanicname){
         if(pipes.containsKey(pipename) && mechanics.containsKey(mechanicname)){
             mechanics.get(mechanicname).HoldPipe(pipes.get(pipename));
         }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        }
     }
 
+    /**
+     * A megadott nevű szerelő kezébe adja a megadott nevű, már létrehozott pumpát.
+     * @param pumpname a pumpa neve
+     * @param mechanicname a szerelő neve
+     */
     public void HoldPump(String pumpname, String mechanicname){
         if(pumps.containsKey(pumpname) && mechanics.containsKey(mechanicname)){
             mechanics.get(mechanicname).HoldPump(pumps.get(pumpname));
         }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        }
     }
 
+    /**
+     * Lépteti a már létrehozott léptethető objektumok közül a megadott nevűt.
+     * @param name a léptethető objektum neve
+     */
     public void Step(String name){
         if(pipes.containsKey(name)){
             pipes.get(name).Step();
@@ -116,6 +161,9 @@ public class Game {
         }
         else if(sources.containsKey(name)){
             sources.get(name).Step();
+        }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
         }
     }
 
@@ -171,7 +219,7 @@ public class Game {
     public void State (String objectname, String args) {
         if (mechanics.containsKey(objectname)) {
             Mechanic m = mechanics.get(objectname);
-            Element on = m.GetLocation();                                               //nem létező függvény!!!
+            Element on = m.GetLocation();
 
             System.out.println("On: " + objectnames.get(on));
 
