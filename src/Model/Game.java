@@ -526,7 +526,7 @@ public class Game {
 
                 //helybéli karakterek
                 var list = pu.GetPlayers();
-                System.out.print("Player: ");
+                System.out.print("Players: ");
                 for (Player p : list) {
                     System.out.print(objectnames.get(p) + " ");
                 }
