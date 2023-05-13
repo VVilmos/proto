@@ -172,21 +172,25 @@ public class Game {
             Pipe p = new Pipe();
             pipes.put(name, p);
             objectnames.put(p, name);
+            timer.addISteppable(p);
         } else if (Objects.equals(type, "Pump")) {
             Pump p = new Pump();
             pumps.put(name, p);
             nodes.put(name, p);
             objectnames.put(p, name);
+            timer.addISteppable(p);
         } else if (Objects.equals(type, "Cistern")) {
             Cistern c = new Cistern();
             cisterns.put(name, c);
             nodes.put(name, c);
             objectnames.put(c, name);
+            timer.addISteppable(c);
         } else if (Objects.equals(type, "Source")) {
             Source s = new Source();
             sources.put(name, s);
             nodes.put(name, s);
             objectnames.put(s, name);
+            timer.addISteppable(s);
         } else if (Objects.equals(type, "Mechanic")) {
             Mechanic m = new Mechanic();
             mechanics.put(name, m);
@@ -999,6 +1003,7 @@ public class Game {
      */
     public void Load(String path) {
         try {
+            timer.clear();
             FileInputStream fileInputStream = new FileInputStream(path);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             pipes = (HashMap<String, Pipe>) objectInputStream.readObject();
@@ -1010,6 +1015,26 @@ public class Game {
             nodes = (HashMap<String, Node>) objectInputStream.readObject();
             players = (HashMap<String, Player>) objectInputStream.readObject();
             objectnames = (HashMap<Object, String>) objectInputStream.readObject();
+
+            for(String key : pipes.keySet()){
+                Pipe p = pipes.get(key);
+                timer.addISteppable(p);
+            }
+
+            for(String key : pumps.keySet()){
+                Pump p = pumps.get(key);
+                timer.addISteppable(p);
+            }
+
+            for(String key : cisterns.keySet()){
+                Cistern c = cisterns.get(key);
+                timer.addISteppable(c);
+            }
+
+            for(String key : sources.keySet()){
+                Source s = sources.get(key);
+                timer.addISteppable(s);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
