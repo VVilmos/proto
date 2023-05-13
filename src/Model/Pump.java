@@ -49,11 +49,12 @@ public class Pump extends Node implements Serializable {
      */
     @Override
     synchronized public void Step() {
-        if (tankFull && pipeEnds[outPipe] != null) {
+
+        if (outPipe != -1 && tankFull && pipeEnds[outPipe] != null) {
             boolean accepted = pipeEnds[outPipe].AcceptWater();
             if (accepted) tankFull = false;
         }
-        if (!isBroken && !tankFull && pipeEnds[inPipe] != null) {
+        if (inPipe != -1 && !isBroken && !tankFull && pipeEnds[inPipe] != null) {
             boolean arrived = pipeEnds[inPipe].RemoveWater();
             if (arrived) tankFull = true;
         }
