@@ -584,7 +584,7 @@ public class Game {
                 if (args.contains("o")) {
 
                     var list = pu.GetPlayers();
-                    System.out.print("Player: ");
+                    System.out.print("Players: ");
                     for (Player p : list) {
                         System.out.print(objectnames.get(p) + " ");
                     }
