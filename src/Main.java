@@ -136,6 +136,46 @@ public class Main {
                     System.out.println(argErrorMsg);
                 else game.Save(command[1]);
             }
+            else if(command[0].equals("fill")){
+                if(command.length != 2){
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                }
+                else{
+                    game.Fill(command[1]);
+                }
+            }
+            else if(command[0].equals("break")){
+                if(command.length != 2){
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                }
+                else{
+                    game.Break(command[1]);
+                }
+            }
+            else if(command[0].equals("pickup")){
+                if(command.length != 4){
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                }
+                else{
+                    game.PickUp(command[1], command[2], command[3]);
+                }
+            }
+            else if(command[0].equals("slipperypipe")){
+                if(command.length != 2){
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                }
+                else{
+                    game.SlipperyPipe(command[1]);
+                }
+            }
+            else if(command[0].equals("stickypipe")){
+                if(command.length != 2){
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                }
+                else{
+                    game.StickyPipe(command[1]);
+                }
+            }
 
         }
         scanner.close();
