@@ -1,12 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Ciszternát reprezentáló osztály
  * Felelőssége: egy aktív elem, amely a hozzácsatlakozatott csövekből vizet szív ki
  */
-public class Cistern extends Node {
+public class Cistern extends Node implements Serializable {
     /**
      * Konstruktor
      */
@@ -34,15 +35,8 @@ public class Cistern extends Node {
      * @return az új cső szabad vége
      */
     public PipeEnd MakePipe() {
-
-
-
-
         Pipe newpip = new Pipe(this);
-
         List<PipeEnd> ends = newpip.GetEnds();
-
-
         return ends.get(1);
     }
 
@@ -50,7 +44,7 @@ public class Cistern extends Node {
      * A ciszterna egy új pumpát juttat a rajta álló szerelőnek
      * @return az új pumpa
      */
-    public Pump MakePump() {
+    synchronized public Pump MakePump() {
 
         Pump newPump = new Pump();
         return newPump;

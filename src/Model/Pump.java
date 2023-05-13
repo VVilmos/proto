@@ -1,10 +1,12 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Pumpát reprezentáló osztály
  * Felelőssége: Egy aktív elem, amely vizet pumpál két bekötött, kiválasztott cső között
  */
-public class Pump extends Node{
+public class Pump extends Node implements Serializable {
     /**
      * A pumpa működési állapota
      * Kétféle állapot lehetséges: meghibásodott vagy nem
@@ -62,7 +64,7 @@ public class Pump extends Node{
      * @param from annak a bekötött csőnek a vége, amiből vizet kívánunk mozgatni
      * @param to annak a bekötött csőnek a vége, amibe vizet kívánunk mozgatni
      */
-    public void Switch(PipeEnd from, PipeEnd to) {
+    synchronized public void Switch(PipeEnd from, PipeEnd to) {
         for (int i = 0; i < pipeEnds.length; i++) {
             if (pipeEnds[i] != null && pipeEnds[i] == from) inPipe = i;
             if (pipeEnds[i] != null && pipeEnds[i] == to) outPipe = i;
@@ -72,21 +74,60 @@ public class Pump extends Node{
     /**
      * A pumpa meghibásodása
      */
-    public void BreakPump() {
+   synchronized public void BreakPump() {
         isBroken = true;
     }
 
     /**
      * A pumpa megszerelése
      */
-    public void Repair() {
+    synchronized public void Repair() {
         isBroken = false;
     }
 
     /**
      * A pumpa átmeneti tárolójának feltöltése
      */
-    public void FillWaterTank() {
+    synchronized public void FillWaterTank() {
         tankFull = true;
+    }
+
+    /**
+     * A pumpa átmeneti tárolójának kirürítése
+     */
+    synchronized public void EmptyWaterTank() {
+        tankFull = false;
+    }
+
+    /**
+     * Getter a pump aktuális bemeneti csövére
+     * @return a pumpa bemeneti csövének sorszáma a csatlakoztatott csövek közül
+     */
+    synchronized public int GetInPipeNumber() {
+        return inPipe;
+    }
+
+    /**
+     * Getter a pump aktuális kimeneti csövére
+     * @return a pumpa kimeneti csövének sorszáma a csatlakoztatott csövek közül
+     */
+    synchronized public int GetOutPipeNumber() {
+        return outPipe;
+    }
+
+    /**
+     * Getter a pumpa működési állapotára
+     * @return a pumpa törött-e
+     */
+    synchronized public boolean GetBrokenness() {
+        return isBroken;
+    }
+
+    /**
+     * Getter a pumpa átmeneti tárolójának vízszintjére
+     * @return az átmeneti tároló teli van-e
+     */
+    synchronized public boolean GetTankLevel() {
+        return tankFull;
     }
 }
