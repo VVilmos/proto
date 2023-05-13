@@ -357,8 +357,10 @@ public class Game {
                 objectnames.put(m.GetHoldingPipeEnd().GetOwnPipe(), objectName);
             } else if (Objects.equals(type, "--pump")) {
                 m.PickupPump();
-                pumps.put(objectName, m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1));
-                objectnames.put(m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1),  objectName);
+                if(m.GetHoldingPumps().size() > 0) {
+                    pumps.put(objectName, m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1));
+                    objectnames.put(m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1), objectName);
+                }
             }
         } else {
             System.out.println("Unknown mechanic name! Note that the referred object is to be added to the running model.");
