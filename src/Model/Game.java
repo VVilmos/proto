@@ -954,29 +954,40 @@ public class Game {
             return;
         }
 
-        Pipe from = pipes.get(fromname);
-        if (from == null) {
-            System.out.println(unknownObjMsg);
-            return;
+        Pipe from = null;
+        Pipe to = null;
+
+        if(!fromname.equals("null")) {
+            from = pipes.get(fromname);
+            if (from == null) {
+                System.out.println(unknownObjMsg);
+                return;
+            }
         }
 
-        Pipe to = pipes.get(toname);
-        if (to == null) {
-            System.out.println(unknownObjMsg);
-            return;
+        if(!toname.equals("null")) {
+            to = pipes.get(toname);
+            if (to == null) {
+                System.out.println(unknownObjMsg);
+                return;
+            }
         }
 
         PipeEnd fromEnd = null;
-        for (PipeEnd e : from.GetEnds())
-            if (e.GetAttachedNode() == pump)
-                fromEnd = e;
+        if(from != null){
+            for (PipeEnd e : from.GetEnds())
+                if (e.GetAttachedNode() == pump)
+                    fromEnd = e;
+        }
 
         PipeEnd toEnd = null;
-        for (PipeEnd e : to.GetEnds())
-            if (e.GetAttachedNode() == pump)
-                toEnd = e;
+        if(to != null){
+            for (PipeEnd e : to.GetEnds())
+                if (e.GetAttachedNode() == pump)
+                    toEnd = e;
+        }
 
-        if (fromEnd != null && toEnd != null)
+        if (fromEnd != null || toEnd != null)
             pump.Switch(fromEnd, toEnd);
     }
 
