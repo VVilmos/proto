@@ -646,7 +646,9 @@ public class Game {
             System.out.print("ConnectedPipes: ");
             PipeEnd[] ends = source.GetPipeEnds();
             for (PipeEnd pe : ends) {
-                System.out.print(objectnames.get(pe.GetOwnPipe()));
+                if (pe != null) {
+                    System.out.print(objectnames.get(pe.GetOwnPipe()));
+                }
             }
 
             System.out.println();
