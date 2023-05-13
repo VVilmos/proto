@@ -7,7 +7,22 @@ import java.util.List;
  * Cső passzív elem.
  * Tárolja/kezeli a fogadott vizet.
  */
-public class Pipe extends Element{
+public class Pipe extends Element implements ISteppable{
+    /**
+     * Ahány időegységig csúszós a cső.
+     */
+    private int slipperyFor = 0;
+
+    /**
+     * Ahány időegységig ragadós a cső.
+     */
+    private int stickyFor = 0;
+
+    /**
+     * Ahány időegységig nem lyukasztható a cső.
+     */
+    private int protectedFor = 0;
+
     /**
      * Törött-e a cső.
      */
@@ -19,28 +34,20 @@ public class Pipe extends Element{
     private boolean hasWater = false;
 
     /**
+     * Eltárolja a csőből kifolyt víz mennyiségét.
+     */
+    private Pool saboteurPool;
+
+    /**
      * A cső végei (1 vagy 2 db)
      */
     private List<PipeEnd> ends = new ArrayList<>();
-
-    /**
-     * Az éppen létező pipeok száma (csak névadásnál van szerepe).
-     */
-    private static int count = 0;
-
-    /**
-     * Kinullázza a számlálót.
-     */
-    public static void ResetCounter() {count = 0;}
 
     /**
      * Konstruktor
      * @param node a node, amihez kezdetben kapcsolva van.
      */
     public Pipe(Node node) {
-        count++;
-
-        // Skeleton.CtorStart("PipeEnd(" + Skeleton.GetObjectName(this) + ") end" + count + "1");
         PipeEnd end1 = new PipeEnd(this);
 
         node.AddPipe(end1);
@@ -48,16 +55,20 @@ public class Pipe extends Element{
         PipeEnd end2 = new PipeEnd(this);
         ends.add(end1);
         ends.add(end2);
+
+        saboteurPool = Game.getSaboteurPool();
     }
 
     /**
      * Kilyukasztja a csövet.
      */
     public void Leak() {
-        isBroken = true;
-        if (hasWater) {
-            Game.getSaboteurPool().AddWater();
-            hasWater =false;
+        if(protectedFor == 0) {
+            isBroken = true;
+            if(hasWater) {
+                saboteurPool.AddWater();
+                hasWater = false;
+            }
         }
     }
 
@@ -65,11 +76,14 @@ public class Pipe extends Element{
      * Megfoltozza a csövet.
      */
     public void Patch() {
-        isBroken = false;
+        if(isBroken) {
+            isBroken = false;
+            protectedFor = Game.generateRandomProtectedTime();
+        }
     }
 
     /**
-     * Elfogad csövet valakitől.
+     * Elfogad vizet valakitől.
      * @return sikeres-e a fogadás.
      */
     public boolean AcceptWater() {
@@ -78,7 +92,7 @@ public class Pipe extends Element{
         }
         hasWater = true;
         if(isBroken){
-            Game.getSaboteurPool().AddWater();
+            saboteurPool.AddWater();
             hasWater = false;
         }
         return true;
@@ -91,15 +105,22 @@ public class Pipe extends Element{
      */
     @Override
     public boolean AcceptPlayer(Player p) {
-
-        if (players.size() > 0) {
-
-            return false;
+        if(players.size() == 0) {
+            if (slipperyFor != 0) {
+                players.add(p);
+                Node nextNode = ends.get(Game.generateRandomBetween(0, ends.size() - 1)).GetAttachedNode();
+                p.Move(nextNode);
+                return false;
+            }
+            if (stickyFor != 0) {
+                // p.Stuck();
+                players.add(p);
+                return true;
+            }
+            players.add(p);
+            return true;
         }
-        players.add(p);
-
-
-        return true;
+        return false;
     }
 
     /**
@@ -109,10 +130,8 @@ public class Pipe extends Element{
     public boolean RemoveWater() {
         if (hasWater) {
             hasWater = false;
-
             return true;
         }
-
         return false;
     }
 
@@ -121,12 +140,14 @@ public class Pipe extends Element{
      * @return a művelet által létrehozott új cső.
      */
     public Pipe Cut() {
-        Node node = ends.get(1).GetAttachedNode();
-        node.RemovePipe(ends.get(1));
+        if(ends.size() == 2) {
+            Node node = ends.get(1).GetAttachedNode();
+            node.RemovePipe(ends.get(1));
 
-        Pipe newpip = new Pipe(node);
-
-        return newpip;
+            return new Pipe(node);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -150,5 +171,34 @@ public class Pipe extends Element{
 
 
         return neighbours;
+    }
+
+    /**
+     * Lépteti a csövet.
+     */
+    @Override
+    public void Step() {
+        if(slipperyFor != 0)
+            slipperyFor--;
+        if(stickyFor != 0)
+            stickyFor--;
+        if(protectedFor != 0)
+            protectedFor--;
+    }
+
+    /**
+     * Ragadóssá teszi a csövet.
+     */
+    public void MakeSticky() {
+        if(stickyFor == 0)
+            stickyFor = Game.generateRandomStickyTime();
+    }
+
+    /**
+     * Csúszóssá teszi a csövet.
+     */
+    public void MakeSlippery() {
+        if (slipperyFor == 0)
+            slipperyFor = Game.generateRandomSlipperyTime();
     }
 }
