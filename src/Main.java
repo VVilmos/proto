@@ -187,6 +187,8 @@ public class Main {
                     System.out.println(argErrorMsg);
             } else if (command[0].equals("exit")) {
                 break;
+            } else {
+                System.out.println("Unknown command!!!");
             }
         }
         scanner.close();
