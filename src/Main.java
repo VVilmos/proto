@@ -74,7 +74,37 @@ public class Main {
                 else{
                     game.Repair(command[1], command[2]);
                 }
-            }
+            }else if(command[0].equals("add")) {
+                if(command.length != 3)
+                    System.out.println(argErrorMsg);
+                else{
+                    game.Add(command[1], command[2]);
+                }
+            }else if(command[0].equals("drain")) {
+                if (command.length != 2)
+                    System.out.println(argErrorMsg);
+                else {
+                    game.Drain(command[1]);
+                }
+            }else if(command[0].equals("step")){
+                if(command.length != 2)
+                    System.out.println(argErrorMsg);
+                else{
+                    game.Step(command[1]);
+                }
+            }else if(command[0].equals("holdpipe")) {
+                if (command.length != 3)
+                    System.out.println(argErrorMsg);
+                else {
+                    game.HoldPipe(command[1], command[2]);
+                }
+            }else if(command[0].equals("holdpump")) {
+                if (command.length != 3)
+                    System.out.println(argErrorMsg);
+                else {
+                    game.HoldPump(command[1], command[2]);
+                }
+
 
         }
         scanner.close();

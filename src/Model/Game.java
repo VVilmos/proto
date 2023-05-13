@@ -11,6 +11,11 @@ public class Game {
     private static final String unknownObjMsg = "Unknown object! Note that all referred objects are to be added to the running model.";
 
     /**
+     * Hibaüzenet arra az esetre, ha egy parancs argumentumai helytelenek.
+     */
+    private static final String argErrorMsg = "Invalid argument! Please check the correct syntax of the command in the documentation.";
+
+    /**
      * A játékban lévő csövek, pumpák, ciszternák, források, szerelők és szabotőrök.
      */
     private HashMap<String, Pipe> pipes = new HashMap<>();
@@ -117,6 +122,9 @@ public class Game {
             Saboteur s = new Saboteur();
             saboteurs.put(name, s);
             objectnames.put(s, name);
+        }
+        else{
+            System.out.println(argErrorMsg);
         }
     }
 
