@@ -56,7 +56,7 @@ public class Main {
                 else {
                     game.Grease(command[1]);
                 }
-            } else if (command[0].equals("switch")) {
+            } else if (command[0].equals("switchpump")) {
                 if (command.length != 4)
                     System.out.println(argErrorMsg);
                 else {
@@ -68,43 +68,74 @@ public class Main {
                 else {
                     game.PlacePump(command[1]);
                 }
-            }else if(command[0].equals("repair")){
-                if(command.length != 3)
+            } else if (command[0].equals("repair")) {
+                if (command.length != 3)
                     System.out.println(argErrorMsg);
-                else{
+                else {
                     game.Repair(command[1], command[2]);
                 }
-            }else if(command[0].equals("add")) {
-                if(command.length != 3)
+            } else if (command[0].equals("add")) {
+                if (command.length != 3)
                     System.out.println(argErrorMsg);
-                else{
+                else {
                     game.Add(command[1], command[2]);
                 }
-            }else if(command[0].equals("drain")) {
+            } else if (command[0].equals("drain")) {
                 if (command.length != 2)
                     System.out.println(argErrorMsg);
                 else {
                     game.Drain(command[1]);
                 }
-            }else if(command[0].equals("step")){
-                if(command.length != 2)
+            } else if (command[0].equals("step")) {
+                if (command.length != 2)
                     System.out.println(argErrorMsg);
-                else{
+                else {
                     game.Step(command[1]);
                 }
-            }else if(command[0].equals("holdpipe")) {
+            } else if (command[0].equals("holdpipe")) {
                 if (command.length != 3)
                     System.out.println(argErrorMsg);
                 else {
                     game.HoldPipe(command[1], command[2]);
                 }
-            }else if(command[0].equals("holdpump")) {
+            } else if (command[0].equals("holdpump")) {
                 if (command.length != 3)
                     System.out.println(argErrorMsg);
                 else {
                     game.HoldPump(command[1], command[2]);
                 }
-
+            } else if (command[0].equals("connect")) {
+                if (command.length == 3)
+                    game.Connect(command[1], command[2]);
+                else if (command.length == 4)
+                    game.Connect(command[1], command[2], command[3]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if (command[0].equals("sticky")) {
+                if (command.length == 2)
+                    game.Sticky(command[1]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if (command[0].equals("connectpipe")) {
+                if (command.length == 2)
+                    game.ConnectPipe(command[1]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if (command[0].equals("leakpipe")) {
+                if (command.length == 2)
+                    game.LeakPipe(command[1]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if (command[0].equals("switch")) {
+                if (command.length == 4)
+                    game.Switch(command[1], command[2], command[3]);
+                else
+                    System.out.println(argErrorMsg);
+            } else if (command[0].equals("save")) {
+                if (command.length != 2)
+                    System.out.println(argErrorMsg);
+                else game.Save(command[1]);
+            }
 
         }
         scanner.close();
