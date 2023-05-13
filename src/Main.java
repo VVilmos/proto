@@ -169,13 +169,13 @@ public class Main {
                     System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
                 }
             } else if (command[0].equals("start")) {
-                if (command.length == 2) {
+                if (command.length == 1) {
                     game.StartGame();
                 } else {
                     System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
                 }
             } else if (command[0].equals("end")) {
-                if (command.length == 2) {
+                if (command.length == 1) {
                     game.EndGame();
                 } else {
                     System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
