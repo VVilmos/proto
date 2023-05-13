@@ -419,7 +419,7 @@ public class Game {
             System.out.print("holdingPipe: ");
 
             //ha nincs a kezében semmi
-            if (m.holdingPipeEnd == null) {
+            if (m.GetHoldingPipeEnd() == null) {
                 System.out.println("null");
             } else { //ha van a kezében cső
                 Pipe holdpipe = m.GetHoldingPipeEnd().GetOwnPipe();
@@ -436,7 +436,6 @@ public class Game {
                 }
                 System.out.println("");
             }
-            System.out.println();
         } else if (saboteurs.containsKey(objectname)) {
             Saboteur s = saboteurs.get(objectname);
             Element on = s.GetLocation();
