@@ -104,7 +104,7 @@ public class Main {
                 else {
                     game.HoldPump(command[1], command[2]);
                 }
-
+            }
 
         }
         scanner.close();
