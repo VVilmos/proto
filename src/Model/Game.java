@@ -6,6 +6,10 @@ import java.util.Objects;
 
 public class Game {
     /**
+     * Hibaüzenet arra az esetre, ha egy keresett objektum nem létezik.
+     */
+    private static final String unknownObjMsg = "Unknown object! Note that all referred objects are to be added to the running model.";
+    /**
      * A játékban lévő csövek, pumpák, ciszternák, források, szerelők és szabotőrök.
      */
     private HashMap<String, Pipe> pipes = new HashMap<>();
@@ -65,7 +69,8 @@ public class Game {
     }
 
     //ide jöhetnek a parancsok
-    //Paraméterként adott objektum nem létezik: "Unknown object! Note that all referred objects are to be added to the running model."
+    //TODO: Paraméterként adott objektum nem létezik: "Unknown object! Note that all referred objects are to be added to the running model."
+    //TODO: A teljes üzenet kiírása helyett lehet használni az unknownObjMsg konstans változót
 
     public void Add(String type, String name) {
         if (Objects.equals(type, "Pipe")) {
@@ -148,7 +153,7 @@ public class Game {
             s.DisconnectPipe(pipeEnds.get(0));      //ha nem az on felőli vége, akkor nem csinál semmit
             s.DisconnectPipe(pipeEnds.get(1));
         } else {
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+            System.out.println(unknownObjMsg);
         }
 
     }
@@ -163,7 +168,7 @@ public class Game {
             Pipe p = pipes.get(pipename);
             p.Leak();
         } else {
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+            System.out.println(unknownObjMsg);
         }
 
     }
@@ -444,7 +449,7 @@ public class Game {
 
             System.out.println();
         } else {
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+            System.out.println(unknownObjMsg);
         }
 
     }
@@ -461,8 +466,10 @@ public class Game {
         if (player == null)
             player = saboteurs.get(playerName);
 
-        if (player == null)  //hibakezelés?
+        if (player == null) {
+            System.out.println(unknownObjMsg);
             return;
+        }
 
         Element element;
         element = pipes.get(elementName);
@@ -472,10 +479,26 @@ public class Game {
             element = cisterns.get(elementName);
         if (element == null)
             element = pumps.get(elementName);
-        if (element == null) //hibakezelés?
+        if (element == null) {
+            System.out.println(unknownObjMsg);
             return;
+        }
 
         player.Move(element);
+    }
+
+    /**
+     * Csúszóssá teszi a paraméterként megadott csövet.
+     *
+     * @param pipeName A cső, amit csúszóssá változtat.
+     */
+    public void Grease(String pipeName) {
+        Pipe pipe = pipes.get(pipeName);
+        if (pipe == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+        pipe.MakeSlippery();
     }
 
 }
