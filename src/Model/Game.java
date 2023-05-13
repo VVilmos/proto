@@ -543,7 +543,7 @@ public class Game {
             return;
         }
 
-        element.Switch(inputPipeEnd, outputPipeEnd);
+        player.SwitchPump(inputPipeEnd, outputPipeEnd);
     }
 
     /**
