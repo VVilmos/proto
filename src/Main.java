@@ -203,7 +203,7 @@ public class Main {
                 if (command[0].equals("state")) {
                     if (command.length == 2) {
                         game.State(command[1], "");
-                        System.out.println(command[1] + "hfdsjh");
+
                     } else if (command.length == 3) {
                         game.State(command[2], command[1]);
                     } else
@@ -257,6 +257,7 @@ public class Main {
                         System.out.println(argErrorMsg);
                     else {
                         game.Add(command[1], command[2]);
+                        System.out.println(command[2] + "hfdsjh");
                     }
                 } else if (command[0].equals("drain")) {
                     if (command.length != 2)
