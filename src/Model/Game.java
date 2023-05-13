@@ -123,12 +123,10 @@ public class Game {
     public void Drain(String name){
         if(pipes.containsKey(name)){
             pipes.get(name).RemoveWater();
-        }
-        else if(pumps.containsKey(name)){
+        } else if(pumps.containsKey(name)){
             pumps.get(name).EmptyWaterTank();
-        }
-        else{
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        } else{
+            System.out.println(unknownObjMsg);
         }
     }
 
@@ -143,7 +141,7 @@ public class Game {
             mechanics.get(mechanicname).HoldPipe(pipes.get(pipename));
         }
         else{
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+            System.out.println(unknownObjMsg);
         }
     }
 
@@ -158,7 +156,7 @@ public class Game {
             mechanics.get(mechanicname).HoldPump(pumps.get(pumpname));
         }
         else{
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+            System.out.println(unknownObjMsg);
         }
     }
 
@@ -178,7 +176,7 @@ public class Game {
             sources.get(name).Step();
         }
         else{
-            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+            System.out.println(unknownObjMsg);
         }
     }
 
