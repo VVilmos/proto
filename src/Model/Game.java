@@ -83,12 +83,42 @@ public class Game {
         }
     }
 
+    /**
+     * A paraméterként megadott nevű objektum (Pump) elörésére alkalmas függvény
+     * @param pumpname az eltörni kívánt pumpa neve
+     */
+    public void Break(String pumpname){
+        if (pumps.containsKey(pumpname)) {
+            Pump p = pumps.get(pumpname);
+            p.BreakPump();
+        }
+        else {
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        }
+    }
+
     public void Drain(String name){
         if(pipes.containsKey(name)){
             pipes.get(name).RemoveWater();
         }
         else if(pumps.containsKey(name)){
             pumps.get(name).EmptyWaterTank();
+        }
+    }
+
+    /**
+     * A paraméterként megadott nevű objektum (Pump vagy Pipe) vízzel való feltöltésére alkalmas függvény
+     * @param name Annak az objektumnak a neve, amit meg szeretnénk tölteni vízzel
+     */
+    public void Fill(String name){
+        if(pipes.containsKey(name)){
+            pipes.get(name).AcceptWater();
+        }
+        else if(pumps.containsKey(name)){
+            pumps.get(name).FillWaterTank();
+        }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
         }
     }
 
@@ -160,6 +190,61 @@ public class Game {
             System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
         }
 
+    }
+
+    /**
+     * Egy új pumpa vagy cső felvételére alkalmas függvény a szerelők esetében (ha ciszternán áll éppen)
+     * @param type a felvenni kívánt objektum típusa (Pump vagy Pipe)
+     * @param objectName a felvenni kívánt objektum leendő neve
+     * @param mechanicName a szerelő, aki felveszi az paraméterként megadott típusú objektumot
+     */
+    public void PickUp(String type, String objectName, String mechanicName){
+        if(mechanics.containsKey(mechanicName)){
+            Mechanic m = mechanics.get(mechanicName);
+            if(Objects.equals(type, "--pipe")){
+                m.PickupPipe();
+                pipes.put(objectName, m.GetHoldingPipeEnd().GetOwnPipe());
+            }
+            else if(Objects.equals(type, "--pump")){
+                m.PickupPump();
+                pumps.put(objectName, m.GetHoldingPumps().get(m.GetHoldingPumps().size()-1));
+            }
+        }
+        else{
+            System.out.println("Unknown mechanic name! Note that the referred object is to be added to the running model.");
+        }
+    }
+
+    /**
+     * A cső csúszóssá tételére alkalmas függvény, amin a paraméterként megadott nevű játékos áll (szabotőrök esetén)
+     * @param saboteurName a szabotőr neve, aki csúszóssá teszi a csövet
+     */
+    public void SlipperyPipe(String saboteurName){
+        if(saboteurs.containsKey(saboteurName)){
+            Saboteur s = saboteurs.get(saboteurName);
+            s.MakeSlipperyPipe();
+        }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        }
+    }
+
+    /**
+     * A cső ragadóssá tételére alkalmas függvény, amin a paraméterként megadott nevű játékos áll
+     * @param playerName a játékos neve, aki ragadóssá teszi a csövet
+     */
+    public void StickyPipe(String playerName){
+        if(mechanics.containsKey(playerName)){
+            Mechanic m = mechanics.get(playerName);
+            m.MakeStickyPipe();
+        }
+        else if(saboteurs.containsKey(playerName)){
+            Saboteur s = saboteurs.get(playerName);
+            s.MakeStickyPipe();
+        }
+        else{
+            System.out.println("Unknown object! Note that all referred objects are to be added to the running model.");
+        }
     }
 
     /**
