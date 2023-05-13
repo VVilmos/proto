@@ -1,11 +1,13 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * A játékban levő csővégeket reprezentálja. \n
  * Lehet hozzá Node-ot kötni illetve lecsatlakoztatni róla. \n
  * Tárolja, hogy milyen Node-dal áll összeköttetésben, és hogy melyik csőhöz tartozik.
  */
-public class PipeEnd {
+public class PipeEnd implements Serializable {
     /**
      * Az a cső, melynek egyik vége az adott csővég példány
      */
