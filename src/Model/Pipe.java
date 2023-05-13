@@ -61,6 +61,19 @@ public class Pipe extends Element implements ISteppable, Serializable {
     }
 
     /**
+     * Konstruktor, amely létrehoz egy csövet, ami semmihez sincs hozzákötve.
+     */
+    public Pipe() {
+        PipeEnd end1 = new PipeEnd(this);
+        PipeEnd end2 = new PipeEnd(this);
+
+        ends.add(end1);
+        ends.add(end2);
+
+        saboteurPool = Game.getSaboteurPool();
+    }
+
+    /**
      * Kilyukasztja a csövet.
      */
     synchronized public void Leak() {

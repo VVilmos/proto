@@ -175,6 +175,12 @@ public class Main {
                 else{
                     game.StickyPipe(command[1]);
                 }
+            } else if(command[0].equals("load")) {
+                if(command.length == 2) {
+                    game.Load(command[1]);
+                } else {
+                    System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
+                }
             }
 
         }

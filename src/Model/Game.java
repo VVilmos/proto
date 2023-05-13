@@ -1,9 +1,6 @@
 package Model;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.*;
 
 public class Game {
@@ -134,7 +131,7 @@ public class Game {
      */
     public void Add(String type, String name) {
         if (Objects.equals(type, "Pipe")) {
-            Pipe p = new Pipe(null);
+            Pipe p = new Pipe();
             pipes.put(name, p);
             objectnames.put(p, name);
         }
@@ -945,6 +942,29 @@ public class Game {
             objectOutputStream.writeObject(objectnames);
             objectOutputStream.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Visszatölt egy játékot a megadott fájlból.
+     *
+     * @param path a fájl elérési útja, ahonnan betölti.
+     */
+    public void Load(String path) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(path);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            pipes = (HashMap<String, Pipe>) objectInputStream.readObject();
+            pumps = (HashMap<String, Pump>) objectInputStream.readObject();
+            cisterns = (HashMap<String, Cistern>) objectInputStream.readObject();
+            sources = (HashMap<String, Source>) objectInputStream.readObject();
+            mechanics = (HashMap<String, Mechanic>) objectInputStream.readObject();
+            saboteurs = (HashMap<String, Saboteur>) objectInputStream.readObject();
+            nodes = (HashMap<String, Node>) objectInputStream.readObject();
+            players = (HashMap<String, Player>) objectInputStream.readObject();
+            objectnames = (HashMap<Object, String>) objectInputStream.readObject();
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
