@@ -446,7 +446,7 @@ public class Game {
             System.out.print("holdingPipe: ");
 
             //ha nincs a kezében semmi
-            if (s.holdingPipeEnd == null) {
+            if (s.GetHoldingPipeEnd() == null) {
                 System.out.println("null");
                 return;
             }
@@ -602,7 +602,7 @@ public class Game {
                     PipeEnd[] ends = pu.GetPipeEnds();
                     for (PipeEnd pe : ends) {
                         if(pe != null)
-                            System.out.print(objectnames.get(pe.GetOwnPipe()));
+                            System.out.print(objectnames.get(pe.GetOwnPipe()) + " ");
                     }
 
                     System.out.println();
