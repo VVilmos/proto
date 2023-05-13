@@ -111,7 +111,7 @@ public class Game {
      * @return véletlen érték
      */
     public static int generateRandomSlipperyTime() {
-        if(determinism)
+        if (determinism)
             return 1;
         return generateRandomBetween(1, 5);
     }
@@ -122,7 +122,7 @@ public class Game {
      * @return véletlen érték
      */
     public static int generateRandomStickyTime() {
-        if(determinism)
+        if (determinism)
             return 1;
         return generateRandomBetween(1, 5);
     }
@@ -133,18 +133,19 @@ public class Game {
      * @return véletlen érték
      */
     public static int generateRandomProtectedTime() {
-        if(determinism)
+        if (determinism)
             return 1;
         return generateRandomBetween(1, 5);
     }
 
     /**
      * Generál egy véletlen értéket, ami egy Pipehoz kapcsolódó Nodeot jelent, ide fog továbbmenni a játékos.
+     *
      * @param from amelyik indexű Noderól érkezett.
      * @return
      */
     public static int generateNextStep(int from) {
-        if(determinism)
+        if (determinism)
             return from == 0 ? 1 : 0;
         return generateRandomBetween(0, 1);
     }
@@ -400,7 +401,10 @@ public class Game {
      * @param args       a lekérdezendő tulajdonságok betűnként kódólva (csak a pumpa és cső lekérdezésénél vesszük figyelembe)
      */
     public void State(String objectname, String args) {
-        if (mechanics.containsKey(objectname)) {
+        if (objectname.equals("pools")) {
+            System.out.println("Mechanics: " + mechanicPool.GetWater());
+            System.out.println("Saboteurs: " + saboteurPool.GetWater());
+        } else if (mechanics.containsKey(objectname)) {
             Mechanic m = mechanics.get(objectname);
             Element on = m.GetLocation();
 
@@ -412,18 +416,16 @@ public class Game {
             //ha nincs a kezében semmi
             if (m.holdingPipeEnd == null) {
                 System.out.println("null");
-            }
-            else{ //ha van a kezében cső
+            } else { //ha van a kezében cső
                 Pipe holdpipe = m.GetHoldingPipeEnd().GetOwnPipe();
                 System.out.println(objectnames.get(holdpipe));
             }
 
             System.out.print("holdingPumps: ");
-            if(m.GetHoldingPumps().size() == 0){
+            if (m.GetHoldingPumps().size() == 0) {
                 System.out.println("");
-            }
-            else{
-                for(Pump p : m.GetHoldingPumps()){
+            } else {
+                for (Pump p : m.GetHoldingPumps()) {
                     System.out.print(objectnames.get(p) + " ");
                 }
                 System.out.println("");
@@ -1017,22 +1019,22 @@ public class Game {
             players = (HashMap<String, Player>) objectInputStream.readObject();
             objectnames = (HashMap<Object, String>) objectInputStream.readObject();
 
-            for(String key : pipes.keySet()){
+            for (String key : pipes.keySet()) {
                 Pipe p = pipes.get(key);
                 timer.addISteppable(p);
             }
 
-            for(String key : pumps.keySet()){
+            for (String key : pumps.keySet()) {
                 Pump p = pumps.get(key);
                 timer.addISteppable(p);
             }
 
-            for(String key : cisterns.keySet()){
+            for (String key : cisterns.keySet()) {
                 Cistern c = cisterns.get(key);
                 timer.addISteppable(c);
             }
 
-            for(String key : sources.keySet()){
+            for (String key : sources.keySet()) {
                 Source s = sources.get(key);
                 timer.addISteppable(s);
             }
