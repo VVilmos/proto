@@ -136,7 +136,7 @@ public class Timer extends Thread {
      * Leállítja az időzítőt végérvényesen. \n
      * Az alkalmazás bezárásakor kell meghívni
      */
-    public synchronized void terminate(){
+    public void terminate(){
         stopSignal = true;
     }
 }
