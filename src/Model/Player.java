@@ -158,4 +158,12 @@ public abstract class Player {
     public Element GetLocation(){
         return on;
     }
+
+    /**
+     * Visszaadja azt a csővéget, amit a Player a kezében tart.
+     * @return a holdingPipeEnd attribútum
+     */
+    public PipeEnd GetHoldingPipeEnd(){
+        return holdingPipeEnd;
+    }
 }
