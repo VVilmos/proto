@@ -404,7 +404,7 @@ public class Game {
             Mechanic m = mechanics.get(objectname);
             Element on = m.GetLocation();
 
-            System.out.println("On: " + objectnames.get(on));
+            System.out.println("on: " + objectnames.get(on));
 
 
             System.out.print("holdingPipe: ");
@@ -432,7 +432,7 @@ public class Game {
             Saboteur s = saboteurs.get(objectname);
             Element on = s.GetLocation();
 
-            System.out.println("On: " + objectnames.get(on));
+            System.out.println("on: " + objectnames.get(on));
 
             System.out.print("holdingPipe: ");
 
