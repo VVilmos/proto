@@ -9,6 +9,7 @@ public class Game {
      * Hibaüzenet arra az esetre, ha egy keresett objektum nem létezik.
      */
     private static final String unknownObjMsg = "Unknown object! Note that all referred objects are to be added to the running model.";
+
     /**
      * A játékban lévő csövek, pumpák, ciszternák, források, szerelők és szabotőrök.
      */
@@ -71,6 +72,7 @@ public class Game {
     //ide jöhetnek a parancsok
     //TODO: Paraméterként adott objektum nem létezik: "Unknown object! Note that all referred objects are to be added to the running model."
     //TODO: A teljes üzenet kiírása helyett lehet használni az unknownObjMsg konstans változót
+
 
     public void Add(String type, String name) {
         if (Objects.equals(type, "Pipe")) {
@@ -499,6 +501,49 @@ public class Game {
             return;
         }
         pipe.MakeSlippery();
+    }
+
+    /**
+     * A megadott nevű játékos átállítja azt a pumpát, amin éppen áll.
+     *
+     * @param playerName A játékos neve, aki a pumpán kell, hogy álljon,
+     * @param input      Az új bemeneti cső neve.
+     * @param output     Az új kimeneti cső neve.
+     */
+    public void SwitchPump(String playerName, String input, String output) {
+        Player player = mechanics.get(playerName);
+        if (player == null)
+            player = saboteurs.get(playerName);
+        if (player == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+
+        Element element = player.GetElement(); //TODO: Player GetElement, olyan metódus, ami visszatéríti, hogy a játékos min áll
+        Pipe inPipe = pipes.get(input);
+        Pipe outPipe = pipes.get(output);
+        if (inPipe == null || outPipe == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+        PipeEnd[] pipeEnds = element.GetPipeEnds(); //TODO: A GetPipeEnds-et bele kell tenni az Element ősosztályba
+        PipeEnd inputPipeEnd = null;
+        PipeEnd outputPipeEnd = null;
+
+        for (PipeEnd pe : pipeEnds)
+            if (pe.GetOwnPipe() == inPipe)
+                inputPipeEnd = pe;
+
+        for (PipeEnd pe : pipeEnds)
+            if (pe.GetOwnPipe() == outPipe)
+                outputPipeEnd = pe;
+
+        if (inputPipeEnd == null || outputPipeEnd == null) {
+            System.out.println("Unable to switch the pump! One of the pipes specified is not connected to the pump.");
+            return;
+        }
+
+        element.Switch(inputPipeEnd, outputPipeEnd);
     }
 
 }

@@ -55,6 +55,12 @@ public class Main {
                 else{
                     game.Grease(command[1]);
                 }
+            }else if(command[0].equals("switch")){
+                if(command.length!=4)
+                    System.out.println(argErrorMsg);
+                else{
+                    game.SwitchPump(command[1], command[2], command[3]);
+                }
             }
 
         }
