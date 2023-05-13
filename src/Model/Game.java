@@ -592,7 +592,7 @@ public class Game {
                     System.out.print("ConnectedPipes: ");
                     PipeEnd[] ends = pu.GetPipeEnds();
                     for (PipeEnd pe : ends) {
-                        System.out.print(objectnames.get(pe.GetOwnPipe()));
+                        System.out.print(objectnames.get(pe.GetOwnPipe()) + " ");
                     }
 
                     System.out.println();
@@ -655,7 +655,7 @@ public class Game {
             PipeEnd[] ends = cis.GetPipeEnds();
             for (PipeEnd pe : ends) {
                 if (pe != null) {
-                    System.out.print(objectnames.get(pe.GetOwnPipe()));
+                    System.out.print(objectnames.get(pe.GetOwnPipe()) + " ");
                 }
             }
 
@@ -678,7 +678,7 @@ public class Game {
             PipeEnd[] ends = source.GetPipeEnds();
             for (PipeEnd pe : ends) {
                 if (pe != null) {
-                    System.out.print(objectnames.get(pe.GetOwnPipe()));
+                    System.out.print(objectnames.get(pe.GetOwnPipe()) + " ");
                 }
             }
 

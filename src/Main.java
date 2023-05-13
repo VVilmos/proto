@@ -24,7 +24,7 @@ public class Main {
                 if (command.length == 2) {
                     game.State(command[1], "");
                 } else if (command.length == 3) {
-                    game.State(command[1], command[2]);
+                    game.State(command[2], command[1]);
                 } else
                     System.out.println(argErrorMsg);
             } else if (command[0].equals("//")) {
