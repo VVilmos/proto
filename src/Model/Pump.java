@@ -61,6 +61,23 @@ public class Pump extends Node implements Serializable {
     }
 
     /**
+     * Egy bekötött cső eltávolítása a pumpáról
+     *
+     * @param pe az eltávolítani kívánt cső bekötött vége
+     */
+    @Override
+    public synchronized void RemovePipe(PipeEnd pe) {
+        PipeEnd out = pipeEnds[outPipe];
+        if (out == pe)
+            outPipe = -1;
+
+        PipeEnd in = pipeEnds[inPipe];
+        if (in == pe)
+            inPipe = -1;
+        super.RemovePipe(pe);
+    }
+
+    /**
      * A pumpán a víz áramlásának/mozgatásának átirányítása
      *
      * @param from annak a bekötött csőnek a vége, amiből vizet kívánunk mozgatni
