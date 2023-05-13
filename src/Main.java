@@ -207,7 +207,7 @@ public class Main {
                         game.State(command[2], command[1]);
                     } else
                         System.out.println(argErrorMsg);
-                } else if (command[0].contains("//") || command[0].equals("")) {
+                } else if (command[0].contains("//") || command[0].equals("\\n")) {
                     //nothing
                 } else if (command[0].equals("leak")) {
                     if (command.length != 2)
