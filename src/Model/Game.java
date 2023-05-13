@@ -354,9 +354,11 @@ public class Game {
             if (Objects.equals(type, "--pipe")) {
                 m.PickupPipe();
                 pipes.put(objectName, m.GetHoldingPipeEnd().GetOwnPipe());
+                objectnames.put(m.GetHoldingPipeEnd().GetOwnPipe(), objectName);
             } else if (Objects.equals(type, "--pump")) {
                 m.PickupPump();
                 pumps.put(objectName, m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1));
+                objectnames.put(m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1),  objectName);
             }
         } else {
             System.out.println("Unknown mechanic name! Note that the referred object is to be added to the running model.");
@@ -426,7 +428,8 @@ public class Game {
             if (m.GetHoldingPumps().size() == 0) {
                 System.out.println("");
             } else {
-                for (Pump p : m.GetHoldingPumps()) {
+                var holdingpump = m.GetHoldingPumps();
+                for (Pump p : holdingpump) {
                     System.out.print(objectnames.get(p) + " ");
                 }
                 System.out.println("");
@@ -540,7 +543,7 @@ public class Game {
                 System.out.print("ConnectedPipes: ");
                 var neighbours = pu.GetNeighbours();
                 for (Element neighbour : neighbours) {
-                    System.out.print(objectnames.get(neighbour));
+                    System.out.print(objectnames.get(neighbour) + " ");
                 }
                 System.out.println();
 

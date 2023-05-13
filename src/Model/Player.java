@@ -2,6 +2,7 @@ package Model;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -96,9 +97,16 @@ public abstract class Player {
      * @param p a lecsatlakoztatni kívánt PipeEnd
      */
     public void DisconnectPipe(PipeEnd p) {
-        if (holdingPipeEnd == null && on.GetEnds().contains(p)) {
-            on.RemovePipe(p);
-            holdingPipeEnd = p;
+        if (holdingPipeEnd == null) {
+            var pipeends = on.GetPipeEnds();
+            int i;
+            for (i = 0; i < pipeends.length; i++) {
+                if (pipeends[i] != null && pipeends[i].equals(p)) break;
+            }
+            if (i < pipeends.length) {
+                on.RemovePipe(p);
+                holdingPipeEnd = p;
+            }
         }
     }
 
