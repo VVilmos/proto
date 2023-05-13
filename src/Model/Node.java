@@ -30,7 +30,7 @@ public abstract class Node extends Element implements ISteppable{
      * @return a mezőváltás/karakterfogadás sikeressége
      */
     @Override
-    public boolean AcceptPlayer(Player p) {
+    public synchronized boolean AcceptPlayer(Player p) {
         players.add(p);
         return true;
     }
@@ -44,7 +44,7 @@ public abstract class Node extends Element implements ISteppable{
     /**
      * @return az adott Node szomszédai
      */
-    public List<Element> GetNeighbours() {
+    public synchronized List<Element> GetNeighbours() {
         List<Element> neighbours = new ArrayList<>();
         for (int i = 0; i < pipeEnds.length; i++){
             if (pipeEnds[i] != null) {
@@ -60,7 +60,7 @@ public abstract class Node extends Element implements ISteppable{
      * @param pe a cső szabad/be nem kötött vége
      * @return a felcsatlakoztatás sikeressége
      */
-    public boolean AddPipe(PipeEnd pe)  {
+    public synchronized boolean AddPipe(PipeEnd pe)  {
         int i = 0;
         while(i < pipeCapacity && pipeEnds[i] != null) {i++;}
 
@@ -78,7 +78,7 @@ public abstract class Node extends Element implements ISteppable{
      * Egy bekötött cső eltávolítása az aktív elemről
      * @param pe az eltávolítani kívánt cső bekötött vége
      */
-    public void RemovePipe(PipeEnd pe) {
+    public synchronized void RemovePipe(PipeEnd pe) {
         for(int i = 0; i < pipeEnds.length; i++){
             if(pipeEnds[i] != null && pipeEnds[i] == pe){
                 pipeEnds[i].DisconnectFromNode();
