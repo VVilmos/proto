@@ -199,6 +199,8 @@ public class Main {
             String[] lines = input.split("\\n");
 
             for (int i = 0; i < lines.length; i++) {
+                lines[i] = lines[i].replace("\n", "").replace("\r", "");
+
                 String[] command = lines[i].split(" ");
                 for (String str : command) System.out.print(str);
                 if (command[0].equals("state")) {
