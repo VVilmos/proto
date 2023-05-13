@@ -34,7 +34,7 @@ public class Game {
     /**
      * A játék determinisztikusságát határozza meg.
      */
-    private boolean determinism;
+    private static boolean determinism = false;
 
     /**
      * A játék időzítője.
@@ -111,6 +111,8 @@ public class Game {
      * @return véletlen érték
      */
     public static int generateRandomSlipperyTime() {
+        if(determinism)
+            return 1;
         return generateRandomBetween(1, 5);
     }
 
@@ -120,6 +122,8 @@ public class Game {
      * @return véletlen érték
      */
     public static int generateRandomStickyTime() {
+        if(determinism)
+            return 1;
         return generateRandomBetween(1, 5);
     }
 
@@ -129,7 +133,20 @@ public class Game {
      * @return véletlen érték
      */
     public static int generateRandomProtectedTime() {
+        if(determinism)
+            return 1;
         return generateRandomBetween(1, 5);
+    }
+
+    /**
+     * Generál egy véletlen értéket, ami egy Pipehoz kapcsolódó Nodeot jelent, ide fog továbbmenni a játékos.
+     * @param from amelyik indexű Noderól érkezett.
+     * @return
+     */
+    public static int generateNextStep(int from) {
+        if(determinism)
+            return from == 0 ? 1 : 0;
+        return generateRandomBetween(0, 1);
     }
 
     /**
@@ -139,7 +156,7 @@ public class Game {
      * @param high felső határ
      * @return véletlen szám
      */
-    public static int generateRandomBetween(int low, int high) {
+    private static int generateRandomBetween(int low, int high) {
         Random r = new Random();
         return r.nextInt(high - low) + low;
     }

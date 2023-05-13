@@ -124,8 +124,13 @@ public class Pipe extends Element implements ISteppable, Serializable {
     synchronized public boolean AcceptPlayer(Player p) {
         if (players.size() == 0) {
             if (slipperyFor != 0) {
+                int fromId = -1;
+                for(int i = 0; i <= 1; ++i)
+                    if(ends.get(i).GetAttachedNode() == p.GetLocation())
+                        fromId = i;
+                assert fromId >= 0;
                 players.add(p);
-                Node nextNode = ends.get(Game.generateRandomBetween(0, ends.size() - 1)).GetAttachedNode();
+                Node nextNode = ends.get(Game.generateNextStep(fromId)).GetAttachedNode();
                 p.Move(nextNode);
                 return false;
             }
