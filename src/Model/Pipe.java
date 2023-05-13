@@ -62,7 +62,7 @@ public class Pipe extends Element implements ISteppable{
     /**
      * Kilyukasztja a csövet.
      */
-    public void Leak() {
+    synchronized public void Leak() {
         if(protectedFor == 0) {
             isBroken = true;
             if(hasWater) {
@@ -75,7 +75,7 @@ public class Pipe extends Element implements ISteppable{
     /**
      * Megfoltozza a csövet.
      */
-    public void Patch() {
+    synchronized public void Patch() {
         if(isBroken) {
             isBroken = false;
             protectedFor = Game.generateRandomProtectedTime();
@@ -86,7 +86,7 @@ public class Pipe extends Element implements ISteppable{
      * Elfogad vizet valakitől.
      * @return sikeres-e a fogadás.
      */
-    public boolean AcceptWater() {
+    synchronized public boolean AcceptWater() {
         if(hasWater) {
             return false;
         }
@@ -104,7 +104,7 @@ public class Pipe extends Element implements ISteppable{
      * @return sikerült-e a művelet.
      */
     @Override
-    public boolean AcceptPlayer(Player p) {
+    synchronized public boolean AcceptPlayer(Player p) {
         if(players.size() == 0) {
             if (slipperyFor != 0) {
                 players.add(p);
@@ -127,7 +127,7 @@ public class Pipe extends Element implements ISteppable{
      * Kiszedi a vizet a csőből, ha van benne.
      * @return sikerült-e a művelet.
      */
-    public boolean RemoveWater() {
+    synchronized public boolean RemoveWater() {
         if (hasWater) {
             hasWater = false;
             return true;
@@ -139,7 +139,7 @@ public class Pipe extends Element implements ISteppable{
      * Kettévágja a csövet.
      * @return a művelet által létrehozott új cső.
      */
-    public Pipe Cut() {
+    synchronized public Pipe Cut() {
         if(ends.size() == 2) {
             Node node = ends.get(1).GetAttachedNode();
             node.RemovePipe(ends.get(1));
@@ -154,7 +154,7 @@ public class Pipe extends Element implements ISteppable{
      * Lekéri a cső végeit.
      * @return a csővégek.
      */
-    public List<PipeEnd> GetEnds() {
+    synchronized public List<PipeEnd> GetEnds() {
 
         return ends;
     }
@@ -163,7 +163,7 @@ public class Pipe extends Element implements ISteppable{
      * Lekéri a cső szomszédos elemeit.
      * @return a szomszédok.
      */
-    public List<Element> GetNeighbours() {
+    synchronized public List<Element> GetNeighbours() {
         List<Element> neighbours = new ArrayList<>();
         for (PipeEnd e : ends) {
             neighbours.add(e.GetAttachedNode());
@@ -177,7 +177,7 @@ public class Pipe extends Element implements ISteppable{
      * Lépteti a csövet.
      */
     @Override
-    public void Step() {
+    synchronized public void Step() {
         if(slipperyFor != 0)
             slipperyFor--;
         if(stickyFor != 0)
@@ -189,7 +189,7 @@ public class Pipe extends Element implements ISteppable{
     /**
      * Ragadóssá teszi a csövet.
      */
-    public void MakeSticky() {
+    synchronized public void MakeSticky() {
         if(stickyFor == 0)
             stickyFor = Game.generateRandomStickyTime();
     }
@@ -197,7 +197,7 @@ public class Pipe extends Element implements ISteppable{
     /**
      * Csúszóssá teszi a csövet.
      */
-    public void MakeSlippery() {
+    synchronized public void MakeSlippery() {
         if (slipperyFor == 0)
             slipperyFor = Game.generateRandomSlipperyTime();
     }
