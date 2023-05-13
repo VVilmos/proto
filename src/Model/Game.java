@@ -852,8 +852,16 @@ public class Game {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(path);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            //TODO: parancsok sorozata szerializálás helyett?
-
+            objectOutputStream.writeObject(pipes);
+            objectOutputStream.writeObject(pumps);
+            objectOutputStream.writeObject(cisterns);
+            objectOutputStream.writeObject(sources);
+            objectOutputStream.writeObject(mechanics);
+            objectOutputStream.writeObject(saboteurs);
+            objectOutputStream.writeObject(nodes);
+            objectOutputStream.writeObject(players);
+            objectOutputStream.writeObject(objectnames);
+            objectOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
