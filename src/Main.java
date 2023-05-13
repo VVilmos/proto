@@ -9,6 +9,7 @@ public class Main {
      * Hibaüzenet arra az esetre, ha egy parancs argumentumai helytelenek.
      */
     private static final String argErrorMsg = "Invalid argument! Please check the correct syntax of the command in the documentation.";
+
     public static void main(String[] args) {
 
         //kezdetben üres, load parancsra újat töltünk be
@@ -49,11 +50,29 @@ public class Main {
                 else {
                     game.Move(command[1], command[2]);
                 }
-            } else if (command[0].equals("grease")){
-                if(command.length != 2)
+            } else if (command[0].equals("grease")) {
+                if (command.length != 2)
+                    System.out.println(argErrorMsg);
+                else {
+                    game.Grease(command[1]);
+                }
+            } else if (command[0].equals("switch")) {
+                if (command.length != 4)
+                    System.out.println(argErrorMsg);
+                else {
+                    game.SwitchPump(command[1], command[2], command[3]);
+                }
+            } else if (command[0].equals("placepump")) {
+                if (command.length != 2)
+                    System.out.println(argErrorMsg);
+                else {
+                    game.PlacePump(command[1]);
+                }
+            }else if(command[0].equals("repair")){
+                if(command.length != 3)
                     System.out.println(argErrorMsg);
                 else{
-                    game.Grease(command[1]);
+                    game.Repair(command[1], command[2]);
                 }
             }
 

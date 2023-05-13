@@ -9,6 +9,7 @@ public class Game {
      * Hibaüzenet arra az esetre, ha egy keresett objektum nem létezik.
      */
     private static final String unknownObjMsg = "Unknown object! Note that all referred objects are to be added to the running model.";
+
     /**
      * A játékban lévő csövek, pumpák, ciszternák, források, szerelők és szabotőrök.
      */
@@ -60,12 +61,16 @@ public class Game {
 
     /**
      * Getter, mely visszaadja a szabotőrök "vízgyűjtőjét"
+     *
      * @return referencia a szabotőrök vízgyüjtőjére
      */
-    public static Pool getSaboteurPool() { return saboteurPool; }
+    public static Pool getSaboteurPool() {
+        return saboteurPool;
+    }
 
     /**
      * Getter, mely visszaadja a szerelők "vízgyűjtőjét"
+     *
      * @return referencia a szerelők vízgyüjtőjére
      */
     public static Pool getMechanicPool() {
@@ -548,6 +553,93 @@ public class Game {
             return;
         }
         pipe.MakeSlippery();
+    }
+
+    /**
+     * A megadott nevű játékos átállítja azt a pumpát, amin éppen áll.
+     *
+     * @param playerName A játékos neve, aki a pumpán kell, hogy álljon,
+     * @param input      Az új bemeneti cső neve.
+     * @param output     Az új kimeneti cső neve.
+     */
+    public void SwitchPump(String playerName, String input, String output) {
+        Player player = mechanics.get(playerName);
+        if (player == null)
+            player = saboteurs.get(playerName);
+        if (player == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+
+        Element element = player.GetElement(); //TODO: Player GetElement, olyan metódus, ami visszatéríti, hogy a játékos min áll
+        Pipe inPipe = pipes.get(input);
+        Pipe outPipe = pipes.get(output);
+        if (inPipe == null || outPipe == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+        PipeEnd[] pipeEnds = element.GetPipeEnds(); //TODO: A GetPipeEnds-et bele kell tenni az Element ősosztályba
+        PipeEnd inputPipeEnd = null;
+        PipeEnd outputPipeEnd = null;
+
+        for (PipeEnd pe : pipeEnds)
+            if (pe.GetOwnPipe() == inPipe)
+                inputPipeEnd = pe;
+
+        for (PipeEnd pe : pipeEnds)
+            if (pe.GetOwnPipe() == outPipe)
+                outputPipeEnd = pe;
+
+        if (inputPipeEnd == null || outputPipeEnd == null) {
+            System.out.println("Unable to switch the pump! One of the pipes specified is not connected to the pump.");
+            return;
+        }
+
+        element.Switch(inputPipeEnd, outputPipeEnd);
+    }
+
+    /**
+     * A megadott szerelő letesz egy pumpát oda, ahol meg van állva.
+     *
+     * @param mechanicName A megadott szerelő neve.
+     */
+    public void PlacePump(String mechanicName) {
+        Mechanic mechanic = mechanics.get(mechanicName);
+        if (mechanic == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+
+        mechanic.PlacePump();
+    }
+
+    /**
+     * A megadott nevű szerelő megjavítja a megadott nevű csövet vagy pumpát
+     *
+     * @param elementName  Az elem neve, amit a szerelő megjavít
+     * @param mechanicName A szerelő neve, aki javítani fog
+     */
+    public void Repair(String elementName, String mechanicName) { //TODO: mechanic removal?
+        Mechanic mechanic = mechanics.get(mechanicName);
+        if (mechanic == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+
+        Pipe pipe = pipes.get(elementName);
+        if (pipe != null) {
+            mechanic.Move(pipe);
+            mechanic.RepairPipe();
+        } else {
+            Pump pump = pumps.get(elementName);
+            if (pump == null) {
+                System.out.println(unknownObjMsg);
+                return;
+            } else {
+                mechanic.Move(pump);
+                mechanic.RepairPump();
+            }
+        }
     }
 
 }
