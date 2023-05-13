@@ -546,4 +546,48 @@ public class Game {
         element.Switch(inputPipeEnd, outputPipeEnd);
     }
 
+    /**
+     * A megadott szerelő letesz egy pumpát oda, ahol meg van állva.
+     *
+     * @param mechanicName A megadott szerelő neve.
+     */
+    public void PlacePump(String mechanicName) {
+        Mechanic mechanic = mechanics.get(mechanicName);
+        if (mechanic == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+
+        mechanic.PlacePump();
+    }
+
+    /**
+     * A megadott nevű szerelő megjavítja a megadott nevű csövet vagy pumpát
+     *
+     * @param elementName  Az elem neve, amit a szerelő megjavít
+     * @param mechanicName A szerelő neve, aki javítani fog
+     */
+    public void Repair(String elementName, String mechanicName) { //TODO: mechanic removal?
+        Mechanic mechanic = mechanics.get(mechanicName);
+        if (mechanic == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+
+        Pipe pipe = pipes.get(elementName);
+        if (pipe != null) {
+            mechanic.Move(pipe);
+            mechanic.RepairPipe();
+        } else {
+            Pump pump = pumps.get(elementName);
+            if (pump == null) {
+                System.out.println(unknownObjMsg);
+                return;
+            } else {
+                mechanic.Move(pump);
+                mechanic.RepairPump();
+            }
+        }
+    }
+
 }
