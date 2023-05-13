@@ -195,7 +195,9 @@ public class Main {
                 Timer.getInstance().terminate();
         }
         else {
-            String[] lines = args[1].split("\\n");
+            String input = args[0];
+            String[] lines = input.split("\\n");
+
             for (int i = 0; i < lines.length; i++) {
                 String[] command = lines[i].split(" ");
                 if (command[0].equals("state")) {
