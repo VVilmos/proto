@@ -20,9 +20,6 @@ public class Main {
             String line = scanner.nextLine();
             String[] command = line.split(" ");
 
-            //elágazások
-            //TODO: Hiba az argumentumok számával: "Invalid argument! Please check the correct syntax of the command in the documentation."
-            //TODO: A teljes üzenet kiírása helyett lehet használni az argErrorMsg változót is
             if (command[0].equals("state")) {
                 if (command.length == 2) {
                     game.State(command[1], "");

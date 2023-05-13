@@ -134,32 +134,27 @@ public class Game {
             Pipe p = new Pipe();
             pipes.put(name, p);
             objectnames.put(p, name);
-        }
-        if (Objects.equals(type, "Pump")) {
+        } else if (Objects.equals(type, "Pump")) {
             Pump p = new Pump();
             pumps.put(name, p);
             nodes.put(name, p);
             objectnames.put(p, name);
-        }
-        if (Objects.equals(type, "Cistern")) {
+        } else if (Objects.equals(type, "Cistern")) {
             Cistern c = new Cistern();
             cisterns.put(name, c);
             nodes.put(name, c);
             objectnames.put(c, name);
-        }
-        if (Objects.equals(type, "Source")) {
+        } else if (Objects.equals(type, "Source")) {
             Source s = new Source();
             sources.put(name, s);
             nodes.put(name, s);
             objectnames.put(s, name);
-        }
-        if (Objects.equals(type, "Mechanic")) {
+        } else if (Objects.equals(type, "Mechanic")) {
             Mechanic m = new Mechanic();
             mechanics.put(name, m);
             players.put(name, m);
             objectnames.put(m, name);
-        }
-        if (Objects.equals(type, "Saboteur")) {
+        } else if (Objects.equals(type, "Saboteur")) {
             Saboteur s = new Saboteur();
             saboteurs.put(name, s);
             players.put(name, s);
@@ -704,14 +699,14 @@ public class Game {
             return;
         }
 
-        Element element = player.GetLocation(); //TODO: Player GetElement, olyan metódus, ami visszatéríti, hogy a játékos min áll
+        Element element = player.GetLocation();
         Pipe inPipe = pipes.get(input);
         Pipe outPipe = pipes.get(output);
         if (inPipe == null || outPipe == null) {
             System.out.println(unknownObjMsg);
             return;
         }
-        PipeEnd[] pipeEnds = element.GetPipeEnds(); //TODO: A GetPipeEnds-et bele kell tenni az Element ősosztályba
+        PipeEnd[] pipeEnds = element.GetPipeEnds();
         PipeEnd inputPipeEnd = null;
         PipeEnd outputPipeEnd = null;
 
