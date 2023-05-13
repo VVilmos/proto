@@ -9,11 +9,21 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * Felelőssége: tárolja a hozzá csatlakoztatott csöveket közvetve a csővégek által
  */
 public abstract class Node extends Element implements ISteppable{
+    private static final int pipeCapacity = 50;
+
     /**
      * fix hosszúságú csővégekből álló tömb, az aktív elemhez csatlakoztatott csővégeket jelöli
      */
-    protected PipeEnd[] pipeEnds = {null, null, null, null, null, null, null, null};
+    protected PipeEnd[] pipeEnds = new PipeEnd[pipeCapacity];
 
+    /**
+     * Az osztály konstruktora, ahol inicializálódik a csővégek tömbje
+     */
+    Node(){
+        for(int i = 0; i < pipeCapacity; i++){
+            pipeEnds[i] = null;
+        }
+    }
     /**
      * Az aktív elemre egy karakter próbál lépni
      * @param p az érkező karakter
@@ -22,8 +32,6 @@ public abstract class Node extends Element implements ISteppable{
     @Override
     public boolean AcceptPlayer(Player p) {
         players.add(p);
-
-
         return true;
     }
 
@@ -33,6 +41,9 @@ public abstract class Node extends Element implements ISteppable{
     @Override
     public abstract void Step();
 
+    /**
+     * @return az adott Node szomszédai
+     */
     public List<Element> GetNeighbours() {
         List<Element> neighbours = new ArrayList<>();
         for (int i = 0; i < pipeEnds.length; i++){
@@ -51,16 +62,14 @@ public abstract class Node extends Element implements ISteppable{
      */
     public boolean AddPipe(PipeEnd pe)  {
         int i = 0;
-        while (i < 8 && pipeEnds[i] != null) {i++;}
+        while(i < pipeCapacity && pipeEnds[i] != null) {i++;}
 
-        if(i < 8) {
+        if(i < pipeCapacity) {
             pipeEnds[i] = pe;
             pe.ConnectNode(this);
-
             return true;
         }
         else {
-
             return false;
         }
     }
@@ -70,11 +79,13 @@ public abstract class Node extends Element implements ISteppable{
      * @param pe az eltávolítani kívánt cső bekötött vége
      */
     public void RemovePipe(PipeEnd pe) {
-
-        int i = 0;
-        while (i < 8 && (pipeEnds[i] == null || pipeEnds[i] != pe)){i++;}
-        if(pipeEnds[i] != null) pipeEnds[i].DisconnectFromNode();
-
+        for(int i = 0; i < pipeEnds.length; i++){
+            if(pipeEnds[i] != null && pipeEnds[i] == pe){
+                pipeEnds[i].DisconnectFromNode();
+                pipeEnds[i] = null;
+                break;
+            }
+        }
     }
 
     /**
@@ -82,7 +93,6 @@ public abstract class Node extends Element implements ISteppable{
      * @return a bekötött csővégek listája
      */
     public PipeEnd[] GetPipeEnds() {
-
-        return pipeEnds;
+        return this.pipeEnds;
     }
 }

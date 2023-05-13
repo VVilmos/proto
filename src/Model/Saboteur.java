@@ -9,13 +9,7 @@ public class Saboteur extends Player{
      * Konstruktor
      */
     public Saboteur() {
-
-    }
-
-    /**
-     * Kilyukasztja a csövet, amin éppen áll.
-     */
-    public void BreakPipe(){
-        on.Leak();
+        Skeleton.CtorStart("Saboteur()");
+        Skeleton.End();
     }
 }

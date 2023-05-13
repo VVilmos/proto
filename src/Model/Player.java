@@ -21,6 +21,11 @@ public abstract class Player {
     protected PipeEnd holdingPipeEnd = null;
 
     /**
+     * Igaz, amennyiben a játékos hozzáragadt a csőhöz.
+     */
+    private boolean isStuck = false;
+
+    /**
      * A Player paraméter nélküli konstruktora.
      */
     public Player(){    }
@@ -29,7 +34,7 @@ public abstract class Player {
      * Átmozgatja a Player-t egy másik, szomszédos Element-re, amennyiben sikerül, eltárolja az új helyzetének.
      * Amennyiben a Player még nincs rajta egy Element-en sem, tehát az on attribútuma null, a mozgatás
      * beállítja a to paramétert az on attribútumnak, amit inicializáláskor használunk.
-     * Egyéb esetben lekérdezi a szomszédokat, és ellenőrzi, hogy a megadott Element szomszédos-e azzal az
+     * Egyéb esetben, ha nincs odaragadva a csőhöz, lekérdezi a szomszédokat, és ellenőrzi, hogy a megadott Element szomszédos-e azzal az
      * Element-tel, amin áll. Ha ez teljesül, akkor rálépteti a PLayer-t, és ha ez a művelet sikeres volt, akkor
      * eltávolítja az on Elementről a PLayer-t és beállítja az új helyzetét.
      * @param to az az Element, amire átmozgatja a Player-t
@@ -39,7 +44,7 @@ public abstract class Player {
             to.AcceptPlayer(this);
             on = to;
         }
-        else{
+        else if(!isStuck){
             List<Element> neighbours =  on.GetNeighbours();
             boolean adjacent = false;
             for(int i = 0; i < neighbours.size(); i++){
@@ -64,7 +69,6 @@ public abstract class Player {
      * @param to az a csővég, amelyikbe továbbítja a vizet a pumpa
      */
     public void SwitchPump(PipeEnd from, PipeEnd to){
-
         on.Switch(from, to);
     }
 
@@ -94,7 +98,50 @@ public abstract class Player {
             on.RemovePipe(p);
             holdingPipeEnd = p;
         }
+    }
 
+    /**
+     * Kilyukasztja a csövet, amin éppen áll.
+     */
+    public void BreakPipe(){
+        on.Leak();
+    }
+
+    /**
+     * Ragadóssá teszi a csövet, amin a játékos áll.
+     */
+    public void MakeStickyPipe(){
+        on.MakeSticky();
+    }
+
+    /**
+     * A Player-t hozzáragasztja a csőhöz.
+     */
+    public void Stuck() {
+        isStuck = true;
+    }
+
+    /**
+     * A Player-t elválasztja a csőtől.
+     */
+    public void Release(){
+        isStuck = false;
+    }
+
+    /**
+     * A megadott cső végét a Player kezébe adja.
+     * @param p a megadott cső, amit a Player megfog
+     */
+    public void HoldPipe(Pipe p){
+        holdingPipeEnd = p.GetEnds().get(1);
+    }
+
+    /**
+     * A Player-t a megadott Element-re csúsztatja.
+     * @param e a megadott Element, amire a Player csúszik
+     */
+    public void SlippedTo(Element e){
+        on = e;
     }
 
     /**
@@ -103,5 +150,20 @@ public abstract class Player {
      */
     public void SetHoldingPipeEnd(PipeEnd pE){
         this.holdingPipeEnd = pE;
+    }
+
+    /**
+     * Visszaadja a Player állapotát, vagyis kiírja az on attribútumát és a nála levő csövet.
+     */
+    public void GetState(){
+        System.out.println("on: " + on); //a neve kell
+        if(holdingPipeEnd != null){
+            Pipe p = holdingPipeEnd.GetOwnPipe();
+            //itt megkeressük a hashmapben a nevét
+            System.out.println("holdingPipe: " /*+ a neve*/);
+        }
+        else{
+            System.out.println("holdingPipe: null");
+        }
     }
 }
