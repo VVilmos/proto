@@ -107,7 +107,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
             return false;
         }
         hasWater = true;
-        if (isBroken) {
+        if(isBroken || ends.get(0).GetAttachedNode() == null || ends.get(1).GetAttachedNode() == null){
             saboteurPool.AddWater();
             hasWater = false;
         }
