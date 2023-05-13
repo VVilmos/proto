@@ -94,7 +94,7 @@ public abstract class Player {
      * @param p a lecsatlakoztatni kívánt PipeEnd
      */
     public void DisconnectPipe(PipeEnd p){
-        if(holdingPipeEnd == null){
+        if(holdingPipeEnd == null && on.GetEnds().contains(p)){
             on.RemovePipe(p);
             holdingPipeEnd = p;
         }
@@ -153,17 +153,17 @@ public abstract class Player {
     }
 
     /**
-     * Visszaadja a Player állapotát, vagyis kiírja az on attribútumát és a nála levő csövet.
+     * Visszaadja azt az Elementet, amin a Player éppen áll.
      */
-    public void GetState(){
-        System.out.println("on: " + on); //a neve kell
-        if(holdingPipeEnd != null){
-            Pipe p = holdingPipeEnd.GetOwnPipe();
-            //itt megkeressük a hashmapben a nevét
-            System.out.println("holdingPipe: " /*+ a neve*/);
-        }
-        else{
-            System.out.println("holdingPipe: null");
-        }
+    public Element GetLocation(){
+        return on;
+    }
+
+    /**
+     * Visszaadja azt a csővéget, amit a Player a kezében tart.
+     * @return a holdingPipeEnd attribútum
+     */
+    public PipeEnd GetHoldingPipeEnd(){
+        return holdingPipeEnd;
     }
 }
