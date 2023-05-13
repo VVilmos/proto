@@ -802,7 +802,11 @@ public class Game {
             return;
         }
 
-        mechanic.PlacePump();
+        Pipe newPipe = mechanic.PlacePump();
+        if (newPipe != null) {
+            objectnames.put(newPipe, "newPipe");
+            pipes.put("newPipe", newPipe);
+        }
     }
 
     /**

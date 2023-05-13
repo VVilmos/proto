@@ -31,9 +31,9 @@ public class Mechanic extends Player {
     /**
      * Lerak egy pumpát.
      */
-    public void PlacePump() {
+    public Pipe PlacePump() {
         if (holdingPumps.size() == 0) {
-            return;
+            return null;
         }
         Pipe newPipe = on.Cut();
         if (newPipe != null) {
@@ -42,7 +42,9 @@ public class Mechanic extends Player {
             holdingPumps.get(0).AddPipe(newPipe.GetEnds().get(1));
             Move(holdingPumps.get(0));
             holdingPumps.remove(0);
+            return newPipe;
         }
+        return null;
     }
 
     /**
