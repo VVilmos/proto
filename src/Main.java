@@ -203,6 +203,7 @@ public class Main {
                 if (command[0].equals("state")) {
                     if (command.length == 2) {
                         game.State(command[1], "");
+                        System.out.println(command[1]);
                     } else if (command.length == 3) {
                         game.State(command[2], command[1]);
                     } else
