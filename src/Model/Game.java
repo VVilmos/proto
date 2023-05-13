@@ -34,7 +34,7 @@ public class Game {
     /**
      * A játék determinisztikusságát határozza meg.
      */
-    private static boolean determinism = true;
+    private static boolean determinism = false;
 
     /**
      * A játék időzítője.
@@ -1043,5 +1043,17 @@ public class Game {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Beállítja a játék nem determinisztikusságát,
+     * vagy átállítja determinisztikusra.
+     * @param state "on" / "off" az új állapot.
+     */
+    public void Random(String state) {
+        if(state.equals("on"))
+            determinism = false;
+        else if(state.equals("off"))
+            determinism = true;
     }
 }

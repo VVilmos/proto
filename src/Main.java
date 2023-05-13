@@ -180,6 +180,11 @@ public class Main {
                 } else {
                     System.out.println("Invalid argument! Please check the correct syntax of the command in the documentation.");
                 }
+            } else if(command[0].equals("random")) {
+                if(command.length == 2)
+                    game.Random(command[1]);
+                else
+                    System.out.println(argErrorMsg);
             } else if (command[0].equals("exit")) {
                 break;
             }
