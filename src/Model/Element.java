@@ -98,6 +98,8 @@ public abstract class Element {
      */
     public List<PipeEnd> GetEnds() {return null;}
 
+    public PipeEnd[] GetPipeEnds() { return null; }
+
     /**
      * Az adott elemet ragadóssá teszi (a Pipe osztályban van felüldefiniálva)
      */

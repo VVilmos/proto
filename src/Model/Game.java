@@ -371,36 +371,38 @@ public class Game {
     public void State(String objectname, String args) {
         if (mechanics.containsKey(objectname)) {
             Mechanic m = mechanics.get(objectname);
-            Element on = m.GetLocation();                                               //nem létező függvény!!!
+            Element on = m.GetLocation();
 
             System.out.println("On: " + objectnames.get(on));
 
 
             System.out.print("holdingPipe: ");
 
-            if (m.holdingPipeEnd == null) {                                             //ha nincs a kezében semmi
+            //ha nincs a kezében semmi
+            if (m.holdingPipeEnd == null) {
                 System.out.println("null");
                 return;
             }
 
             //ha van a kezében cső
-            Pipe holdpipe = m.holdingPipeEnd.GetOwnPipe();                               //elérhetem a holdingPipeEndet?????
+            Pipe holdpipe = m.GetHoldingPipeEnd().GetOwnPipe();
             System.out.println(objectnames.get(holdpipe));
         } else if (saboteurs.containsKey(objectname)) {
             Saboteur s = saboteurs.get(objectname);
-            Element on = s.GetLocation();                                               //nem létező függvény!!!
+            Element on = s.GetLocation();
 
             System.out.println("On: " + objectnames.get(on));
 
             System.out.print("holdingPipe: ");
 
-            if (s.holdingPipeEnd == null) {                                             //ha nincs a kezében semmi
+            //ha nincs a kezében semmi
+            if (s.holdingPipeEnd == null) {
                 System.out.println("null");
                 return;
             }
 
             //ha van a kezében cső
-            Pipe holdpipe = s.holdingPipeEnd.GetOwnPipe();                               //elérhetem a holdingPipeEndet?????
+            Pipe holdpipe = s.GetHoldingPipeEnd().GetOwnPipe();
             System.out.println(objectnames.get(holdpipe));
         } else if (pipes.containsKey(objectname)) {
             Pipe pip = pipes.get(objectname);
@@ -431,7 +433,7 @@ public class Game {
                 if (pip.GetSlipperyness()) System.out.println("true");
                 else System.out.println("false");
                 System.out.print("isProtected: ");
-                if (pip.GetProtectednedd()) System.out.println("true");
+                if (pip.GetProtectedness()) System.out.println("true");
                 else System.out.println("false");
 
                 System.out.println();
@@ -472,7 +474,7 @@ public class Game {
                 }
                 if (args.contains("p")) {
                     System.out.print("isProtected: ");
-                    if (pip.GetProtectednedd()) System.out.println("true");
+                    if (pip.GetProtectedness()) System.out.println("true");
                     else System.out.println("false");
                 }
 
@@ -492,7 +494,7 @@ public class Game {
 
                 //csatlakoztatott csövek
                 System.out.print("ConnectedPipes: ");
-                var neighbours = pu.GetNeighbours();,
+                var neighbours = pu.GetNeighbours();
                 for (Element neighbour : neighbours) {
                     System.out.print(objectnames.get(neighbour));
                 }
@@ -705,7 +707,7 @@ public class Game {
             return;
         }
 
-        Element element = player.GetElement(); //TODO: Player GetElement, olyan metódus, ami visszatéríti, hogy a játékos min áll
+        Element element = player.GetLocation(); //TODO: Player GetElement, olyan metódus, ami visszatéríti, hogy a játékos min áll
         Pipe inPipe = pipes.get(input);
         Pipe outPipe = pipes.get(output);
         if (inPipe == null || outPipe == null) {
@@ -753,7 +755,7 @@ public class Game {
      * @param elementName  Az elem neve, amit a szerelő megjavít
      * @param mechanicName A szerelő neve, aki javítani fog
      */
-    public void Repair(String elementName, String mechanicName) { //TODO: mechanic removal?
+    public void Repair(String elementName, String mechanicName) {
         Mechanic mechanic = mechanics.get(mechanicName);
         if (mechanic == null) {
             System.out.println(unknownObjMsg);
@@ -762,16 +764,15 @@ public class Game {
 
         Pipe pipe = pipes.get(elementName);
         if (pipe != null) {
-            mechanic.Move(pipe);
-            mechanic.RepairPipe();
+            if(mechanic.GetLocation() == pipe)
+                mechanic.RepairPipe();
         } else {
             Pump pump = pumps.get(elementName);
             if (pump == null) {
                 System.out.println(unknownObjMsg);
-                return;
             } else {
-                mechanic.Move(pump);
-                mechanic.RepairPump();
+                if(mechanic.GetLocation() == pump)
+                    mechanic.RepairPump();
             }
         }
     }

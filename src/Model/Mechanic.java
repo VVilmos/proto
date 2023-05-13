@@ -38,8 +38,8 @@ public class Mechanic extends Player{
         Pipe newPipe = on.Cut();
         if(newPipe != null) {
             List<PipeEnd> ends = on.GetEnds();
-            ends.get(1).ConnectNode(holdingPumps.get(0)); //AddPipe hívja ConnectNode-ot, ez így működni fog?
-            newPipe.GetEnds().get(1).ConnectNode(holdingPumps.get(0));
+            holdingPumps.get(0).AddPipe(ends.get(1));
+            holdingPumps.get(0).AddPipe(newPipe.GetEnds().get(1));
             Move(holdingPumps.get(0));
             holdingPumps.remove(0);
         }
@@ -91,7 +91,7 @@ public class Mechanic extends Player{
      * Visszaadja a játékosnál levő pumpákat.
      * @return a játékosnál levő pumpák
      */
-    public List<Pump> GetHoldinPumps(){
+    public List<Pump> GetHoldingPumps(){
         return holdingPumps;
     }
 }
