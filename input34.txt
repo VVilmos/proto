@@ -1,0 +1,19 @@
+//init
+add Pump pump
+add Pipe pip1
+add Pipe pip2
+add Pump help1
+add Pump help2
+connect pump pip1 help1
+connect pump pip2 help2
+switch pump pip1 pip2
+fill pump
+fill pip1
+
+//break and step 2
+break pump
+step pump
+step pump
+state -w pip1
+state -pftba pump
+state -w pip2
