@@ -658,7 +658,7 @@ public class Game {
 
             //helybéli karakterek
             var list = cis.GetPlayers();
-            System.out.print("Player: ");
+            System.out.print("Players: ");
             for (Player p : list) {
                 System.out.print(objectnames.get(p) + " ");
             }
@@ -681,7 +681,7 @@ public class Game {
 
             //helybéli karakterek
             var list = source.GetPlayers();
-            System.out.print("Player: ");
+            System.out.print("Players: ");
             for (Player p : list) {
                 System.out.print(objectnames.get(p) + " ");
             }
