@@ -353,8 +353,10 @@ public class Game {
             Mechanic m = mechanics.get(mechanicName);
             if (Objects.equals(type, "--pipe")) {
                 m.PickupPipe();
-                pipes.put(objectName, m.GetHoldingPipeEnd().GetOwnPipe());
-                objectnames.put(m.GetHoldingPipeEnd().GetOwnPipe(), objectName);
+                if (m.GetHoldingPipeEnd() != null) {
+                    pipes.put(objectName, m.GetHoldingPipeEnd().GetOwnPipe());
+                    objectnames.put(m.GetHoldingPipeEnd().GetOwnPipe(), objectName);
+                }
             } else if (Objects.equals(type, "--pump")) {
                 m.PickupPump();
                 if(m.GetHoldingPumps().size() > 0) {
