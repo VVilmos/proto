@@ -1,0 +1,10 @@
+hasWater: true
+
+ConnectedPipes: pip1 pip2 
+InPipe: pip1
+OutPipe: pip2
+isBroken: true
+TankFull: true
+
+hasWater: true
+

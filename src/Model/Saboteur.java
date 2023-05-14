@@ -1,21 +1,16 @@
 package Model;
 
+import java.io.Serializable;
+
 /**
  * Szabotőr játékos
  * A játékos képességein felül képes csövet lyukasztani.
  */
-public class Saboteur extends Player{
+public class Saboteur extends Player implements Serializable {
     /**
-     * Konstruktor
+     * Csúszóssá teszi a csövet, amin éppen áll.
      */
-    public Saboteur() {
-
-    }
-
-    /**
-     * Kilyukasztja a csövet, amin éppen áll.
-     */
-    public void BreakPipe(){
-        on.Leak();
+    public void MakeSlipperyPipe() {
+        on.MakeSlippery();
     }
 }

@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,22 @@ import java.util.List;
  * Cső passzív elem.
  * Tárolja/kezeli a fogadott vizet.
  */
-public class Pipe extends Element{
+public class Pipe extends Element implements ISteppable, Serializable {
+    /**
+     * Ahány időegységig csúszós a cső.
+     */
+    private int slipperyFor = 0;
+
+    /**
+     * Ahány időegységig ragadós a cső.
+     */
+    private int stickyFor = 0;
+
+    /**
+     * Ahány időegységig nem lyukasztható a cső.
+     */
+    private int protectedFor = 0;
+
     /**
      * Törött-e a cső.
      */
@@ -19,28 +35,21 @@ public class Pipe extends Element{
     private boolean hasWater = false;
 
     /**
+     * Eltárolja a csőből kifolyt víz mennyiségét.
+     */
+    private Pool saboteurPool;
+
+    /**
      * A cső végei (1 vagy 2 db)
      */
     private List<PipeEnd> ends = new ArrayList<>();
 
     /**
-     * Az éppen létező pipeok száma (csak névadásnál van szerepe).
-     */
-    private static int count = 0;
-
-    /**
-     * Kinullázza a számlálót.
-     */
-    public static void ResetCounter() {count = 0;}
-
-    /**
      * Konstruktor
+     *
      * @param node a node, amihez kezdetben kapcsolva van.
      */
     public Pipe(Node node) {
-        count++;
-
-        // Skeleton.CtorStart("PipeEnd(" + Skeleton.GetObjectName(this) + ") end" + count + "1");
         PipeEnd end1 = new PipeEnd(this);
 
         node.AddPipe(end1);
@@ -48,37 +57,58 @@ public class Pipe extends Element{
         PipeEnd end2 = new PipeEnd(this);
         ends.add(end1);
         ends.add(end2);
+
+        saboteurPool = Game.getSaboteurPool();
+    }
+
+    /**
+     * Konstruktor, amely létrehoz egy csövet, ami semmihez sincs hozzákötve.
+     */
+    public Pipe() {
+        PipeEnd end1 = new PipeEnd(this);
+        PipeEnd end2 = new PipeEnd(this);
+
+        ends.add(end1);
+        ends.add(end2);
+
+        saboteurPool = Game.getSaboteurPool();
     }
 
     /**
      * Kilyukasztja a csövet.
      */
-    public void Leak() {
-        isBroken = true;
-        if (hasWater) {
-            Game.getSaboteurPool().AddWater();
-            hasWater =false;
+    synchronized public void Leak() {
+        if (protectedFor == 0) {
+            isBroken = true;
+            if (hasWater) {
+                saboteurPool.AddWater();
+                hasWater = false;
+            }
         }
     }
 
     /**
      * Megfoltozza a csövet.
      */
-    public void Patch() {
-        isBroken = false;
+    synchronized public void Patch() {
+        if (isBroken) {
+            isBroken = false;
+            protectedFor = Game.generateRandomProtectedTime();
+        }
     }
 
     /**
-     * Elfogad csövet valakitől.
+     * Elfogad vizet valakitől.
+     *
      * @return sikeres-e a fogadás.
      */
-    public boolean AcceptWater() {
-        if(hasWater) {
+    synchronized public boolean AcceptWater() {
+        if (hasWater) {
             return false;
         }
         hasWater = true;
-        if(isBroken){
-            Game.getSaboteurPool().AddWater();
+        if(isBroken || ends.get(0).GetAttachedNode() == null || ends.get(1).GetAttachedNode() == null){
+            saboteurPool.AddWater();
             hasWater = false;
         }
         return true;
@@ -86,63 +116,81 @@ public class Pipe extends Element{
 
     /**
      * Ráléptet egy játékost a csőre.
+     *
      * @param p a játékos.
      * @return sikerült-e a művelet.
      */
     @Override
-    public boolean AcceptPlayer(Player p) {
-
-        if (players.size() > 0) {
-
-            return false;
+    synchronized public boolean AcceptPlayer(Player p) {
+        if (players.size() == 0) {
+            if (slipperyFor != 0) {
+                int fromId = -1;
+                for(int i = 0; i <= 1; ++i)
+                    if(ends.get(i).GetAttachedNode() == p.GetLocation())
+                        fromId = i;
+                assert fromId >= 0;
+                players.add(p);
+                Node nextNode = ends.get(Game.generateNextStep(fromId)).GetAttachedNode();
+                p.SlippedTo(nextNode);
+                players.remove(p);
+                return false;
+            }
+            if (stickyFor != 0) {
+                p.Stuck();
+                players.add(p);
+                return true;
+            }
+            players.add(p);
+            return true;
         }
-        players.add(p);
-
-
-        return true;
+        return false;
     }
 
     /**
      * Kiszedi a vizet a csőből, ha van benne.
+     *
      * @return sikerült-e a művelet.
      */
-    public boolean RemoveWater() {
+    synchronized public boolean RemoveWater() {
         if (hasWater) {
             hasWater = false;
-
             return true;
         }
-
         return false;
     }
 
     /**
      * Kettévágja a csövet.
+     *
      * @return a művelet által létrehozott új cső.
      */
-    public Pipe Cut() {
-        Node node = ends.get(1).GetAttachedNode();
-        node.RemovePipe(ends.get(1));
+    synchronized public Pipe Cut() {
+        if (ends.size() == 2) {
+            Node node = ends.get(1).GetAttachedNode();
+            node.RemovePipe(ends.get(1));
 
-        Pipe newpip = new Pipe(node);
-
-        return newpip;
+            return new Pipe(node);
+        } else {
+            return null;
+        }
     }
 
     /**
      * Lekéri a cső végeit.
+     *
      * @return a csővégek.
      */
-    public List<PipeEnd> GetEnds() {
+    synchronized public List<PipeEnd> GetEnds() {
 
         return ends;
     }
 
     /**
      * Lekéri a cső szomszédos elemeit.
+     *
      * @return a szomszédok.
      */
-    public List<Element> GetNeighbours() {
+    synchronized public List<Element> GetNeighbours() {
         List<Element> neighbours = new ArrayList<>();
         for (PipeEnd e : ends) {
             neighbours.add(e.GetAttachedNode());
@@ -150,5 +198,85 @@ public class Pipe extends Element{
 
 
         return neighbours;
+    }
+
+    /**
+     * Lépteti a csövet.
+     */
+    @Override
+    synchronized public void Step() {
+        if (slipperyFor != 0)
+            slipperyFor--;
+        if (stickyFor != 0) {
+            stickyFor--;
+            if(stickyFor == 0) {
+                Player p = players.get(0);
+                if(p != null)
+                    p.Release();
+            }
+        }
+        if (protectedFor != 0)
+            protectedFor--;
+    }
+
+    /**
+     * Ragadóssá teszi a csövet.
+     */
+    synchronized public void MakeSticky() {
+        if (stickyFor == 0)
+            stickyFor = Game.generateRandomStickyTime();
+    }
+
+    /**
+     * Csúszóssá teszi a csövet.
+     */
+    synchronized public void MakeSlippery() {
+        if (slipperyFor == 0)
+            slipperyFor = Game.generateRandomSlipperyTime();
+    }
+
+    /**
+     * Lekérdezi, hogy törött-e a cső.
+     *
+     * @return
+     */
+    synchronized public boolean GetBrokennes() {
+        return isBroken;
+    }
+
+    /**
+     * Lekérdezi, hogy van-e víz a csőben.
+     *
+     * @return
+     */
+    synchronized public boolean GetWaterLevel() {
+        return hasWater;
+    }
+
+    /**
+     * Lekérdezi, hogy ragadós-e a cső.
+     *
+     * @return
+     */
+    synchronized public boolean GetStickyness() {
+        return stickyFor > 0;
+    }
+
+    /**
+     * Lekérdezi, hogy csúszós-e a cső.
+     *
+     * @return
+     */
+    synchronized public boolean GetSlipperyness() {
+        return slipperyFor > 0;
+    }
+
+    /**
+     * Lekérdezi, hogy védett-e a cső (azaz nem lehet kilyukasztani)
+     *
+     * @return
+     */
+    synchronized public boolean GetProtectedness() {
+        return protectedFor > 0;
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
  * Felelőssége: Képes megjavítani az elromlott pumpákat és a lyukas csöveket,
  * új csövet / pumpákat magához venni és letenni.
  */
-public class Mechanic extends Player{
+public class Mechanic extends Player {
     /**
      * A szerelőnél levő pumpákat tárolja el.
      */
@@ -17,7 +17,7 @@ public class Mechanic extends Player{
     /**
      * A Mechanic paraméter nélküli konstruktora.
      */
-    public Mechanic(){
+    public Mechanic() {
         super();
     }
 
@@ -29,35 +29,34 @@ public class Mechanic extends Player{
     }
 
     /**
-     * Lerak egy pumpát a csőre, amin áll.
+     * Lerak egy pumpát.
      */
-    public void PlacePump() {
-
-        if(holdingPumps.size() == 0) {
-            return;
+    public Pipe PlacePump() {
+        if (holdingPumps.size() == 0) {
+            return null;
         }
-
         Pipe newPipe = on.Cut();
-
-
-        List<PipeEnd> ends = on.GetEnds();
-        ends.get(1).ConnectNode(holdingPumps.get(0));
-
-        newPipe.GetEnds().get(1).ConnectNode(holdingPumps.get(0));
-
-        Move(holdingPumps.get(0));
-        holdingPumps.remove(0);
-
+        if (newPipe != null) {
+            List<PipeEnd> ends = on.GetEnds();
+            holdingPumps.get(0).AddPipe(ends.get(1));
+            holdingPumps.get(0).AddPipe(newPipe.GetEnds().get(1));
+            Move(holdingPumps.get(0));
+            holdingPumps.remove(0);
+            return newPipe;
+        }
+        return null;
     }
 
     /**
      * Felvesz egy új pumpát.
      * Megkéri a Ciszternát, hogy gyártson le neki egy új pumpát,
-     * majd hozzáaadja azt a holdingPumps-hoz.
+     * majd hozzáaadja azt a holdingPumps-hoz, ha nem null.
      */
     public void PickupPump() {
         Pump p = on.MakePump();
-        holdingPumps.add(p);
+        if (p != null) {
+            holdingPumps.add(p);
+        }
     }
 
     /**
@@ -67,9 +66,11 @@ public class Mechanic extends Player{
      * A cső másik vége a Ciszternához van bekötve.
      */
     public void PickupPipe() {
-        if(holdingPipeEnd == null){
+        if (holdingPipeEnd == null) {
             PipeEnd p = on.MakePipe();
-            holdingPipeEnd = p;
+            if (p != null) {
+                holdingPipeEnd = p;
+            }
         }
     }
 
@@ -77,7 +78,24 @@ public class Mechanic extends Player{
      * Megfoltozza a csövet, amin a Mechanic áll.
      */
     public void RepairPipe() {
-
         on.Patch();
+    }
+
+    /**
+     * A játékosnál levő pumpákhoz adja a paraméterben megadott pumpát.
+     *
+     * @param p a hozzáadandó pumpa
+     */
+    public void HoldPump(Pump p) {
+        holdingPumps.add(p);
+    }
+
+    /**
+     * Visszaadja a játékosnál levő pumpákat.
+     *
+     * @return a játékosnál levő pumpák
+     */
+    public List<Pump> GetHoldingPumps() {
+        return holdingPumps;
     }
 }
