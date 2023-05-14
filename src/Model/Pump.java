@@ -77,7 +77,6 @@ public class Pump extends Node implements Serializable {
             PipeEnd in = pipeEnds[inPipe];
             if (in == pe)
                 inPipe = -1;
-
         }
         super.RemovePipe(pe);
     }
