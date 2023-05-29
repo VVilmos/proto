@@ -1,0 +1,17 @@
+package Control;
+
+public enum Operation {
+    IDLE,
+    SWITCHPUMP,
+    DISCONNECTPIPE,
+    BREAKPIPE,
+    REPAIRPUMP,
+    REPAIRPIPE,
+    STICKYPIPE,
+    SLIPPERYPIPE,
+    PICKUPPUMP,
+    PICKUPPIPE,
+    CONNECTPIPE,
+    PLACEPUMP,
+    MOVE,
+}

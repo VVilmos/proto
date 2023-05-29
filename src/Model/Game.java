@@ -1,5 +1,7 @@
 package Model;
 
+import Control.GameEnding;
+
 import java.io.*;
 import java.util.*;
 
@@ -35,6 +37,11 @@ public class Game {
      * A játék determinisztikusságát határozza meg.
      */
     private static boolean determinism = false;
+
+    /**
+     * Növekvő sorszám az elemekhez
+     */
+    private static int elem_number = 0;
 
     /**
      * A játék időzítője.
@@ -77,14 +84,14 @@ public class Game {
     /**
      * Megállítja a játékot és kiírja a nyertes csapat nevét.
      */
-    public void EndGame() {
+    public GameEnding EndGame() {
         timer.pause();
         if (getSaboteurPool().GetWater() > getMechanicPool().GetWater()) {
-            System.out.println("Saboteurs won!");
+            return GameEnding.SABOTEURS_WIN;
         } else if (getSaboteurPool().GetWater() < getMechanicPool().GetWater()) {
-            System.out.println("Mechanics won!");
+            return GameEnding.MECHANICS_WIN;
         } else {
-            System.out.println("It's a tie!");
+            return GameEnding.EQUAL;
         }
     }
 
@@ -161,6 +168,77 @@ public class Game {
     private static int generateRandomBetween(int low, int high) {
         Random r = new Random();
         return r.nextInt(high - low) + low;
+    }
+
+    /**
+     * Hozzáad egy szerelőt a játékhoz
+     *
+     * @param mechanic A szerelő referenciája
+     * @param name     A szerelő neve
+     */
+    public void AddMechanic(Mechanic mechanic, String name) {
+        mechanics.put(name, mechanic);
+        players.put(name, mechanic);
+        objectnames.put(mechanic, name);
+    }
+
+    /**
+     * Hozzáad egy szabotőrt a játékhoz
+     *
+     * @param saboteur A szerelő referenciája
+     * @param name     A szerelő neve
+     */
+    public void AddSaboteur(Saboteur saboteur, String name) {
+        saboteurs.put(name, saboteur);
+        players.put(name, saboteur);
+        objectnames.put(saboteur, name);
+    }
+
+    /**
+     * Hozzáad egy csövet a játékhoz
+     * @param p A cső reeferenciája
+     */
+    public void AddPipe(Pipe p){
+        String name = "pipe" + getElemNum();
+        pipes.put(name, p);
+        objectnames.put(p, name);
+        timer.addISteppable(p);
+    }
+
+    /**
+     * Hozzáad egy pumpát a játékhoz
+     * @param p A pumpa referenciája
+     */
+    public void AddPump(Pump p){
+        String name = "pump" + getElemNum();
+        pumps.put(name, p);
+        nodes.put(name, p);
+        objectnames.put(p, name);
+        timer.addISteppable(p);
+    }
+
+    /**
+     * Hozzáad egy ciszternát a játékhoz
+     * @param c A ciszterna referenciája
+     */
+    public void AddCistern(Cistern c){
+        String name = "cistern" + getElemNum();
+        cisterns.put(name, c);
+        nodes.put(name, c);
+        objectnames.put(c, name);
+        timer.addISteppable(c);
+    }
+
+    /**
+     * Hozzáad egy forrást a játékhoz
+     * @param s A forrás referenciája
+     */
+    public void AddSource(Source s){
+        String name = "source" + getElemNum();
+        sources.put(name, s);
+        nodes.put(name, s);
+        objectnames.put(s, name);
+        timer.addISteppable(s);
     }
 
     /**
@@ -327,6 +405,23 @@ public class Game {
     }
 
     /**
+     * Egy cső lecsatlakoztatását végzi egy karakteren keresztül.
+     * Ha a paraméterként megadott karakter vagy cső nem létezik, hibát jelez.
+     * Ha a megadott csövet a karakter nem tudja lecsatlakoztatni, akkor a modell nem változik, de nem jelez hibát.
+     *
+     * @param player a szerelő vagy szabotőr objektum, akivel le akarjuk csatlakoztatni a csövet
+     * @param pipe   a lecsatlakoztatni kívánt cső objektum
+     */
+    public void DisconnectPipe(Player player, Pipe pipe) {
+          if(pipe != null){
+            var pipeEnds = pipe.GetEnds();
+            player.DisconnectPipe(pipeEnds.get(0));      //ha nem az on felőli vége, akkor nem csinál semmit
+            player.DisconnectPipe(pipeEnds.get(1));
+        }
+
+    }
+
+    /**
      * A paramáterként kapott csőnévnek megfelelő cső objektumot kilyukasztja. Ha a keresett cső nem létezik, hibát jelez.
      *
      * @param pipename a kilyukasztandó cső neve
@@ -359,7 +454,7 @@ public class Game {
                 }
             } else if (Objects.equals(type, "--pump")) {
                 m.PickupPump();
-                if(m.GetHoldingPumps().size() > 0) {
+                if (m.GetHoldingPumps().size() > 0) {
                     pumps.put(objectName, m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1));
                     objectnames.put(m.GetHoldingPumps().get(m.GetHoldingPumps().size() - 1), objectName);
                 }
@@ -605,7 +700,7 @@ public class Game {
                     System.out.print("ConnectedPipes: ");
                     PipeEnd[] ends = pu.GetPipeEnds();
                     for (PipeEnd pe : ends) {
-                        if(pe != null)
+                        if (pe != null)
                             System.out.print(objectnames.get(pe.GetOwnPipe()) + " ");
                     }
 
@@ -753,6 +848,36 @@ public class Game {
     }
 
     /**
+     * A játékos átállítja azt a pumpát, amin éppen áll
+     *
+     * @param player  A játékos, aki a pumpán kell, hogy álljon
+     * @param inPipe  Az új bemeneti cső
+     * @param outPipe Az új kimeneti cső
+     */
+    public void SwitchPump(Player player, Pipe inPipe, Pipe outPipe) {
+
+        Element element = player.GetLocation();
+        if (inPipe == null || outPipe == null) {
+            System.out.println(unknownObjMsg);
+            return;
+        }
+        PipeEnd[] pipeEnds = element.GetPipeEnds();
+        PipeEnd inputPipeEnd = null;
+        PipeEnd outputPipeEnd = null;
+
+        for (PipeEnd pe : pipeEnds)
+            if (pe.GetOwnPipe() == inPipe)
+                inputPipeEnd = pe;
+
+
+        for (PipeEnd pe : pipeEnds)
+            if (pe.GetOwnPipe() == outPipe)
+                outputPipeEnd = pe;
+
+        element.Switch(inputPipeEnd, outputPipeEnd);
+    }
+
+    /**
      * A megadott nevű játékos átállítja azt a pumpát, amin éppen áll.
      *
      * @param playerName A játékos neve, aki a pumpán kell, hogy álljon,
@@ -780,13 +905,13 @@ public class Game {
         PipeEnd inputPipeEnd = null;
         PipeEnd outputPipeEnd = null;
 
-        if(input != "null") {
+        if (input != "null") {
             for (PipeEnd pe : pipeEnds)
                 if (pe.GetOwnPipe() == inPipe)
                     inputPipeEnd = pe;
         }
 
-        if(output != "null") {
+        if (output != "null") {
             for (PipeEnd pe : pipeEnds)
                 if (pe.GetOwnPipe() == outPipe)
                     outputPipeEnd = pe;
@@ -966,7 +1091,7 @@ public class Game {
         Pipe from = null;
         Pipe to = null;
 
-        if(!fromname.equals("null")) {
+        if (!fromname.equals("null")) {
             from = pipes.get(fromname);
             if (from == null) {
                 System.out.println(unknownObjMsg);
@@ -974,7 +1099,7 @@ public class Game {
             }
         }
 
-        if(!toname.equals("null")) {
+        if (!toname.equals("null")) {
             to = pipes.get(toname);
             if (to == null) {
                 System.out.println(unknownObjMsg);
@@ -983,14 +1108,14 @@ public class Game {
         }
 
         PipeEnd fromEnd = null;
-        if(from != null){
+        if (from != null) {
             for (PipeEnd e : from.GetEnds())
                 if (e.GetAttachedNode() == pump)
                     fromEnd = e;
         }
 
         PipeEnd toEnd = null;
-        if(to != null){
+        if (to != null) {
             for (PipeEnd e : to.GetEnds())
                 if (e.GetAttachedNode() == pump)
                     toEnd = e;
@@ -1071,12 +1196,21 @@ public class Game {
     /**
      * Beállítja a játék nem determinisztikusságát,
      * vagy átállítja determinisztikusra.
+     *
      * @param state "on" / "off" az új állapot.
      */
     public void Random(String state) {
-        if(state.equals("on"))
+        if (state.equals("on"))
             determinism = false;
-        else if(state.equals("off"))
+        else if (state.equals("off"))
             determinism = true;
+    }
+
+    /**
+     * Sorszámot generál az újonnan hozzáadott elemeknek
+     * @return Sorszám
+     */
+    private int getElemNum(){
+        return elem_number++;
     }
 }
