@@ -338,10 +338,33 @@ public class Main {
     public static void main(String[] args) {
         window = new GameWindow("Sivatagi vízhálózat");
         window.setSize(1024, 768);
-        Cistern c = new Cistern();
-        Source s = new Source();
-        Pipe pipe = new Pipe(c);
-        pipe.GetEnds().get(1).ConnectNode(s);
+        Cistern c1 = new Cistern();
+        Cistern c2 = new Cistern();
+        Cistern c3 = new Cistern();
+        Cistern c4 = new Cistern();
+
+
+        Source s1 = new Source();
+        Source s2 = new Source();
+        Source s3 = new Source();
+        Source s4 = new Source();
+
+        Pipe pipe1 = new Pipe(c1);
+        Pipe pipe2 = new Pipe(c2);
+        Pipe pipe3 = new Pipe(c3);
+
+        Pump p1 = new Pump();
+        Pump p2 = new Pump();
+        Pump p3 = new Pump();
+        Pump p4 = new Pump();
+
+        Pipe pipe5 = new Pipe(p1);
+        Pipe pipe6 = new Pipe(p2);
+        Pipe pipe7 = new Pipe(p3);
+        Pipe pipe8 = new Pipe(p4);
+
+
+        s.AddPipe(pipe.GetEnds().get(1));
         Main.getInstance().addCistern(c, new Point(30, 30));
         Main.getInstance().addSource(s, new Point(600, 600));
         ElementView cv = instance.GetElementView(c);

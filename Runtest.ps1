@@ -25,9 +25,9 @@ function Runtest {
     $expectedOutput = Get-Content $outputFile -Raw
 
     #compile and run program with inputfile
-    $program = "$($PSScriptRoot)\Main.java" #proto.java???
+    $program = "$($PSScriptRoot)\Control.Main.java" #proto.java???
     javac $program
-    $actualOutput =  java -cp $PSScriptRoot Main $input| Out-String
+    $actualOutput =  java -cp $PSScriptRoot Control.Main $input| Out-String
 
     
     # Trim the trailing newline from the expected and actual output strings
