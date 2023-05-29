@@ -2,7 +2,13 @@ package View;
 
 import java.awt.*;
 
-public class PlayerView{
+/**
+ * A játékosok megjelenítéséért felelős absztrakt osztály
+ */
+public abstract class PlayerView {
 
-    public void Update(Graphics g) {}
+    /**
+     * A játékosok frissítéséért, újra kirajzolásáért felelős absztrakt függvény
+     */
+    public abstract  void Update(Graphics g);
 }

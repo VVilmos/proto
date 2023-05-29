@@ -6,13 +6,26 @@ import Model.Element;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * A játékban szereplő szabotőrök megjelenítésérrt felelős osztály
+ */
 public class SaboteurView extends PlayerView{
-
+    /**
+     * A View-hoz tartozó szabotőr
+     */
     private Saboteur saboteur;
 
+    /**
+     * paraméteres konstruktor
+     * @param s a szabotőr, amely a View létrehozásához szükséges
+     */
     public SaboteurView(Saboteur s){
         this.saboteur = s;
     }
+
+    /**
+     * A szabotőr újra kirajzolásáért, frissítéséért felelős függvény
+     */
     @Override
     public void Update(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -30,16 +43,16 @@ public class SaboteurView extends PlayerView{
         int minusPlusY = random.nextInt(2);
 
         if(minusPlusX == 0 && minusPlusY == 0){
-            g2d.fillRect(location.GetX() - randNumX, location.GetY() - randNumY, 15, 60);
+            g2d.fillRect(location.GetX() - randNumX, location.GetY() - randNumY, 10, 35);
         }
         else if(minusPlusX == 0 && minusPlusY == 1){
-            g2d.fillRect(location.GetX() - randNumX, location.GetY() + randNumY, 15, 60);
+            g2d.fillRect(location.GetX() - randNumX, location.GetY() + randNumY, 10, 35);
         }
         else if(minusPlusX == 1 && minusPlusY == 0){
-            g2d.fillRect(location.GetX() + randNumX, location.GetY() - randNumY, 15, 60);
+            g2d.fillRect(location.GetX() + randNumX, location.GetY() - randNumY, 10, 35);
         }
         else if(minusPlusX == 1 && minusPlusY == 1) {
-            g2d.fillRect(location.GetX() + randNumX, location.GetY() + randNumY, 15, 60);
+            g2d.fillRect(location.GetX() + randNumX, location.GetY() + randNumY, 10, 35);
         }
     }
 }
