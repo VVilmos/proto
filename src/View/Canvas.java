@@ -104,8 +104,9 @@ public class Canvas extends JPanel {
        addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
+
                int i;
-               for (i = 0; i < elementviews.size(); i++) {
+               for (i = elementviews.size() -1 ; i >= 0 ; i--) {
                    Point p = new Point(e.getX(), e.getY());
                    if (elementviews.get(i).ContainsPoint(p)) break;
                }
