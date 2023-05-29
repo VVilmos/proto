@@ -101,6 +101,7 @@ public class Main {
      */
     public void Clicked(ElementView view) {
         Element clickedElement = viewsElements.get(view);
+        System.out.println("Azonosítottam");
         clickedElements.add(clickedElement);
         RunOperation();
     }
@@ -134,8 +135,10 @@ public class Main {
      * Kattintás vagy {@link Main#SetOperation(Operation)} hatására hívódik.
      */
     public void RunOperation() {
+        if (activePlayer == null) return;
         switch (currentOperation) {
             case IDLE:
+                clickedElements.clear();
                 return;
             case SWITCHPUMP:
                 if (clickedElements.size() >= 2) {
@@ -204,6 +207,7 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case PLACEPUMP:
+
                 Element on = activePlayer.GetLocation();
                 Pump p = activePlayer.GetHoldingPumps().get(0);
                 Pipe newPipe = activePlayer.PlacePump();
@@ -218,7 +222,7 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case MOVE:
-                if (clickedElements.size() > 1) {
+                if (clickedElements.size() >= 1) {
                     activePlayer.Move(clickedElements.get(0));
                     currentOperation = Operation.IDLE;
                     clickedElements.clear();
@@ -374,6 +378,18 @@ public class Main {
         source2.AddPipe(pipe6.GetEnds().get(1));
         source3.AddPipe(pipe7.GetEnds().get(1));
         source4.AddPipe(pipe8.GetEnds().get(1));
+
+        Pipe cp1 = new Pipe(p1);
+        p2.AddPipe(cp1.GetEnds().get(1));
+        Pipe cp2 = new Pipe(p2);
+        p3.AddPipe(cp2.GetEnds().get(1));
+        Pipe cp3 = new Pipe(p3);
+        p4.AddPipe(cp3.GetEnds().get(1));
+
+        Main.getInstance().addPipe(cp1, new Point(570/2, 30), new Point(570/2, 230));
+        Main.getInstance().addPipe(cp2, new Point(570/2, 230), new Point(570/2, 430));
+        Main.getInstance().addPipe(cp3, new Point(570/2, 430), new Point(570/2, 620));
+
 
 
         Main.getInstance().addCistern(c1, new Point(30, 30));

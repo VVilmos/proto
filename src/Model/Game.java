@@ -866,12 +866,12 @@ public class Game {
         PipeEnd outputPipeEnd = null;
 
         for (PipeEnd pe : pipeEnds)
-            if (pe.GetOwnPipe() == inPipe)
+            if (pe != null && pe.GetOwnPipe() == inPipe)
                 inputPipeEnd = pe;
 
 
         for (PipeEnd pe : pipeEnds)
-            if (pe.GetOwnPipe() == outPipe)
+            if (pe != null && pe.GetOwnPipe() == outPipe)
                 outputPipeEnd = pe;
 
         element.Switch(inputPipeEnd, outputPipeEnd);
