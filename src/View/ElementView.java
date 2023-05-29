@@ -1,6 +1,8 @@
 package View;
 
 
+import java.awt.*;
+
 /**
  * A játékban szereplő mezők megjelenítéséért felelős (ős)osztály
  */
@@ -28,7 +30,7 @@ public abstract class ElementView {
      * A kirajzolt mező állapotának lekérdezése, majd az eredménytől függően a megfelelő grafika kirajzolása
      * Absztrakt függvény, azaz minden olyan leszármazottnak meg kell valósítania, amely tényleges megjelenítést végez
      */
-    public abstract void Update();
+    public abstract void Update(Graphics g);
 
     private int radius = 3;
 
