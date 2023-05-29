@@ -41,7 +41,7 @@ public class Canvas extends JPanel {
      */
     @Override
     public void paintComponent(Graphics g) {
-
+        super.paintComponent(g);
         //sárga háttér
         setBackground(new Color(226, 222, 141));
 
@@ -90,10 +90,9 @@ public class Canvas extends JPanel {
 
     /**
      * A rajzolófelület paraméteres konstruktora
-     * @param c a játékot vezérlő controller objektum, aminek továbbítani kell a klikkeléssel kiválasztott objektum-képet/grafikát
      */
-   public Canvas(Main c) {
-        controller = c;
+   public Canvas() {
+        controller = Main.getInstance();
        addMouseListener(new MouseAdapter() {
            @Override
            public void mouseClicked(MouseEvent e) {
@@ -103,7 +102,7 @@ public class Canvas extends JPanel {
                    if (elementviews.get(i).ContainsPoint(p)) break;
                }
 
-               //if (i < elementviews.size()) controller.Clicked(elementviews.get(i));
+               if (i < elementviews.size()) controller.Clicked(elementviews.get(i));
                repaint();
            }
        });
