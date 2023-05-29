@@ -125,6 +125,35 @@ public abstract class Player {
     }
 
     /**
+     * Csúszóssá teszi a csövet, amin éppen áll.
+     */
+    public void MakeSlipperyPipe() {
+
+    }
+
+    /**
+     * Felvesz egy új pumpát.
+     * Megkéri a Ciszternát, hogy gyártson le neki egy új pumpát,
+     * majd hozzáaadja azt a holdingPumps-hoz, ha nem null.
+     */
+    public void PickupPump() {}
+
+    /**
+     * Felvesz egy új csővéget, amennyiben a Mechanic kezében nincs már egy.
+     * Megkéri a Ciszternát, hogy gyártson le neki egy új csövet,
+     * majd hozzáadja a végét a holdingPipeEnd-hez.
+     * A cső másik vége a Ciszternához van bekötve.
+     */
+    public void PickupPipe() {}
+
+    /**
+     * Lerak egy pumpát.
+     */
+    public Pipe PlacePump() {
+        return null;
+     }
+
+    /**
      * A Player-t hozzáragasztja a csőhöz.
      */
     public void Stuck() {
@@ -182,4 +211,14 @@ public abstract class Player {
     public PipeEnd GetHoldingPipeEnd() {
         return holdingPipeEnd;
     }
+
+    /**
+     * Megjavítja a csövet, amin épp áll.
+     */
+    public void RepairPump(){}
+
+    /**
+     * Megfoltozza a csövet, amin épp áll.
+     */
+    public void RepairPipe() {}
 }
