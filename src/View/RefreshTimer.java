@@ -78,6 +78,6 @@ public class RefreshTimer extends Thread {
      * Az időzítő periódikusan meghívódó függénye. Itt végezzük a frissítés műveletét.
      */
     public void Tick(){
-        component.revalidate();
+        component.repaint();
     }
 }

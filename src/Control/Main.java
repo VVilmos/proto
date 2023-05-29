@@ -138,22 +138,22 @@ public class Main {
             case IDLE:
                 return;
             case SWITCHPUMP:
-                if (clickedElements.size() == 2) {
+                if (clickedElements.size() >= 2) {
                     Pipe input = (Pipe) clickedElements.get(0);
                     Pipe output = (Pipe) clickedElements.get(1);
                     game.SwitchPump(activePlayer, input, output);
-                    clickedElements.remove(0);
-                    clickedElements.remove(0);
+                    clickedElements.clear();
                     currentOperation = Operation.IDLE;
                 }
                 break;
             case DISCONNECTPIPE:
-                if (clickedElements.size() == 1) {
+                if (clickedElements.size() >= 1) {
                     game.DisconnectPipe(activePlayer, (Pipe) clickedElements.get(0));
 
-                    Pipe pipe = (Pipe) clickedElements.remove(0);
+                    Pipe pipe = (Pipe) clickedElements.get(0);
                     window.getCanvas().Remove(GetElementView(pipe));
                     viewsElements.remove(GetElementView(pipe));
+                    clickedElements.clear();
                     currentOperation = Operation.IDLE;
                 }
                 break;
@@ -218,10 +218,10 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case MOVE:
-                if (clickedElements.size() == 1) {
+                if (clickedElements.size() > 1) {
                     activePlayer.Move(clickedElements.get(0));
                     currentOperation = Operation.IDLE;
-                    clickedElements.remove(0);
+                    clickedElements.clear();
                 }
                 break;
         }
@@ -338,8 +338,17 @@ public class Main {
     public static void main(String[] args) {
         window = new GameWindow("Sivatagi vízhálózat");
         window.setSize(1024, 768);
-        Main.getInstance().addCistern(new Cistern(), new Point(10, 10));
-        Main.getInstance().addSource(new Source(), new Point(600, 600));
+        Cistern c = new Cistern();
+        Source s = new Source();
+        Pipe pipe = new Pipe(c);
+        pipe.GetEnds().get(1).ConnectNode(s);
+        Main.getInstance().addCistern(c, new Point(30, 30));
+        Main.getInstance().addSource(s, new Point(600, 600));
+        ElementView cv = instance.GetElementView(c);
+        ElementView sv = instance.GetElementView(s);
+
+
+        Main.getInstance().addPipe(pipe, cv.GetCenterCoordinates(), sv.GetCenterCoordinates());
         window.setVisible(true);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }

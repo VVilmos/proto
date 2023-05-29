@@ -32,7 +32,7 @@ public abstract class ElementView {
      */
     public abstract void Update(Graphics g);
 
-    private int radius = 3;
+    private int radius = 40;
 
     /**
      * A paraméterként kapott pont a megjelenített mezőhöz tartozik-e
