@@ -125,8 +125,8 @@ public class Main {
      * @param op
      */
     public void SetOperation(Operation op) {
-        RunOperation();
         currentOperation = op;
+        RunOperation();
     }
 
     /**
@@ -204,10 +204,10 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case PLACEPUMP:
+                Element on = activePlayer.GetLocation();
                 Pump p = activePlayer.GetHoldingPumps().get(0);
                 Pipe newPipe = activePlayer.PlacePump();
                 if (newPipe != null) {
-                    Element on = activePlayer.GetLocation();
                     ElementView onView = GetElementView(on);
                     Point newPumpCenter = onView.GetCenterCoordinates();
                     Point[] ends = onView.GetEndPointsCoordinates();
@@ -341,7 +341,8 @@ public class Main {
         Cistern c = new Cistern();
         Source s = new Source();
         Pipe pipe = new Pipe(c);
-        pipe.GetEnds().get(1).ConnectNode(s);
+        s.AddPipe(pipe.GetEnds().get(0));
+        c.AddPipe(pipe.GetEnds().get(1));
         Main.getInstance().addCistern(c, new Point(30, 30));
         Main.getInstance().addSource(s, new Point(600, 600));
         ElementView cv = instance.GetElementView(c);

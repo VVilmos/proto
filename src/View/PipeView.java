@@ -20,7 +20,7 @@ public class PipeView extends ElementView{
         Graphics2D g2d = (Graphics2D) g;
 
         // Alap cső
-        if(pipe.GetWaterLevel()) {
+        if(!pipe.GetWaterLevel()) {
             g2d.setColor(new Color(86, 93, 99));
         } else {
             g2d.setColor(new Color(14,135,204));
@@ -67,7 +67,8 @@ public class PipeView extends ElementView{
     }
 
     public Point[] GetEndPointsCoordinates() {
-        return endPoints;
+        Point[] points = new Point[] {new Point(endPoints[0].GetX(), endPoints[0].GetY()), new Point(endPoints[1].GetX(), endPoints[1].GetY())};
+        return points;
     }
 
     @Override

@@ -15,6 +15,7 @@ public class CisternView extends ElementView{
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(new Color(0, 0, 0));
         Point center = GetCenterCoordinates();
-        g2d.fillOval(center.GetX(), center.GetY(), 40, 40);
+        Point ovalPoint = new Point(center.GetX()-20, center.GetY()-20);
+        g2d.fillOval(ovalPoint.GetX(), ovalPoint.GetY(), 40, 40);
     }
 }
