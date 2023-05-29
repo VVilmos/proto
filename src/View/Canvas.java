@@ -63,6 +63,14 @@ public class Canvas extends JPanel {
     }
 
     /**
+     * Eltávolít egy nézetet
+     * @param view A nézet, amit eltávolít
+     */
+    public void Remove(ElementView view){
+        elementviews.remove(view);
+    }
+
+    /**
      * Új karakter elhelyezése a pályára
      * @param pv az új játékos/karakter kirajzolását végző objektum
      */

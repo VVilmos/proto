@@ -1213,4 +1213,24 @@ public class Game {
     private int getElemNum(){
         return elem_number++;
     }
+
+    /**
+     *
+     * @return Visszatéríti az első ciszternát
+     */
+    public Cistern GetFirstCistern(){
+        Map.Entry<String, Cistern> entry = cisterns.entrySet().iterator().next();
+        Cistern cistern = entry.getValue();
+        return cistern;
+    }
+
+    /**
+     *
+     * @return Visszatéríti az első ciszternát
+     */
+    public Source GetFirstSource(){
+        Map.Entry<String, Source> entry = sources.entrySet().iterator().next();
+        Source source = entry.getValue();
+        return source;
+    }
 }

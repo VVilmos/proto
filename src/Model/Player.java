@@ -221,4 +221,13 @@ public abstract class Player {
      * Megfoltozza a csövet, amin épp áll.
      */
     public void RepairPipe() {}
+
+    /**
+     * Visszaadja a játékosnál levő pumpákat.
+     *
+     * @return a játékosnál levő pumpák
+     */
+    public List<Pump> GetHoldingPumps() {
+        return null;
+    }
 }

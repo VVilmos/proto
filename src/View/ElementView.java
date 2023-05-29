@@ -45,6 +45,10 @@ public abstract class ElementView {
             return DesertMath.Distance(center, p) <= radius;
     }
 
+    public Point[] GetEndPointsCoordinates() {return null;}
+
+    public void SetEndPoints(Point p1, Point p2) {
+    }
 
 
 

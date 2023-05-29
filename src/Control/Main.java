@@ -2,12 +2,12 @@ package Control;
 
 import Model.*;
 import Model.Timer;
-import View.ElementView;
-import View.RefreshTimer;
+import View.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -150,7 +150,9 @@ public class Main {
             case DISCONNECTPIPE:
                 if (clickedElements.size() == 1) {
                     game.DisconnectPipe(activePlayer, (Pipe) clickedElements.get(0));
-                    clickedElements.remove(0);
+
+                    Pipe pipe = (Pipe) clickedElements.remove(0);
+                    window.getCanvas().Remove(GetElementView(pipe));
                     currentOperation = Operation.IDLE;
                 }
                 break;
@@ -183,17 +185,38 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case CONNECTPIPE:
+                Pipe pipe = activePlayer.GetHoldingPipeEnd().GetOwnPipe();
                 activePlayer.ConnectPipe();
+                List<Element> neighbours = pipe.GetNeighbours();
+                if(neighbours.size() == 2){
+                    ElementView view1 = GetElementView(neighbours.get(0));
+                    ElementView view2 = GetElementView(neighbours.get(1));
+                    Point center1 = view1.GetCenterCoordinates();
+                    Point center2 = view2.GetCenterCoordinates();
+                    if(activePlayer.GetHoldingPipeEnd() == null){
+                        PipeView pv = new PipeView(pipe);
+                        pv.SetEndPoints(center1, center2);
+                        window.getCanvas().PushElementView_Front(pv);
+                    }
+                }
                 currentOperation = Operation.IDLE;
                 break;
             case PLACEPUMP:
+                Pump p = activePlayer.GetHoldingPumps().get(0);
                 Pipe newPipe = activePlayer.PlacePump();
-                if(newPipe != null)
-                    addPipe(newPipe);
+                if (newPipe != null) {
+                    Element on = activePlayer.GetLocation();
+                    ElementView onView = GetElementView(on);
+                    Point newPumpCenter = onView.GetCenterCoordinates();
+                    Point[] ends = onView.GetEndPointsCoordinates();
+                    onView.SetEndPoints(ends[0], newPumpCenter);
+                    addPipe(newPipe, newPumpCenter, ends[1]);
+                    addPump(p, newPumpCenter);
+                }
                 currentOperation = Operation.IDLE;
                 break;
             case MOVE:
-                if(clickedElements.size() == 1) {
+                if (clickedElements.size() == 1) {
                     activePlayer.Move(clickedElements.get(0));
                     currentOperation = Operation.IDLE;
                     clickedElements.remove(0);
@@ -209,7 +232,10 @@ public class Main {
         Mechanic mechanic = new Mechanic();
         game.AddMechanic(mechanic, name);
         players.add(mechanic);
-        //TODO: View
+        MechanicView mv = new MechanicView(mechanic);
+        Cistern cistern = game.GetFirstCistern();
+        mechanic.Move(cistern);
+        window.getCanvas().AddPlayerView(mv);
     }
 
     /**
@@ -219,46 +245,65 @@ public class Main {
         Saboteur saboteur = new Saboteur();
         game.AddSaboteur(saboteur, name);
         players.add(saboteur);
-        //TODO:View
+        SaboteurView sv = new SaboteurView(saboteur);
+        Source source = game.GetFirstSource();
+        saboteur.Move(source);
+        window.getCanvas().AddPlayerView(sv);
     }
 
     /**
      * Hozzáad egy csövet a játékhoz
+     *
      * @param p A cső, amit a játékhoz hozzáad.
      */
-    public void addPipe(Pipe p){
+    public void addPipe(Pipe p, Point end1, Point end2) {
         elements.add(p);
         game.AddPipe(p);
-        //TODO: View
+        PipeView pv = new PipeView(p);
+        pv.SetEndPoints(end1, end2);
+        window.getCanvas().PushElementView_Front(pv);
     }
+
     /**
      * Hozzáad egy pumpát a játékhoz
-     * @param p A cső, amit a játékhoz hozzáad.
+     *
+     * @param p      A cső, amit a játékhoz hozzáad.
+     * @param center A pumpa középpontja
      */
-    public void addPump(Pump p){
+    public void addPump(Pump p, Point center) {
         elements.add(p);
         game.AddPump(p);
-        //TODO: View
+        PumpView pv = new PumpView(p);
+        pv.SetCenter(center);
+        window.getCanvas().PushElementView_Back(pv);
     }
 
     /**
      * Hozzáad egy ciszternát a játékhoz
-     * @param c A cső, amit a játékhoz hozzáad.
+     *
+     * @param c      A cső, amit a játékhoz hozzáad.
+     * @param center Az elem középpontja
      */
-    public void addCistern(Cistern c){
+    public void addCistern(Cistern c, Point center) {
         elements.add(c);
         game.AddCistern(c);
-        //TODO: View
+        CisternView cv = new CisternView(c);
+        cv.SetCenter(center);
+        window.getCanvas().PushElementView_Back(cv);
     }
 
     /**
      * Hozzáad egy csövet a játékhoz
-     * @param s A cső, amit a játékhoz hozzáad.
+     *
+     * @param s      A cső, amit a játékhoz hozzáad.
+     * @param center Az elem középpontja
      */
-    public void addSource(Source s){
+    public void addSource(Source s, Point center) {
         elements.add(s);
         game.AddSource(s);
-        //TODO: View
+        SourceView sv = new SourceView(s);
+        sv.SetCenter(center);
+        window.getCanvas().PushElementView_Back(sv);
     }
 
     /**
@@ -287,6 +332,8 @@ public class Main {
     public static void main(String[] args) {
         window = new GameWindow("Sivatagi vízhálózat");
         window.setSize(1024, 768);
+        Main.getInstance().addCistern(new Cistern(), new Point(10, 10));
+        Main.getInstance().addSource(new Source(), new Point(600, 600));
         window.setVisible(true);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         RefreshTimer.getInstance().shutdown();

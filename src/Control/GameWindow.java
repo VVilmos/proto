@@ -86,6 +86,7 @@ public class GameWindow extends JFrame {
         controller = Main.getInstance();
         initializeWindow();
         initializeListeners();
+        RefreshTimer.getInstance().setComponent(canvas);
         RefreshTimer.getInstance().start();
     }
 
@@ -193,7 +194,6 @@ public class GameWindow extends JFrame {
         String name = JOptionPane.showInputDialog("Name of the Mechanic");
         playerListModel.addElement(name);
         controller.addMechanic(name);
-        canvas.AddPlayerView(new MechanicView());
     }
 
     /**

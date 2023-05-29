@@ -59,7 +59,7 @@ public class RefreshTimer extends Thread {
     @Override
     public void run() {
         while(!stopSignal){
-
+            Tick();
             try {
                 Thread.sleep(refreshPeriod);
             } catch (InterruptedException e) {

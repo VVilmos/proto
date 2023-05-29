@@ -1,5 +1,6 @@
 package View;
 
+import Control.Main;
 import Model.Saboteur;
 import Model.Element;
 import java.awt.*;
@@ -18,7 +19,7 @@ public class SaboteurView extends PlayerView{
         g2d.setColor(Color.RED);
 
         Element on = saboteur.GetLocation();
-        ElementView ev = Main.GetElementView(on);
+        ElementView ev = Main.getInstance().GetElementView(on);
         Point location = ev.GetCenterCoordinates();
 
         Random random = new Random();
