@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 /**
@@ -113,6 +115,16 @@ public class GameWindow extends JFrame {
         bPickuppump.addActionListener((e) -> controller.SetOperation(Operation.PICKUPPUMP));
         mLoad.addActionListener(this::loadListener);
         mSave.addActionListener(this::saveListener);
+        addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                Model.Timer.getInstance().terminate();
+                RefreshTimer.getInstance().shutdown();
+                e.getWindow().dispose();
+            }
+        });
     }
 
 

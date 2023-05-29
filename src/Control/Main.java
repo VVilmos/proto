@@ -153,6 +153,7 @@ public class Main {
 
                     Pipe pipe = (Pipe) clickedElements.remove(0);
                     window.getCanvas().Remove(GetElementView(pipe));
+                    viewsElements.remove(GetElementView(pipe));
                     currentOperation = Operation.IDLE;
                 }
                 break;
@@ -197,6 +198,7 @@ public class Main {
                         PipeView pv = new PipeView(pipe);
                         pv.SetEndPoints(center1, center2);
                         window.getCanvas().PushElementView_Front(pv);
+                        viewsElements.put(pv, pipe);
                     }
                 }
                 currentOperation = Operation.IDLE;
@@ -262,6 +264,7 @@ public class Main {
         PipeView pv = new PipeView(p);
         pv.SetEndPoints(end1, end2);
         window.getCanvas().PushElementView_Front(pv);
+        viewsElements.put(pv, p);
     }
 
     /**
@@ -276,6 +279,7 @@ public class Main {
         PumpView pv = new PumpView(p);
         pv.SetCenter(center);
         window.getCanvas().PushElementView_Back(pv);
+        viewsElements.put(pv, p);
     }
 
     /**
@@ -290,6 +294,7 @@ public class Main {
         CisternView cv = new CisternView(c);
         cv.SetCenter(center);
         window.getCanvas().PushElementView_Back(cv);
+        viewsElements.put(cv, c);
     }
 
     /**
@@ -304,6 +309,7 @@ public class Main {
         SourceView sv = new SourceView(s);
         sv.SetCenter(center);
         window.getCanvas().PushElementView_Back(sv);
+        viewsElements.put(sv, s);
     }
 
     /**
@@ -336,7 +342,5 @@ public class Main {
         Main.getInstance().addSource(new Source(), new Point(600, 600));
         window.setVisible(true);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        RefreshTimer.getInstance().shutdown();
-        Timer.getInstance().terminate();
     }
 }
