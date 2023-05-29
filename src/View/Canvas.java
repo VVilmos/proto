@@ -111,7 +111,7 @@ public class Canvas extends JPanel {
                    if (elementviews.get(i).ContainsPoint(p)) break;
                }
 
-               if (i < elementviews.size()) controller.Clicked(elementviews.get(i));
+               if (i < elementviews.size() && i > 0) controller.Clicked(elementviews.get(i));
                repaint();
            }
        });

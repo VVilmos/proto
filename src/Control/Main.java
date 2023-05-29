@@ -338,18 +338,72 @@ public class Main {
     public static void main(String[] args) {
         window = new GameWindow("Sivatagi vízhálózat");
         window.setSize(1024, 768);
-        Cistern c = new Cistern();
-        Source s = new Source();
-        Pipe pipe = new Pipe(c);
-        s.AddPipe(pipe.GetEnds().get(0));
-        c.AddPipe(pipe.GetEnds().get(1));
-        Main.getInstance().addCistern(c, new Point(30, 30));
-        Main.getInstance().addSource(s, new Point(600, 600));
-        ElementView cv = instance.GetElementView(c);
-        ElementView sv = instance.GetElementView(s);
+        Cistern c1 = new Cistern();
+        Cistern c2 = new Cistern();
+        Cistern c3 = new Cistern();
+        Cistern c4 = new Cistern();
 
 
-        Main.getInstance().addPipe(pipe, cv.GetCenterCoordinates(), sv.GetCenterCoordinates());
+        Pipe pipe1 = new Pipe(c1);
+        Pipe pipe2 = new Pipe(c2);
+        Pipe pipe3 = new Pipe(c3);
+        Pipe pipe4 = new Pipe(c4);
+
+
+        Pump p1 = new Pump();
+        Pump p2 = new Pump();
+        Pump p3 = new Pump();
+        Pump p4 = new Pump();
+
+        p1.AddPipe(pipe1.GetEnds().get(1));
+        p2.AddPipe(pipe2.GetEnds().get(1));
+        p3.AddPipe(pipe3.GetEnds().get(1));
+        p4.AddPipe(pipe4.GetEnds().get(1));
+
+        Pipe pipe5 = new Pipe(p1);
+        Pipe pipe6 = new Pipe(p2);
+        Pipe pipe7 = new Pipe(p3);
+        Pipe pipe8 = new Pipe(p4);
+
+        Source source1 = new Source();
+        Source source2 = new Source();
+        Source source3 = new Source();
+        Source source4 = new Source();
+
+        source1.AddPipe(pipe5.GetEnds().get(1));
+        source2.AddPipe(pipe6.GetEnds().get(1));
+        source3.AddPipe(pipe7.GetEnds().get(1));
+        source4.AddPipe(pipe8.GetEnds().get(1));
+
+
+        Main.getInstance().addCistern(c1, new Point(30, 30));
+        Main.getInstance().addCistern(c2, new Point(30, 230));
+        Main.getInstance().addCistern(c3, new Point(30, 430));
+        Main.getInstance().addCistern(c4, new Point(30, 620));
+
+        Main.getInstance().addSource(source1, new Point(600, 30));
+        Main.getInstance().addSource(source2, new Point(600, 230));
+        Main.getInstance().addSource(source3, new Point(600, 430));
+        Main.getInstance().addSource(source4, new Point(600, 620));
+
+        Main.getInstance().addPump(p1, new Point(570/2, 30));
+        Main.getInstance().addPump(p2, new Point(570/2, 230));
+        Main.getInstance().addPump(p3, new Point(570/2, 430));
+        Main.getInstance().addPump(p4, new Point(570/2, 620));
+
+        Main.getInstance().addPipe(pipe1, new Point(30, 30), new Point(570/2, 30));
+        Main.getInstance().addPipe(pipe2, new Point(30, 230), new Point(570/2, 230));
+        Main.getInstance().addPipe(pipe3, new Point(30, 430), new Point(570/2, 430));
+        Main.getInstance().addPipe(pipe4, new Point(30, 620), new Point(570/2, 620));
+        Main.getInstance().addPipe(pipe5, new Point(570/2, 30), new Point(600, 30));
+        Main.getInstance().addPipe(pipe6, new Point(570/2, 230), new Point(600, 230));
+        Main.getInstance().addPipe(pipe7, new Point(570/2, 430), new Point(600, 430));
+        Main.getInstance().addPipe(pipe8, new Point(570/2, 620), new Point(600, 620));
+
+
+
+
+
         window.setVisible(true);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
