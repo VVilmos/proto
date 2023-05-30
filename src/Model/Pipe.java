@@ -210,9 +210,12 @@ public class Pipe extends Element implements ISteppable, Serializable {
         if (stickyFor != 0) {
             stickyFor--;
             if(stickyFor == 0) {
-                Player p = players.get(0);
-                if(p != null)
-                    p.Release();
+                if (players.size() > 0) {
+                    Player p = players.get(0);
+                    if(p != null)
+                        p.Release();
+                }
+
             }
         }
         if (protectedFor != 0)

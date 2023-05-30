@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static Control.Operation.IDLE;
-
 /**
  * Ez az alkalmazás fő osztálya, ami egyben a Controller szerepét is ellátja.
  * Singleton osztály
@@ -26,7 +24,7 @@ public class Main {
     /**
      * A jelenlegi művelet típusa
      */
-    private Operation currentOperation = IDLE;
+    private Operation currentOperation = Operation.IDLE;
 
     /**
      * A jelenleg kiválasztott járékos referenciát tárolja
@@ -138,7 +136,7 @@ public class Main {
      */
     public void RunOperation() {
         if (activePlayer == null || !game.isRunning()){
-            currentOperation = IDLE;
+            currentOperation = Operation.IDLE;
             return;
         }
         switch (currentOperation) {
@@ -151,7 +149,7 @@ public class Main {
                     Pipe output = (Pipe) clickedElements.get(1) instanceof Pipe ? (Pipe) clickedElements.get(1) : null;
                     game.SwitchPump(activePlayer, input, output);
                     clickedElements.clear();
-                    currentOperation = IDLE;
+                    currentOperation = Operation.IDLE;
                 }
                 break;
             case DISCONNECTPIPE:
@@ -162,36 +160,36 @@ public class Main {
                     window.getCanvas().Remove(GetElementView(pipe));
                     viewsElements.remove(GetElementView(pipe));
                     clickedElements.clear();
-                    currentOperation = IDLE;
+                    currentOperation = Operation.IDLE;
                 }
                 break;
             case BREAKPIPE:
                 activePlayer.BreakPipe();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case REPAIRPUMP:
                 activePlayer.RepairPump();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case REPAIRPIPE:
                 activePlayer.RepairPipe();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case STICKYPIPE:
                 activePlayer.MakeStickyPipe();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case SLIPPERYPIPE:
                 activePlayer.MakeSlipperyPipe();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case PICKUPPUMP:
                 activePlayer.PickupPump();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case PICKUPPIPE:
                 activePlayer.PickupPipe();
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case CONNECTPIPE:
                 Pipe pipe = activePlayer.GetHoldingPipeEnd().GetOwnPipe();
@@ -209,7 +207,7 @@ public class Main {
                         viewsElements.put(pv, pipe);
                     }
                 }
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case PLACEPUMP:
 
@@ -226,12 +224,12 @@ public class Main {
                         addPump(p, newPumpCenter);
                     }
                 }
-                currentOperation = IDLE;
+                currentOperation = Operation.IDLE;
                 break;
             case MOVE:
                 if (clickedElements.size() >= 1) {
                     activePlayer.Move(clickedElements.get(0));
-                    currentOperation = IDLE;
+                    currentOperation = Operation.IDLE;
                     clickedElements.clear();
                 }
                 break;
