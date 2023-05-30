@@ -6,15 +6,29 @@ import Model.Pipe;
 import java.awt.*;
 import java.io.Serializable;
 
-public class PipeView extends ElementView {
+public class PipeView extends ElementView{
+    /**
+     * A cső, amit megjelenítünk.
+     */
     private Pipe pipe;
 
+    /**
+     * A cső végeinek koordinátái, az összeköttetéshez.
+     */
     private Point[] endPoints = new Point[2];
 
+    /**
+     * Konstruktor
+     * @param pipe a megjelenítendő cső.
+     */
     public PipeView(Pipe pipe) {
         this.pipe = pipe;
     }
 
+    /**
+     * Kirajzolja a csövet.
+     * @param g amire rajzol.
+     */
     @Override
     public void Update(Graphics g) {
         int mainStroke = 15;
@@ -63,16 +77,30 @@ public class PipeView extends ElementView {
         }
     }
 
+    /**
+     * Beállítja a cső végeinek koordinátáit.
+     * @param p1 az első végének koordinátája.
+     * @param p2 a második végének koordinátája.
+     */
     public void SetEndPoints(Point p1, Point p2) {
         endPoints[0] = p1;
         endPoints[1] = p2;
     }
 
+    /**
+     * Lekérdezi a cső végeinek koordinátáit.
+     * @return a koordináták.
+     */
     public Point[] GetEndPointsCoordinates() {
         Point[] points = new Point[] {new Point(endPoints[0].GetX(), endPoints[0].GetY()), new Point(endPoints[1].GetX(), endPoints[1].GetY())};
         return points;
     }
 
+    /**
+     * Megmondja, hogy egy adott pont a csőhöz tartozik-e.
+     * @param p a vizsgált pont
+     * @return hozzá tartozik-e.
+     */
     @Override
     public boolean ContainsPoint(Point p) {
         int mainStroke = 15;
@@ -92,6 +120,10 @@ public class PipeView extends ElementView {
         return true;
     }
 
+    /**
+     * Visszaadja a cső középpontjának koordinátáját.
+     * @return a középpont.
+     */
     @Override
     public Point GetCenterCoordinates() {
         int x = (endPoints[0].GetX() + endPoints[1].GetX()) / 2;
