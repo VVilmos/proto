@@ -207,7 +207,7 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case PLACEPUMP:
-
+                if (activePlayer.GetHoldingPumps() == null && activePlayer.GetHoldingPumps().size() == 0) return;
                 Element on = activePlayer.GetLocation();
                 Pump p = activePlayer.GetHoldingPumps().get(0);
                 Pipe newPipe = activePlayer.PlacePump();
@@ -224,7 +224,7 @@ public class Main {
             case MOVE:
                 if (clickedElements.size() >= 1) {
                     activePlayer.Move(clickedElements.get(0));
-                    currentOperation = Operation.IDLE;
+                    //currentOperation = Operation.IDLE;        move az beragado billentyu
                     clickedElements.clear();
                 }
                 break;
