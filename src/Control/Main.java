@@ -207,7 +207,7 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case PLACEPUMP:
-                if (activePlayer.GetHoldingPumps() == null && activePlayer.GetHoldingPumps().size() == 0) return;
+                if (activePlayer.GetHoldingPumps() == null || activePlayer.GetHoldingPumps().size() == 0) return;
                 Element on = activePlayer.GetLocation();
                 Pump p = activePlayer.GetHoldingPumps().get(0);
                 Pipe newPipe = activePlayer.PlacePump();
@@ -397,10 +397,7 @@ public class Main {
         Main.getInstance().addCistern(c3, new Point(30, 430));
         Main.getInstance().addCistern(c4, new Point(30, 620));
 
-        Main.getInstance().addSource(source1, new Point(600, 30));
-        Main.getInstance().addSource(source2, new Point(600, 230));
-        Main.getInstance().addSource(source3, new Point(600, 430));
-        Main.getInstance().addSource(source4, new Point(600, 620));
+
 
         Main.getInstance().addPump(p1, new Point(570/2, 30));
         Main.getInstance().addPump(p2, new Point(570/2, 230));
@@ -415,6 +412,11 @@ public class Main {
         Main.getInstance().addPipe(pipe6, new Point(570/2, 230), new Point(600, 230));
         Main.getInstance().addPipe(pipe7, new Point(570/2, 430), new Point(600, 430));
         Main.getInstance().addPipe(pipe8, new Point(570/2, 620), new Point(600, 620));
+
+        Main.getInstance().addSource(source1, new Point(600, 30));
+        Main.getInstance().addSource(source2, new Point(600, 230));
+        Main.getInstance().addSource(source3, new Point(600, 430));
+        Main.getInstance().addSource(source4, new Point(600, 620));
 
 
 
