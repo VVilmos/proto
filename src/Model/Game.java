@@ -44,6 +44,11 @@ public class Game {
     private static int elem_number = 0;
 
     /**
+     * Igaz, ha a játék fut
+     */
+    private boolean running = false;
+
+    /**
      * A játék időzítője.
      */
     private Timer timer;
@@ -79,6 +84,7 @@ public class Game {
      */
     public void StartGame() {
         timer.start();
+        running = true;
     }
 
     /**
@@ -86,6 +92,7 @@ public class Game {
      */
     public GameEnding EndGame() {
         timer.pause();
+        running = false;
         if (getSaboteurPool().GetWater() > getMechanicPool().GetWater()) {
             return GameEnding.SABOTEURS_WIN;
         } else if (getSaboteurPool().GetWater() < getMechanicPool().GetWater()) {
@@ -196,32 +203,43 @@ public class Game {
 
     /**
      * Hozzáad egy csövet a játékhoz
+     *
      * @param p A cső reeferenciája
      */
-    public void AddPipe(Pipe p){
+    public void AddPipe(Pipe p) {
         String name = "pipe" + getElemNum();
         pipes.put(name, p);
         objectnames.put(p, name);
-        timer.addISteppable(p);
+        if (timer.isRunning()) {
+            timer.pause();
+            timer.addISteppable(p);
+            timer.start();
+        } else timer.addISteppable(p);
     }
 
     /**
      * Hozzáad egy pumpát a játékhoz
+     *
      * @param p A pumpa referenciája
      */
-    public void AddPump(Pump p){
+    public void AddPump(Pump p) {
         String name = "pump" + getElemNum();
         pumps.put(name, p);
         nodes.put(name, p);
         objectnames.put(p, name);
-        timer.addISteppable(p);
+        if (timer.isRunning()) {
+            timer.pause();
+            timer.addISteppable(p);
+            timer.start();
+        } else timer.addISteppable(p);
     }
 
     /**
      * Hozzáad egy ciszternát a játékhoz
+     *
      * @param c A ciszterna referenciája
      */
-    public void AddCistern(Cistern c){
+    public void AddCistern(Cistern c) {
         String name = "cistern" + getElemNum();
         cisterns.put(name, c);
         nodes.put(name, c);
@@ -231,9 +249,10 @@ public class Game {
 
     /**
      * Hozzáad egy forrást a játékhoz
+     *
      * @param s A forrás referenciája
      */
-    public void AddSource(Source s){
+    public void AddSource(Source s) {
         String name = "source" + getElemNum();
         sources.put(name, s);
         nodes.put(name, s);
@@ -413,7 +432,7 @@ public class Game {
      * @param pipe   a lecsatlakoztatni kívánt cső objektum
      */
     public void DisconnectPipe(Player player, Pipe pipe) {
-          if(pipe != null){
+        if (pipe != null) {
             var pipeEnds = pipe.GetEnds();
             player.DisconnectPipe(pipeEnds.get(0));      //ha nem az on felőli vége, akkor nem csinál semmit
             player.DisconnectPipe(pipeEnds.get(1));
@@ -1150,6 +1169,28 @@ public class Game {
     }
 
     /**
+     * Elment egy játékot a megadott fájlba.
+     *
+     * @param objectOutputStream Az {@link ObjectOutputStream}, ahova ment.
+     */
+    public void Save(ObjectOutputStream objectOutputStream) {
+        try {
+            objectOutputStream.writeObject(pipes);
+            objectOutputStream.writeObject(pumps);
+            objectOutputStream.writeObject(cisterns);
+            objectOutputStream.writeObject(sources);
+            objectOutputStream.writeObject(mechanics);
+            objectOutputStream.writeObject(saboteurs);
+            objectOutputStream.writeObject(nodes);
+            objectOutputStream.writeObject(players);
+            objectOutputStream.writeObject(objectnames);
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Visszatölt egy játékot a megadott fájlból.
      *
      * @param path a fájl elérési útja, ahonnan betölti.
@@ -1159,6 +1200,48 @@ public class Game {
             timer.clear();
             FileInputStream fileInputStream = new FileInputStream(path);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            pipes = (HashMap<String, Pipe>) objectInputStream.readObject();
+            pumps = (HashMap<String, Pump>) objectInputStream.readObject();
+            cisterns = (HashMap<String, Cistern>) objectInputStream.readObject();
+            sources = (HashMap<String, Source>) objectInputStream.readObject();
+            mechanics = (HashMap<String, Mechanic>) objectInputStream.readObject();
+            saboteurs = (HashMap<String, Saboteur>) objectInputStream.readObject();
+            nodes = (HashMap<String, Node>) objectInputStream.readObject();
+            players = (HashMap<String, Player>) objectInputStream.readObject();
+            objectnames = (HashMap<Object, String>) objectInputStream.readObject();
+
+            for (String key : pipes.keySet()) {
+                Pipe p = pipes.get(key);
+                timer.addISteppable(p);
+            }
+
+            for (String key : pumps.keySet()) {
+                Pump p = pumps.get(key);
+                timer.addISteppable(p);
+            }
+
+            for (String key : cisterns.keySet()) {
+                Cistern c = cisterns.get(key);
+                timer.addISteppable(c);
+            }
+
+            for (String key : sources.keySet()) {
+                Source s = sources.get(key);
+                timer.addISteppable(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Visszatölt egy játékot a megadott fájlból.
+     *
+     * @param objectInputStream az {@link ObjectInputStream}, ahonnan betölti.
+     */
+    public void Load(ObjectInputStream objectInputStream) {
+        try {
+            timer.clear();
             pipes = (HashMap<String, Pipe>) objectInputStream.readObject();
             pumps = (HashMap<String, Pump>) objectInputStream.readObject();
             cisterns = (HashMap<String, Cistern>) objectInputStream.readObject();
@@ -1208,29 +1291,37 @@ public class Game {
 
     /**
      * Sorszámot generál az újonnan hozzáadott elemeknek
+     *
      * @return Sorszám
      */
-    private int getElemNum(){
+    private int getElemNum() {
         return elem_number++;
     }
 
     /**
-     *
      * @return Visszatéríti az első ciszternát
      */
-    public Cistern GetFirstCistern(){
+    public Cistern GetFirstCistern() {
         Map.Entry<String, Cistern> entry = cisterns.entrySet().iterator().next();
         Cistern cistern = entry.getValue();
         return cistern;
     }
 
     /**
-     *
      * @return Visszatéríti az első ciszternát
      */
-    public Source GetFirstSource(){
+    public Source GetFirstSource() {
         Map.Entry<String, Source> entry = sources.entrySet().iterator().next();
         Source source = entry.getValue();
         return source;
+    }
+
+    /**
+     * Getter a játék állapotára
+     *
+     * @return Igazat térít vissza, ha a játék fut
+     */
+    public boolean isRunning() {
+        return running;
     }
 }

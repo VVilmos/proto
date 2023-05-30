@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
+import java.io.*;
 
 /**
  * A játék ablakát megjelenítő osztály
@@ -115,11 +115,9 @@ public class GameWindow extends JFrame {
         bPickuppump.addActionListener((e) -> controller.SetOperation(Operation.PICKUPPUMP));
         mLoad.addActionListener(this::loadListener);
         mSave.addActionListener(this::saveListener);
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e)
-            {
+            public void windowClosing(WindowEvent e) {
                 Model.Timer.getInstance().terminate();
                 RefreshTimer.getInstance().shutdown();
                 e.getWindow().dispose();
@@ -165,7 +163,7 @@ public class GameWindow extends JFrame {
         bSwitch = new JButton("Switch");
         bConnect = new JButton("Connect");
         bDisconnect = new JButton("Disconnect");
-        bLeakpipe = new JButton("Leak Pipe");
+        bLeakpipe = new JButton("Puncture Pipe");
         bSticky = new JButton("Sticky");
         bSlippery = new JButton("Slippery");
         bRepairpump = new JButton("Repair Pump");
@@ -203,18 +201,22 @@ public class GameWindow extends JFrame {
      * Az Add Mechanic menüelem listenere
      */
     public void addMechanicListener(ActionEvent event) {
-        String name = JOptionPane.showInputDialog("Name of the Mechanic");
-        playerListModel.addElement(name);
-        controller.addMechanic(name);
+        if (!controller.getGame().isRunning()) {
+            String name = JOptionPane.showInputDialog("Name of the Mechanic");
+            playerListModel.addElement(name);
+            controller.addMechanic(name);
+        } else JOptionPane.showMessageDialog(this, "You cannot add players while the game is running");
     }
 
     /**
      * Az Add Saboteur menüelem listenere
      */
     public void addSaboteurListener(ActionEvent event) {
-        String name = JOptionPane.showInputDialog("Name of the Saboteur:");
-        playerListModel.addElement(name);
-        controller.addSaboteur(name);
+        if (!controller.getGame().isRunning()) {
+            String name = JOptionPane.showInputDialog("Name of the Saboteur:");
+            playerListModel.addElement(name);
+            controller.addSaboteur(name);
+        } else JOptionPane.showMessageDialog(this, "You cannot add players while the game is running");
     }
 
     /**
@@ -248,31 +250,43 @@ public class GameWindow extends JFrame {
     /**
      * A játék betöltése menüelem listenerje
      */
-    public void loadListener(ActionEvent actionEvent){
+    public void loadListener(ActionEvent actionEvent) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION){
-            File file = fileChooser.getSelectedFile();
-            controller.getGame().Load(file.getPath());
-            //TODO: Views
+        if (result == JFileChooser.APPROVE_OPTION) {
+            FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(fileChooser.getSelectedFile());
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+                controller.getGame().Load(objectInputStream);
+                canvas.Load(objectInputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * A játék elmentése menüelem listenerje
      */
-    public void saveListener(ActionEvent actionEvent){
+    public void saveListener(ActionEvent actionEvent) {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showSaveDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION){
-            File file = fileChooser.getSelectedFile();
-            controller.getGame().Save(file.getPath());
-            //TODO: Views
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try{
+                FileOutputStream fileOutputStream = new FileOutputStream(fileChooser.getSelectedFile());
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+                controller.getGame().Save(objectOutputStream);
+                canvas.Save(objectOutputStream);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * Getter a játékteret megjelenítő vászonra
+     *
      * @return A vászon, ami a játékteret tartalmazza
      */
     public Canvas getCanvas() {

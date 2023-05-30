@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static Control.Operation.IDLE;
+
 /**
  * Ez az alkalmazás fő osztálya, ami egyben a Controller szerepét is ellátja.
  * Singleton osztály
@@ -24,7 +26,7 @@ public class Main {
     /**
      * A jelenlegi művelet típusa
      */
-    private Operation currentOperation = Operation.IDLE;
+    private Operation currentOperation = IDLE;
 
     /**
      * A jelenleg kiválasztott járékos referenciát tárolja
@@ -135,18 +137,21 @@ public class Main {
      * Kattintás vagy {@link Main#SetOperation(Operation)} hatására hívódik.
      */
     public void RunOperation() {
-        if (activePlayer == null) return;
+        if (activePlayer == null || !game.isRunning()){
+            currentOperation = IDLE;
+            return;
+        }
         switch (currentOperation) {
             case IDLE:
                 clickedElements.clear();
                 return;
             case SWITCHPUMP:
                 if (clickedElements.size() >= 2) {
-                    Pipe input = (Pipe) clickedElements.get(0);
-                    Pipe output = (Pipe) clickedElements.get(1);
+                    Pipe input = (Pipe) clickedElements.get(0) instanceof Pipe ? (Pipe) clickedElements.get(0) : null;
+                    Pipe output = (Pipe) clickedElements.get(1) instanceof Pipe ? (Pipe) clickedElements.get(1) : null;
                     game.SwitchPump(activePlayer, input, output);
                     clickedElements.clear();
-                    currentOperation = Operation.IDLE;
+                    currentOperation = IDLE;
                 }
                 break;
             case DISCONNECTPIPE:
@@ -157,36 +162,36 @@ public class Main {
                     window.getCanvas().Remove(GetElementView(pipe));
                     viewsElements.remove(GetElementView(pipe));
                     clickedElements.clear();
-                    currentOperation = Operation.IDLE;
+                    currentOperation = IDLE;
                 }
                 break;
             case BREAKPIPE:
                 activePlayer.BreakPipe();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case REPAIRPUMP:
                 activePlayer.RepairPump();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case REPAIRPIPE:
                 activePlayer.RepairPipe();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case STICKYPIPE:
                 activePlayer.MakeStickyPipe();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case SLIPPERYPIPE:
                 activePlayer.MakeSlipperyPipe();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case PICKUPPUMP:
                 activePlayer.PickupPump();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case PICKUPPIPE:
                 activePlayer.PickupPipe();
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case CONNECTPIPE:
                 Pipe pipe = activePlayer.GetHoldingPipeEnd().GetOwnPipe();
@@ -204,27 +209,29 @@ public class Main {
                         viewsElements.put(pv, pipe);
                     }
                 }
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case PLACEPUMP:
 
                 Element on = activePlayer.GetLocation();
-                Pump p = activePlayer.GetHoldingPumps().get(0);
-                Pipe newPipe = activePlayer.PlacePump();
-                if (newPipe != null) {
-                    ElementView onView = GetElementView(on);
-                    Point newPumpCenter = onView.GetCenterCoordinates();
-                    Point[] ends = onView.GetEndPointsCoordinates();
-                    onView.SetEndPoints(ends[0], newPumpCenter);
-                    addPipe(newPipe, newPumpCenter, ends[1]);
-                    addPump(p, newPumpCenter);
+                if(!activePlayer.GetHoldingPumps().isEmpty()) {
+                    Pump p = activePlayer.GetHoldingPumps().get(0);
+                    Pipe newPipe = activePlayer.PlacePump();
+                    if (newPipe != null) {
+                        ElementView onView = GetElementView(on);
+                        Point newPumpCenter = onView.GetCenterCoordinates();
+                        Point[] ends = onView.GetEndPointsCoordinates();
+                        onView.SetEndPoints(ends[0], newPumpCenter);
+                        addPipe(newPipe, newPumpCenter, ends[1]);
+                        addPump(p, newPumpCenter);
+                    }
                 }
-                currentOperation = Operation.IDLE;
+                currentOperation = IDLE;
                 break;
             case MOVE:
                 if (clickedElements.size() >= 1) {
                     activePlayer.Move(clickedElements.get(0));
-                    currentOperation = Operation.IDLE;
+                    currentOperation = IDLE;
                     clickedElements.clear();
                 }
                 break;
@@ -341,7 +348,7 @@ public class Main {
      */
     public static void main(String[] args) {
         window = new GameWindow("Sivatagi vízhálózat");
-        window.setSize(1024, 768);
+        window.setSize(1230, 922);
         Cistern c1 = new Cistern();
         Cistern c2 = new Cistern();
         Cistern c3 = new Cistern();

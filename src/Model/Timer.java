@@ -142,4 +142,12 @@ public class Timer extends Thread {
             interrupt();
         }
     }
+
+    /**
+     * Visszatéríti az időzítő állapotát
+     * @return Igazat térít vissza, ha az időzítő fut.
+     */
+    public boolean isRunning(){
+        return (isAlive() && !pauseSignal);
+    }
 }

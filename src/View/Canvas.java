@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,4 +119,11 @@ public class Canvas extends JPanel {
        });
    }
 
+    public void Load(ObjectInputStream objectInputStream) {
+       //TODO: Views
+    }
+
+    public void Save(ObjectOutputStream objectOutputStream) {
+       //TODO: Views
+    }
 }
