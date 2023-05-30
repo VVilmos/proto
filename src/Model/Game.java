@@ -85,6 +85,35 @@ public class Game {
     public void StartGame() {
         timer.start();
         running = true;
+
+        Thread thread = new Thread(this::BreakRandomPump);
+        thread.setDaemon(true);
+        thread.start();
+
+    }
+
+    public synchronized void BreakRandomPump() {
+        while (true) {
+            Random r = new Random();
+            int size = pumps.size();
+            int i = r.nextInt(0, size-1);
+            int prob = r.nextInt(1, 10);
+            if (prob == 4 ) {
+                ArrayList<Pump> pumps1 = new ArrayList<>(pumps.values());
+                Pump pumpToBreak = pumps1.get(i);
+                pumpToBreak.BreakPump();
+            }
+            try {
+                Thread.sleep(2000);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
+
+
+
     }
 
     /**
