@@ -1,10 +1,12 @@
 package View;
 
+import Model.Element;
 import Model.Source;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class SourceView extends ElementView{
+public class SourceView extends ElementView {
     private Source source;
 
     public SourceView(Source source){
@@ -17,5 +19,13 @@ public class SourceView extends ElementView{
         Point center = GetCenterCoordinates();
         Point ovalPoint = new Point(center.GetX()-20, center.GetY()-20);
         g2d.fillOval(ovalPoint.GetX(), ovalPoint.GetY(), 40, 40);
+    }
+
+    /**
+     * @return Visszatéríti a nézethez tartozó elemet
+     */
+    @Override
+    public Element GetElement() {
+        return source;
     }
 }

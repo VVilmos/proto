@@ -1,5 +1,8 @@
 package Model;
 
+import java.io.IOException;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -8,7 +11,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * Aktív elemeket reprezentáló absztrakt osztály
  * Felelőssége: tárolja a hozzá csatlakoztatott csöveket közvetve a csővégek által
  */
-public abstract class Node extends Element implements ISteppable {
+public abstract class Node extends Element implements ISteppable, Serializable {
     private static final int pipeCapacity = 50;
 
     /**
@@ -101,4 +104,23 @@ public abstract class Node extends Element implements ISteppable {
     public PipeEnd[] GetPipeEnds() {
         return this.pipeEnds;
     }
+
+    @Serial
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        for (int i = 0; i<pipeCapacity; i++) {
+            out.writeObject(pipeEnds[i]);
+        }
+    }
+
+    @Serial
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        pipeEnds = new PipeEnd[50];
+        for(int i = 0; i<pipeCapacity; i++){
+            pipeEnds[i] = (PipeEnd) in.readObject();
+        }
+    }
+
 }

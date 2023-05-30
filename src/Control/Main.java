@@ -48,12 +48,6 @@ public class Main {
 
 
     /**
-     * {@link ElementView} - {@link Element} összerendeléseket tartalmazó hashmap.
-     * Ebből keressük ki a kattintott nézetekhez tartalmazó modellelemeket
-     */
-    private HashMap<ElementView, Element> viewsElements;
-
-    /**
      * A Main singleton osztálynak egyetlen példánya.
      */
     private static Main instance = null;
@@ -88,7 +82,6 @@ public class Main {
         players = new ArrayList<>();
         elements = new ArrayList<>();
         clickedElements = new ArrayList<>();
-        viewsElements = new HashMap<>();
         game = new Game();
     }
 
@@ -100,7 +93,7 @@ public class Main {
      * @param view Az az {@link ElementView}, amire rákattintott a felhasználó.
      */
     public void Clicked(ElementView view) {
-        Element clickedElement = viewsElements.get(view);
+        Element clickedElement = view.GetElement();
         System.out.println("Azonosítottam");
         clickedElements.add(clickedElement);
         RunOperation();
@@ -113,9 +106,9 @@ public class Main {
      * @return Visszatéríti a keresett nézetet.
      */
     public ElementView GetElementView(Element element) {
-        for (Map.Entry<ElementView, Element> entry : viewsElements.entrySet()) {
-            if (entry.getValue() == element)
-                return entry.getKey();
+        for (ElementView view : window.getCanvas().getElementViews()) {
+            if (view.GetElement() == element)
+                return view;
         }
         return null;
     }
@@ -135,7 +128,9 @@ public class Main {
      * Kattintás vagy {@link Main#SetOperation(Operation)} hatására hívódik.
      */
     public void RunOperation() {
-        if (activePlayer == null || !game.isRunning()){
+        if (!game.isRunning())
+            JOptionPane.showMessageDialog(window, "You can only perform operations while the game is running.");
+        if (activePlayer == null || !game.isRunning()) {
             currentOperation = Operation.IDLE;
             return;
         }
@@ -158,7 +153,6 @@ public class Main {
 
                     Pipe pipe = (Pipe) clickedElements.get(0);
                     window.getCanvas().Remove(GetElementView(pipe));
-                    viewsElements.remove(GetElementView(pipe));
                     clickedElements.clear();
                     currentOperation = Operation.IDLE;
                 }
@@ -192,19 +186,20 @@ public class Main {
                 currentOperation = Operation.IDLE;
                 break;
             case CONNECTPIPE:
-                Pipe pipe = activePlayer.GetHoldingPipeEnd().GetOwnPipe();
-                activePlayer.ConnectPipe();
-                List<Element> neighbours = pipe.GetNeighbours();
-                if(neighbours.size() == 2){
-                    ElementView view1 = GetElementView(neighbours.get(0));
-                    ElementView view2 = GetElementView(neighbours.get(1));
-                    Point center1 = view1.GetCenterCoordinates();
-                    Point center2 = view2.GetCenterCoordinates();
-                    if(activePlayer.GetHoldingPipeEnd() == null){
-                        PipeView pv = new PipeView(pipe);
-                        pv.SetEndPoints(center1, center2);
-                        window.getCanvas().PushElementView_Front(pv);
-                        viewsElements.put(pv, pipe);
+                if (activePlayer.GetHoldingPipeEnd() != null) {
+                    Pipe pipe = activePlayer.GetHoldingPipeEnd().GetOwnPipe();
+                    activePlayer.ConnectPipe();
+                    List<Element> neighbours = pipe.GetNeighbours();
+                    if (neighbours.size() == 2) {
+                        ElementView view1 = GetElementView(neighbours.get(0));
+                        ElementView view2 = GetElementView(neighbours.get(1));
+                        Point center1 = view1.GetCenterCoordinates();
+                        Point center2 = view2.GetCenterCoordinates();
+                        if (activePlayer.GetHoldingPipeEnd() == null) {
+                            PipeView pv = new PipeView(pipe);
+                            pv.SetEndPoints(center1, center2);
+                            window.getCanvas().PushElementView_Front(pv);
+                        }
                     }
                 }
                 currentOperation = Operation.IDLE;
@@ -212,7 +207,7 @@ public class Main {
             case PLACEPUMP:
 
                 Element on = activePlayer.GetLocation();
-                if(!activePlayer.GetHoldingPumps().isEmpty()) {
+                if (!activePlayer.GetHoldingPumps().isEmpty()) {
                     Pump p = activePlayer.GetHoldingPumps().get(0);
                     Pipe newPipe = activePlayer.PlacePump();
                     if (newPipe != null) {
@@ -273,7 +268,6 @@ public class Main {
         PipeView pv = new PipeView(p);
         pv.SetEndPoints(end1, end2);
         window.getCanvas().PushElementView_Front(pv);
-        viewsElements.put(pv, p);
     }
 
     /**
@@ -288,7 +282,6 @@ public class Main {
         PumpView pv = new PumpView(p);
         pv.SetCenter(center);
         window.getCanvas().PushElementView_Back(pv);
-        viewsElements.put(pv, p);
     }
 
     /**
@@ -303,7 +296,6 @@ public class Main {
         CisternView cv = new CisternView(c);
         cv.SetCenter(center);
         window.getCanvas().PushElementView_Back(cv);
-        viewsElements.put(cv, c);
     }
 
     /**
@@ -318,7 +310,6 @@ public class Main {
         SourceView sv = new SourceView(s);
         sv.SetCenter(center);
         window.getCanvas().PushElementView_Back(sv);
-        viewsElements.put(sv, s);
     }
 
     /**
@@ -391,10 +382,9 @@ public class Main {
         Pipe cp3 = new Pipe(p3);
         p4.AddPipe(cp3.GetEnds().get(1));
 
-        Main.getInstance().addPipe(cp1, new Point(570/2, 30), new Point(570/2, 230));
-        Main.getInstance().addPipe(cp2, new Point(570/2, 230), new Point(570/2, 430));
-        Main.getInstance().addPipe(cp3, new Point(570/2, 430), new Point(570/2, 620));
-
+        Main.getInstance().addPipe(cp1, new Point(570 / 2, 30), new Point(570 / 2, 230));
+        Main.getInstance().addPipe(cp2, new Point(570 / 2, 230), new Point(570 / 2, 430));
+        Main.getInstance().addPipe(cp3, new Point(570 / 2, 430), new Point(570 / 2, 620));
 
 
         Main.getInstance().addCistern(c1, new Point(30, 30));
@@ -407,22 +397,19 @@ public class Main {
         Main.getInstance().addSource(source3, new Point(600, 430));
         Main.getInstance().addSource(source4, new Point(600, 620));
 
-        Main.getInstance().addPump(p1, new Point(570/2, 30));
-        Main.getInstance().addPump(p2, new Point(570/2, 230));
-        Main.getInstance().addPump(p3, new Point(570/2, 430));
-        Main.getInstance().addPump(p4, new Point(570/2, 620));
+        Main.getInstance().addPump(p1, new Point(570 / 2, 30));
+        Main.getInstance().addPump(p2, new Point(570 / 2, 230));
+        Main.getInstance().addPump(p3, new Point(570 / 2, 430));
+        Main.getInstance().addPump(p4, new Point(570 / 2, 620));
 
-        Main.getInstance().addPipe(pipe1, new Point(30, 30), new Point(570/2, 30));
-        Main.getInstance().addPipe(pipe2, new Point(30, 230), new Point(570/2, 230));
-        Main.getInstance().addPipe(pipe3, new Point(30, 430), new Point(570/2, 430));
-        Main.getInstance().addPipe(pipe4, new Point(30, 620), new Point(570/2, 620));
-        Main.getInstance().addPipe(pipe5, new Point(570/2, 30), new Point(600, 30));
-        Main.getInstance().addPipe(pipe6, new Point(570/2, 230), new Point(600, 230));
-        Main.getInstance().addPipe(pipe7, new Point(570/2, 430), new Point(600, 430));
-        Main.getInstance().addPipe(pipe8, new Point(570/2, 620), new Point(600, 620));
-
-
-
+        Main.getInstance().addPipe(pipe1, new Point(30, 30), new Point(570 / 2, 30));
+        Main.getInstance().addPipe(pipe2, new Point(30, 230), new Point(570 / 2, 230));
+        Main.getInstance().addPipe(pipe3, new Point(30, 430), new Point(570 / 2, 430));
+        Main.getInstance().addPipe(pipe4, new Point(30, 620), new Point(570 / 2, 620));
+        Main.getInstance().addPipe(pipe5, new Point(570 / 2, 30), new Point(600, 30));
+        Main.getInstance().addPipe(pipe6, new Point(570 / 2, 230), new Point(600, 230));
+        Main.getInstance().addPipe(pipe7, new Point(570 / 2, 430), new Point(600, 430));
+        Main.getInstance().addPipe(pipe8, new Point(570 / 2, 620), new Point(600, 620));
 
 
         window.setVisible(true);

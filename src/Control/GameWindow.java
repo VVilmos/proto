@@ -1,6 +1,7 @@
 package Control;
 
 import View.Canvas;
+import View.ElementView;
 import View.MechanicView;
 import View.RefreshTimer;
 
@@ -231,6 +232,10 @@ public class GameWindow extends JFrame {
      * A játék elinditásához szükséges listener.
      */
     public void startActionListener(ActionEvent actionEvent) {
+        if(controller.getGame().isRunning()){
+            JOptionPane.showMessageDialog(this, "The game is already running.");
+            return;
+        }
         controller.getGame().StartGame();
     }
 
@@ -238,6 +243,10 @@ public class GameWindow extends JFrame {
      * A játék megállításához szükséges listener.
      */
     public void pauseActionListener(ActionEvent actionEvent) {
+        if(!controller.getGame().isRunning()){
+            JOptionPane.showMessageDialog(this, "The game is not running.");
+            return;
+        }
         GameEnding ending = controller.getGame().EndGame();
         if (ending == GameEnding.MECHANICS_WIN)
             JOptionPane.showMessageDialog(this, "Mechanics won!");
@@ -260,7 +269,8 @@ public class GameWindow extends JFrame {
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                 controller.getGame().Load(objectInputStream);
                 canvas.Load(objectInputStream);
-            } catch (IOException e) {
+                objectInputStream.close();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -278,6 +288,7 @@ public class GameWindow extends JFrame {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
                 controller.getGame().Save(objectOutputStream);
                 canvas.Save(objectOutputStream);
+                objectOutputStream.close();
             }catch (IOException e){
                 e.printStackTrace();
             }

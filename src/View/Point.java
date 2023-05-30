@@ -1,10 +1,12 @@
 package View;
 
 
+import java.io.Serializable;
+
 /**
  * A vásznon kirajzolt pontokat reprezentáló osztály
  */
-public class Point {
+public class Point implements Serializable {
 
     /**
      *  A pont X koordinátája

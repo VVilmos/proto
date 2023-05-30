@@ -1,10 +1,12 @@
 package View;
 
+import Model.Element;
 import Model.Pump;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class PumpView extends ElementView{
+public class PumpView extends ElementView {
     private Pump pump;
 
     public PumpView(Pump pump){
@@ -23,4 +25,11 @@ public class PumpView extends ElementView{
         }
     }
 
+    /**
+     * @return Visszatéríti a nézethez tartozó elemet
+     */
+    @Override
+    public Element GetElement() {
+        return pump;
+    }
 }

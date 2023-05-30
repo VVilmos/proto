@@ -1,10 +1,12 @@
 package View;
 
+import Model.Element;
 import Model.Pipe;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class PipeView extends ElementView{
+public class PipeView extends ElementView {
     private Pipe pipe;
 
     private Point[] endPoints = new Point[2];
@@ -95,5 +97,13 @@ public class PipeView extends ElementView{
         int x = (endPoints[0].GetX() + endPoints[1].GetX()) / 2;
         int y = (endPoints[0].GetY() + endPoints[1].GetY()) / 2;
         return new Point(x, y);
+    }
+
+    /**
+     * @return Visszatéríti a nézethez tartozó elemet
+     */
+    @Override
+    public Element GetElement() {
+        return pipe;
     }
 }

@@ -1,12 +1,15 @@
 package View;
 
 
+import Model.Element;
+
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * A játékban szereplő mezők megjelenítéséért felelős (ős)osztály
  */
-public abstract class ElementView {
+public abstract class ElementView implements Serializable {
 
     /**
      * Az adott objektumhoz tartozó grafika (kör vagy szakasz) középpontja
@@ -48,6 +51,13 @@ public abstract class ElementView {
     public Point[] GetEndPointsCoordinates() {return null;}
 
     public void SetEndPoints(Point p1, Point p2) {
+    }
+
+    /**
+     * @return Visszatéríti a nézethez tartozó elemet
+     */
+    public Element GetElement(){
+        return null;
     }
 
 

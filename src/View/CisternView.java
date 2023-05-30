@@ -1,10 +1,12 @@
 package View;
 
 import Model.Cistern;
+import Model.Element;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class CisternView extends ElementView{
+public class CisternView extends ElementView  {
     private Cistern cistern;
 
     public CisternView(Cistern cistern){
@@ -17,5 +19,13 @@ public class CisternView extends ElementView{
         Point center = GetCenterCoordinates();
         Point ovalPoint = new Point(center.GetX()-20, center.GetY()-20);
         g2d.fillOval(ovalPoint.GetX(), ovalPoint.GetY(), 40, 40);
+    }
+
+    /**
+     * @return Visszatéríti a nézethez tartozó elemet
+     */
+    @Override
+    public Element GetElement() {
+        return cistern;
     }
 }

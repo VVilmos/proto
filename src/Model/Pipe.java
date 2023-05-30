@@ -37,7 +37,7 @@ public class Pipe extends Element implements ISteppable, Serializable {
     /**
      * Eltárolja a csőből kifolyt víz mennyiségét.
      */
-    private Pool saboteurPool;
+    private transient Pool saboteurPool;
 
     /**
      * A cső végei (1 vagy 2 db)
@@ -71,6 +71,13 @@ public class Pipe extends Element implements ISteppable, Serializable {
         ends.add(end1);
         ends.add(end2);
 
+        saboteurPool = Game.getSaboteurPool();
+    }
+
+    /**
+     * Inicializálja a saboteurPool attribútumot
+     */
+    public void initPool(){
         saboteurPool = Game.getSaboteurPool();
     }
 

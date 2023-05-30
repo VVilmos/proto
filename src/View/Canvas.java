@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -119,11 +120,20 @@ public class Canvas extends JPanel {
        });
    }
 
-    public void Load(ObjectInputStream objectInputStream) {
-       //TODO: Views
+    public void Load(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+       elementviews.clear();
+       elementviews = (ArrayList<ElementView>) objectInputStream.readObject();
     }
 
-    public void Save(ObjectOutputStream objectOutputStream) {
-       //TODO: Views
+    public void Save(ObjectOutputStream objectOutputStream) throws IOException {
+            objectOutputStream.writeObject(elementviews);
+    }
+
+    /**
+     * Getter a nézetek listájára
+     * @return Visszatéríti az összes nézetet egy listában
+     */
+    public List<ElementView> getElementViews() {
+        return elementviews;
     }
 }

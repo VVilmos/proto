@@ -123,12 +123,19 @@ public class Game {
         timer.pause();
         running = false;
         if (getSaboteurPool().GetWater() > getMechanicPool().GetWater()) {
+            saboteurPool.Reset();
+            mechanicPool.Reset();
             return GameEnding.SABOTEURS_WIN;
         } else if (getSaboteurPool().GetWater() < getMechanicPool().GetWater()) {
+            saboteurPool.Reset();
+            mechanicPool.Reset();
             return GameEnding.MECHANICS_WIN;
         } else {
+            saboteurPool.Reset();
+            mechanicPool.Reset();
             return GameEnding.EQUAL;
         }
+
     }
 
     /**
@@ -1208,12 +1215,7 @@ public class Game {
             objectOutputStream.writeObject(pumps);
             objectOutputStream.writeObject(cisterns);
             objectOutputStream.writeObject(sources);
-            objectOutputStream.writeObject(mechanics);
-            objectOutputStream.writeObject(saboteurs);
             objectOutputStream.writeObject(nodes);
-            objectOutputStream.writeObject(players);
-            objectOutputStream.writeObject(objectnames);
-            objectOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1241,6 +1243,7 @@ public class Game {
 
             for (String key : pipes.keySet()) {
                 Pipe p = pipes.get(key);
+                p.initPool();
                 timer.addISteppable(p);
             }
 
@@ -1275,30 +1278,31 @@ public class Game {
             pumps = (HashMap<String, Pump>) objectInputStream.readObject();
             cisterns = (HashMap<String, Cistern>) objectInputStream.readObject();
             sources = (HashMap<String, Source>) objectInputStream.readObject();
-            mechanics = (HashMap<String, Mechanic>) objectInputStream.readObject();
-            saboteurs = (HashMap<String, Saboteur>) objectInputStream.readObject();
             nodes = (HashMap<String, Node>) objectInputStream.readObject();
-            players = (HashMap<String, Player>) objectInputStream.readObject();
-            objectnames = (HashMap<Object, String>) objectInputStream.readObject();
+            objectnames.clear();
 
             for (String key : pipes.keySet()) {
                 Pipe p = pipes.get(key);
                 timer.addISteppable(p);
+                objectnames.put(p, key);
             }
 
             for (String key : pumps.keySet()) {
                 Pump p = pumps.get(key);
                 timer.addISteppable(p);
+                objectnames.put(p, key);
             }
 
             for (String key : cisterns.keySet()) {
                 Cistern c = cisterns.get(key);
                 timer.addISteppable(c);
+                objectnames.put(c, key);
             }
 
             for (String key : sources.keySet()) {
                 Source s = sources.get(key);
                 timer.addISteppable(s);
+                objectnames.put(s, key);
             }
         } catch (Exception e) {
             e.printStackTrace();
