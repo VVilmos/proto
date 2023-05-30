@@ -1,14 +1,17 @@
 package Model;
 
+import java.io.IOException;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Element {
+public abstract class Element implements Serializable {
 
     /**
      * Az adott elemen álló játékosok listája
      */
-    protected List<Player> players = new ArrayList<>();
+    protected transient List<Player> players = new ArrayList<>();
 
     /**
      * @return az adott elemen álló játékosok listája
@@ -137,5 +140,12 @@ public abstract class Element {
      * Az adott elemet csúszóssá teszi (a Pipe osztályban van felüldefiniálva)
      */
     public void MakeSlippery() {
+    }
+
+    @Serial
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        players = new ArrayList<>();
     }
 }

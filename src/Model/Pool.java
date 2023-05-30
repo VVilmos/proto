@@ -31,4 +31,11 @@ public class Pool {
     public int GetWater() {
         return amount;
     }
+
+    /**
+     * Kiüríti a medencét.
+     */
+    public void Reset(){
+        amount = 0;
+    }
 }
